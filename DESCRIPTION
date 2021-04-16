@@ -3,7 +3,21 @@ Type: Package
 Title: Flexible and Interpretable Non-parametric Tests of Exchangeability
 Version: 1.0
 Date: 2021-04-12
-Author: Alan Aw [University of California, Berkeley]
+Authors@R: c(
+    person(given = "Alan",
+           family = "Aw",
+           role = c("aut", "cre"),
+           email = "alanaw1@berkeley.edu",
+           comment = c(ORCID = "0000-0001-9455-7878")),
+    person(given = "Jeffrey",
+           family = "Spence",
+           role = c("aut"),
+           email = "",
+           comment = c(ORCID = "0000-0002-3199-1447")),
+    person(given = "Yun",
+           family = "Song",
+           role = c("aut"),
+           email = ""))
 Maintainer: Alan Aw <alanaw1@berkeley.edu>
 Description: Given a multivariate dataset and some knowledge about 
               the dependencies between its features, it is important to 
@@ -13,7 +27,7 @@ Description: Given a multivariate dataset and some knowledge about
               exchangeability, allowing the user to specify the feature dependencies
               by hand. See Aw, Spence and Song (2021) for the accompanying paper.
 License: GPL (>= 2)
-Suggests: tinytest
+Suggests: testthat::test_package("flintyR")
 Imports: Rcpp (>= 1.0.6)
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
