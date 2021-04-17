@@ -22,6 +22,5 @@ Dependencies: getHammingDistance
 \examples{
 X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
 getBinVStat(X)
-Output: 0.3155556
 
 }

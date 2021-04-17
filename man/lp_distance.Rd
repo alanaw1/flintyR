@@ -19,6 +19,6 @@ has N rows, and computes a vector recording all
 ordered lexicographically.
 }
 \examples{
-X = [[0.5,0.5],[0,1],[0.3,0.7]] --> lPVec = [x,y,z]
-with x = (0.5^p + 0.5^p)
+# X = [[0.5,0.5],[0,1],[0.3,0.7]] --> lPVec = [x,y,z]
+# with x = (0.5^p + 0.5^p)
 }

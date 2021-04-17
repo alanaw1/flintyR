@@ -21,6 +21,5 @@ Dependencies: hamming_bitwise from fast_dist_calc.cpp
 \examples{
 X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
 getHammingDistance(X)
-Output: 7 8 5 3 3 6 6 5 5 8
 
 }

@@ -14,7 +14,7 @@ permutation resampling}
 
 \item{nruns}{The resampling number (use at least 1000)}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
 A vector of resampled values of the V statistic

@@ -9,7 +9,7 @@ getRealVStat(X, p)
 \arguments{
 \item{X}{The N x P real matrix}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}s}
 }
 \value{
 V(X), the variance of the pairwise \eqn{l_p^p} distance between samples
@@ -25,6 +25,5 @@ Dependencies: getLpDistance
 \examples{
 X <- matrix(nrow = 5, ncol = 10, rnorm(50))
 getRealVStat(X, p = 2)
-Output: 11.39957
 
 }

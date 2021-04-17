@@ -9,7 +9,7 @@ indGaussian(X, p = 2)
 \arguments{
 \item{X}{The binary or real matrix on which to perform test of exchangeability}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
 The asymptotic p-value

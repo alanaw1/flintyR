@@ -9,7 +9,7 @@ getLpDistance(X, p)
 \arguments{
 \item{X}{The N x P real matrix}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
 A length \eqn{{N \choose 2}} vector of pairwise \eqn{l_p^p} distances
@@ -24,6 +24,5 @@ Dependencies: lp_distance from fast_dist_calc.cpp
 \examples{
 X <- matrix(nrow = 5, ncol = 10, rnorm(50))
 getLpDistance(X, p = 2)
-Output: 25.858275 12.192920  5.721839  9.773896 32.529985 26.364949 35.202755  6.916293 23.122540 15.901531
 
 }

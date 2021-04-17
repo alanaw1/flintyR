@@ -15,7 +15,6 @@ registerDoParallel()
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
 #' getHammingDistance(X)
-#' Output: 7 8 5 3 3 6 6 5 5 8
 #'
 getHammingDistance <- function(X) {
   # Check that each entry of X is 0 or 1
@@ -42,12 +41,11 @@ getHammingDistance <- function(X) {
 #'
 #' Dependencies: lp_distance from fast_dist_calc.cpp
 #' @param X The N x P real matrix
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return A length \eqn{{N \choose 2}} vector of pairwise \eqn{l_p^p} distances
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rnorm(50))
 #' getLpDistance(X, p = 2)
-#' Output: 25.858275 12.192920  5.721839  9.773896 32.529985 26.364949 35.202755  6.916293 23.122540 15.901531
 #'
 getLpDistance <- function(X, p) {
   # The number of columns of X is 1 (edge case)
@@ -76,7 +74,6 @@ getLpDistance <- function(X, p) {
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
 #' getBinVStat(X)
-#' Output: 0.3155556
 #'
 getBinVStat <- function(X) {
   # The number of columns of X is 1 (edge case)
@@ -99,12 +96,11 @@ getBinVStat <- function(X) {
 #'
 #' Dependencies: getLpDistance
 #' @param X The N x P real matrix
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}s
 #' @return V(X), the variance of the pairwise \eqn{l_p^p} distance between samples
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rnorm(50))
 #' getRealVStat(X, p = 2)
-#' Output: 11.39957
 #'
 getRealVStat <- function(X, p) {
   # The number of columns of X is 1 (edge case)
@@ -134,16 +130,14 @@ getRealVStat <- function(X, p) {
 #' Dependencies: getBinVStat, getRealVStat
 #' @param X The N x P binary or real matrix
 #' @param block_labels A vector of length P, whose pth component indicates the block membership of feature p
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return V(X'), where X' is a resampled by permutation of entries blockwise
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rnorm(50)) # real matrix example
 #' naiveBlockPermute1(X, block_labels = c(1,1,2,2,3,3,4,4,5,5), p = 2) # use Euclidean distance
-#' Output: 6.812804
 #'
 #' X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix example
 #' naiveBlockPermute1(X, block_labels = c(1,1,2,2,3,3,4,4,5,5))
-#' Output: 0.09333333
 #'
 naiveBlockPermute1 <- function(X,
                                block_labels,
@@ -184,16 +178,14 @@ naiveBlockPermute1 <- function(X,
 #' Dependencies: getBinVStat, getRealVStat
 #' @param X The N x P binary or real matrix
 #' @param block_labels A vector of length P, whose pth component indicates the block membership of feature p
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return V(X'), where X' is a resampled by permutation of entries blockwise
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rnorm(50)) # real matrix example
 #' naiveBlockPermute2(X, block_boundaries = c(4,7,9), p = 2) # use Euclidean distance
-#' Output: 3.612564
 #'
 #' X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix example
 #' naiveBlockPermute2(X, block_boundaries = c(4,7,9))
-#' Output: 0.1555556
 #'
 naiveBlockPermute2 <- function(X,
                                block_boundaries,
@@ -326,7 +318,7 @@ cachePermute <- function(dists, forward, reverse) {
 #' @param X The binary or real matrix on which to perform
 #' permutation resampling
 #' @param block_labels Length P vector recording the block label of each feature
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @param nruns The resampling number (use at least 1000)
 #' @return A vector of resampled values of the V statistic
 #'
@@ -386,7 +378,7 @@ cacheBlockPermute1 <- function(X,
 #' permutation resampling
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @param nruns The resampling number (use at least 1000)
 #' @return A vector of resampled values of the V statistic
 #'
@@ -449,7 +441,7 @@ cacheBlockPermute2 <- function(X,
 #' block of non-independent features starts. Default is NULL.
 #' @param block_labels Length P vector recording the block label of each feature.
 #' Default is NULL.
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @param nruns The resampling number (use at least 1000)
 #' @return The block permutation p-value
 #'
@@ -502,10 +494,10 @@ blockPermute <- function(X,
 
 #' Tail Probability for Chi Square Convolution Random Variable
 #'
-#' Computes P(X > val) where \eqn{X = w1 Y + w2 Z}, where
-#' Y is chi square distributed with d1 degrees of freedom,
-#' Z is chi square distributed with d2 degrees of freedom,
-#' and w1 and w2 are weights with w2 assumed positive.
+#' Computes \eqn{P(X > val)} where \eqn{X = w_1 Y + w_2 Z}, where
+#' \eqn{Y} is chi square distributed with \eqn{d_1} degrees of freedom,
+#' \eqn{Z} is chi square distributed with \eqn{d_2} degrees of freedom,
+#' and \eqn{w_1} and \eqn{w_2} are weights with \eqn{w_2} assumed positive.
 #' The probability is computed using numerical integration of the
 #' densities of the two chi square distributions. (Method: trapezoidal rule)
 #'
@@ -539,7 +531,7 @@ weightedChi2P <- function(val, w1, w2, d1, d2){
 #'
 #' Dependencies: buildReverse, getLpDistance
 #' @param X The binary or real matrix
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The three distinct entries of cov matrix, (alpha, beta, gamma)
 #'
 getCov <- function(X,
@@ -645,7 +637,7 @@ getChi2Weights <- function(alpha, beta, gamma, N) {
 #'
 #' Dependencies: getBinVStat, getRealVStat, getChi2Weights, weightedChi2P, getCov
 #' @param X The binary or real matrix on which to perform test of exchangeability
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The asymptotic p-value
 #'
 indLargeP <- function(X,
@@ -673,7 +665,7 @@ indLargeP <- function(X,
 #'
 #' Dependencies: getBinVStat, getRealVStat, getCov, getChi2Weights
 #' @param X The binary or real matrix on which to perform test of exchangeability
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The asymptotic p-value
 #'
 indGaussian <- function(X,
@@ -709,7 +701,7 @@ indGaussian <- function(X,
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts.
 #' @param block_labels Length P vector recording the block label of each feature.
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The three distinct entries of cov matrix, (alpha, beta, gamma)
 #'
 getBlockCov <- function(X,
@@ -812,7 +804,7 @@ getBlockCov <- function(X,
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts.
 #' @param block_labels Length P vector recording the block label of each feature.
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The asymptotic p-value
 #'
 blockLargeP <- function(X,
@@ -848,7 +840,7 @@ blockLargeP <- function(X,
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts.
 #' @param block_labels Length P vector recording the block label of each feature.
-#' @param p The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)
+#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The asymptotic p-value
 #'
 blockGaussian <- function(X,

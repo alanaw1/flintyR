@@ -19,5 +19,5 @@ has N rows, and computes a vector recording all
 ordered lexicographically.
 }
 \examples{
-t(X) = [[1,0], [0,1], [1,1]] --> output = [2,1,1]
+# t(X) = [[1,0], [0,1], [1,1]] --> output = [2,1,1]
 }

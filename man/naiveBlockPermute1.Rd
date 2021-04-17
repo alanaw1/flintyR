@@ -11,7 +11,7 @@ naiveBlockPermute1(X, block_labels, p = 2)
 
 \item{block_labels}{A vector of length P, whose pth component indicates the block membership of feature p}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
 V(X'), where X' is a resampled by permutation of entries blockwise
@@ -33,10 +33,8 @@ Dependencies: getBinVStat, getRealVStat
 \examples{
 X <- matrix(nrow = 5, ncol = 10, rnorm(50)) # real matrix example
 naiveBlockPermute1(X, block_labels = c(1,1,2,2,3,3,4,4,5,5), p = 2) # use Euclidean distance
-Output: 6.812804
 
 X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix example
 naiveBlockPermute1(X, block_labels = c(1,1,2,2,3,3,4,4,5,5))
-Output: 0.09333333
 
 }

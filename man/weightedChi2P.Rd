@@ -21,10 +21,10 @@ weightedChi2P(val, w1, w2, d1, d2)
 1 - CDF = P(X > val)
 }
 \description{
-Computes P(X > val) where \eqn{X = w1 Y + w2 Z}, where
-Y is chi square distributed with d1 degrees of freedom,
-Z is chi square distributed with d2 degrees of freedom,
-and w1 and w2 are weights with w2 assumed positive.
+Computes \eqn{P(X > val)} where \eqn{X = w_1 Y + w_2 Z}, where
+\eqn{Y} is chi square distributed with \eqn{d_1} degrees of freedom,
+\eqn{Z} is chi square distributed with \eqn{d_2} degrees of freedom,
+and \eqn{w_1} and \eqn{w_2} are weights with \eqn{w_2} assumed positive.
 The probability is computed using numerical integration of the
 densities of the two chi square distributions. (Method: trapezoidal rule)
 }

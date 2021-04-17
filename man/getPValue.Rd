@@ -29,7 +29,7 @@ Default is NULL.}
 
 \item{nruns}{Resampling number for exact test. Default is 5000.}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p). Default is 2.}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}. Default is 2.}
 }
 \value{
 The p-value to be used to test the null hypothesis of exchangeability
@@ -60,31 +60,53 @@ If P or B is small, however, stick with permutations.
 Dependencies: All functions in auxiliary.R
 }
 \examples{
-Example 1 (get p-value of small matrix with independent features using exact test)
+# Example 1 (get p-value of small matrix with independent features using exact test)
+suppressWarnings(require(doParallel))
+registerDoParallel()
+
 X1 <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix, small
 getPValue(X1) # perform exact test with 5000 permutations
 
-Output: 0.2588 # should be larger than 0.05
+# should be larger than 0.05
 
-Example 2 (get p-value of high-dim matrix with independent features using asymptotic test)
+# Example 2 (get p-value of high-dim matrix with independent features using asymptotic test)
 X2 <- matrix(nrow = 10, ncol = 1000, rnorm(1e4)) # real matrix, large enough
 getPValue(X2, p = 2, largeP = TRUE) # very fast
 
-Output: 0.5282631 # should be larger than 0.05
+# should be larger than 0.05
 # getPValue(X2, p = 2) # slower, do not run (Output: 0.5764)
 
-Example 3 (get p-value of high-dim matrix with partitionable features using exact test)
+# Example 3 (get p-value of high-dim matrix with partitionable features using exact test)
+suppressWarnings(require(doParallel))
+registerDoParallel()
+
 X3 <- matrix(nrow = 10, ncol = 1000, rbinom(1e4, 1, 0.5))
 getPValue(X3, block_labels = rep(c(1,2,3,4,5), 200))
 
-Output: 0.7168
-Warning message: # there are features that have zero variation (i.e., all 0s or 1s)
-In getPValue(X3, block_labels = rep(c(1, 2, 3, 4, 5), 200)) :
-There exist columns with all ones or all zeros for binary X.
+# Warning message: # there are features that have zero variation (i.e., all 0s or 1s)
+# In getPValue(X3, block_labels = rep(c(1, 2, 3, 4, 5), 200)) :
+# There exist columns with all ones or all zeros for binary X.
 
-Example 4 (get p-value of high-dim matrix with partitionable features using asymptotic test)
+# Example 4 (get p-value of high-dim matrix with partitionable features using asymptotic test)
 
-This elaborate example generates binarized versions of time series data.
+## This elaborate example generates binarized versions of time series data.
+
+# Helper function to binarize a marker
+# by converting z-scores to {0,1} based on
+# standard normal quantiles
+binarizeMarker <- function(x, freq, ploidy) {
+ if (ploidy == 1) {
+   return((x > qnorm(1-freq)) + 0)
+ } else if (ploidy == 2) {
+   if (x <= qnorm((1-freq)^2)) {
+     return(0)
+   } else if (x <= qnorm(1-freq^2)) {
+     return(1)
+   } else return(2)
+ } else {
+   cat("Specify valid ploidy number, 1 or 2")
+ }
+}
 
 getAutoRegArray <- function(B, N, maf_l = 0.38, maf_u = 0.5, rho = 0.5, ploid = 1) {
 # get minor allele frequencies by sampling from uniform
@@ -105,17 +127,15 @@ for (b in 1:B) {
 return(ar_array)
 }
 
-# Function to generate the data array with desired number of samples
+## Function to generate the data array with desired number of samples
 getExHaplotypes <- function(N) {
   array <- do.call("cbind",
                    lapply(1:50, function(x) {getAutoRegArray(N, B = 20)}))
   return(array)
 }
 
-# Generate data and run test
+##  Generate data and run test
 X4 <- getExHaplotypes(10)
 getPValue(X4, block_boundaries = seq(from = 1, to = 1000, by = 25), largeP = TRUE)
-
-Output: 0.3878773
 
 }

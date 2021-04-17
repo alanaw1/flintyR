@@ -9,7 +9,7 @@ getCov(X, p = 2)
 \arguments{
 \item{X}{The binary or real matrix}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
 The three distinct entries of cov matrix, (alpha, beta, gamma)

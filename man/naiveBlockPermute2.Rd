@@ -9,7 +9,7 @@ naiveBlockPermute2(X, block_boundaries, p = 2)
 \arguments{
 \item{X}{The N x P binary or real matrix}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., ||x||_p^p = (x_1^p+...x_n^p)}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 
 \item{block_labels}{A vector of length P, whose pth component indicates the block membership of feature p}
 }
@@ -33,10 +33,8 @@ Dependencies: getBinVStat, getRealVStat
 \examples{
 X <- matrix(nrow = 5, ncol = 10, rnorm(50)) # real matrix example
 naiveBlockPermute2(X, block_boundaries = c(4,7,9), p = 2) # use Euclidean distance
-Output: 3.612564
 
 X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix example
 naiveBlockPermute2(X, block_boundaries = c(4,7,9))
-Output: 0.1555556
 
 }
