@@ -1,6 +1,6 @@
 # flintyR 
 
-This is the homepage of `flintyR`, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is under development. 
+This is the homepage of **flintyR**, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is under development. 
 
 ## What does this package offer?
 
