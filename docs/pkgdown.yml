@@ -1,0 +1,8 @@
+pandoc: 1.19.2.1
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  intro: intro.html
+  single-cell-atac-seq: single-cell-atac-seq.html
+last_built: 2021-04-17T23:37Z
+
