@@ -24,10 +24,9 @@ devtools::install.packages("flintyR")
 The code below demonstrates running our test on a binary matrix. 
 
 ```
-library(flintyR)
+# library(flintyR)
 X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
 getPValue(X) # perform exact test with 5000 permutations
-
 # Output should be larger than 0.05
 ```
 
