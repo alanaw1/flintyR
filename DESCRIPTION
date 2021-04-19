@@ -1,9 +1,9 @@
 Package: flintyR
-Type: Package
 Title: Flexible and Interpretable Non-parametric Tests of Exchangeability
 Version: 1.0
 Date: 2021-04-12
 Authors@R: c(person("Alan", "Aw", email = "alanaw1@berkeley.edu", role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9455-7878")), person("Jeffrey", "Spence", email = "jspence@stanford.edu", role = "ctb"))
+Author: Alan Aw <alanaw1@berkeley.edu>
 Maintainer: Alan Aw <alanaw1@berkeley.edu>
 Description: Given a multivariate dataset and some knowledge about 
               the dependencies between its features, it is important to 
@@ -13,10 +13,6 @@ Description: Given a multivariate dataset and some knowledge about
               exchangeability, allowing the user to specify the feature dependencies
               by hand. See Aw, Spence and Song (2021) for the accompanying paper.
 License: GPL (>= 2)
-Suggests: 
-    testthat,
-    knitr,
-    rmarkdown
 Imports: Rcpp (>= 1.0.6), doParallel
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
