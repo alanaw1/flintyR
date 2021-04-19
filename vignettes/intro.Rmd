@@ -154,6 +154,8 @@ if (the_p_value > 0.05) {
 }
 ```
 
+Note that alternative approaches, which we will not explore here, include selective inference ([Gao et al., 2021+](https://arxiv.org/abs/2012.02936)). For this alternative approach, in the differential analysis step one computes a $p$-value *conditioned on the cluster membership* obtained from the previous clustering step. 
+
 # Dependent Features: Example from Population Genetics
 
 This section to be updated. 
