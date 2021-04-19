@@ -139,7 +139,7 @@ The process above, in which we first cluster the data and then perform different
 
 <details>
   <summary><b>What is Double Dipping?</b></summary>
-    Double dipping arises when insufficient care is taken in data analysis that involves multiple stages of computational work. While there are at least three well-documented instances of the phenomenon ([Kriegerskorte et al., 2009](https://www.nature.com/articles/nn.2303)), here we focus on a two-stage pipeline involving clustering and differential analysis. We dip into the data first by clustering, and then dip again by performing differential analysis on the post-clustering data. This is problematic because the clustering method inherently searches for discriminative features to determine clusters. Thus we should not dip twice, or "double dip." 
+    Double dipping arises when insufficient care is taken in data analysis that involves multiple stages of computational work. While there are at least three well-documented instances of the phenomenon ([Kriegeskorte et al., 2009](https://www.nature.com/articles/nn.2303)), here we focus on a two-stage pipeline involving clustering and differential analysis. We dip into the data first by clustering, and then dip again by performing differential analysis on the post-clustering data. This is problematic because the clustering method inherently searches for discriminative features to determine clusters. Thus we should not dip twice, or "double dip." 
 </details> 
 
 Fortunately, we can avoid risking double dipping by performing our exchangeability test on the dataset $\mathbf{X}$ as a first step. 
