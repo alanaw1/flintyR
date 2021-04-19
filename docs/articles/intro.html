@@ -117,19 +117,6 @@
 <span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span>,
             nrow <span class="op">=</span> <span class="fl">100</span>,
             ncol <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
-<p><details><summary><b>View the first few entries of X</b></summary></details></p>
-<pre><code>```r
-# View data 
-X[1:6, 1:6]
-#&gt;            [,1]       [,2]      [,3]       [,4]        [,5]        [,6]
-#&gt; [1,]  0.2677109  1.1697031 -1.391893  1.9276736  0.50012380  0.09710544
-#&gt; [2,] -0.9367075 -1.6044303 -1.235421 -0.4614786  0.93162155 -0.22835027
-#&gt; [3,]  0.5962061  1.7238011 -1.728620  1.4165617 -0.66611422  1.79343602
-#&gt; [4,] -0.3120436  0.0244604 -1.426386 -1.2235425 -1.93759405  0.62449384
-#&gt; [5,]  0.3979791 -2.3207033 -1.051542  1.9308740 -0.06560023 -0.21070892
-#&gt; [6,] -0.5147962 -1.0740352  1.410444 -0.1887267  0.53929135  0.43858110
-```</code></pre>
-<p></p>
 <p>Under such settings <span class="math inline">\(\mathbf{X}\)</span> is homogeneous and the samples <span class="math inline">\(\mathbf{x}_1,\ldots,\mathbf{x}_N\)</span> are exchangeable, but if we were handed <span class="math inline">\(\mathbf{X}\)</span> without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis.</p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Cluster data</span>
@@ -222,7 +209,7 @@ X[1:6, 1:6]
 <span class="co"># Compute p-value for test of homogeneity</span>
 <span class="va">the_p_value</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"The p-value for the exchangeability test is "</span>, <span class="va">the_p_value</span>, <span class="st">".\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="co">#&gt; The p-value for the exchangeability test is 0.4798.</span>
+<span class="co">#&gt; The p-value for the exchangeability test is 0.4868.</span>
 <span class="kw">if</span> <span class="op">(</span><span class="va">the_p_value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"No evidence of heterogeneity at alpha = 0.05!\n"</span><span class="op">)</span>
 <span class="op">}</span>

@@ -54,14 +54,6 @@ X <- matrix(rnorm(5000),
             ncol = 50)
 ```
 
-<details>
-  <summary><b>View the first few entries of X</b></summary>
-    ```{r 2_1_2, echo=TRUE, eval=TRUE}
-    # View data 
-    X[1:6, 1:6]
-    ```
-</details> 
-
 Under such settings $\mathbf{X}$ is homogeneous and the samples $\mathbf{x}_1,\ldots,\mathbf{x}_N$ are exchangeable, but if we were handed $\mathbf{X}$ without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis. 
 
 ```{r 2_2, echo = TRUE}
