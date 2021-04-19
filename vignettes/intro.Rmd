@@ -14,15 +14,126 @@ knitr::opts_chunk$set(
 )
 ```
 
-flinty provides the scientist a way to test if their dataset contains multiple subpopulations. This is an important question if the scientist wishes to infer quantities of interest from the dataset, for instance population-level parameters, without overlooking any latent heterogeneities. 
+**flinty** provides scientists a way to test if their datasets contain multiple subpopulations. This is an important question if the scientist wishes to infer quantities of interest from the dataset, for instance population-level parameters, without overlooking any latent heterogeneities. 
 
-- In population genetics, suppose genetic samples are collected from individuals, say in a country like Mexico whose population history records admixture events and endogamous mating by cultural ancestry. It is not surprising if a dataset contains individuals that belong to distinguishable genetic communities. Unfortunately, absent information like family pedigrees, we might not have external means of grouping the individuals  
+Consider the following examples commonly encountered by practitioners. 
 
+- In population genetics, genetic samples are collected from individuals, say in a country like Mexico whose population history records admixture events and endogamous mating by cultural ancestry. It is not surprising if a dataset contains individuals that belong to distinguishable genetic communities. Unfortunately, absent information like family pedigrees, we might not have external means of grouping the individuals. This leads to less fine-scale analysis of the data and missed inferences about subpopulations. 
+- In single cell genomics, unique molecular identifiers (UMIs) are collected for a large sample of cells, and clustering algorithms are run to generate homogeneous groups of cells. External validation is used to guide correctness of clustering, and the resulting groups are assumed homogeneous for downstream analysis. However, the clustering algorithm does not *provably* recover homogeneous clusters without mathematical justification and underlying modeling assumptions made about the data. This has prompted the use of [statistical hypothesis testing](https://doi.org/10.1080/01621459.2020.1833888) to validate post-clustering homogeneity.      
+- In survey questionnaires typical of the social sciences, the multivariate dataset $\mathbf{X}$ conceals latent factors that can be recovered statistically. Concretely, it is assumed that the $P$-variate observations $\mathbf{x}_1,\ldots,\mathbf{x}_N$ making up $\mathbf{X}$ satisfy 
+$$\mathbf{x}_i = \mathbf{\Lambda}\boldsymbol{\xi}_i + \boldsymbol{\delta}_i$$
+for each sample $i$. Here $\mathbf{\Lambda}$ is the $P\times M$ matrix of loadings, $\boldsymbol{\xi}_i$ is the $M$-dimensional sample-specific measurement at those $M$ factors, and $\boldsymbol{\delta}_i$ is a $P$-dimensional residual vector. After learning the latent factors from the dataset (i.e., $\mathbf{\Lambda}$, and by extension $\boldsymbol{\xi}_i$ and $\boldsymbol{\delta}_i$ for each $i$), it is important to [check that](https://doi.org/10.1207/S15327906MBR3801_5) the residual vectors $\mathbf{\Delta}=[\boldsymbol{\delta}_1,\ldots,\boldsymbol{\delta}_N]^T$ look independent and identically distributed, or at least exchangeable, so that no other latent factor was missed.         
 
-Here, we illustrate one of the applications of  
+For each example above, methods have been developed to address the issue described. These methods vary in their degree of success. We won't discuss the successes and limitations of such methods here. We merely want to suggest connections of our methods with some of these settings. 
 
-```{r setup}
+Instead, in this vignette we shall describe our general method of exchangeability and demonstrate its use on simulated data. Along the way, we will delight ourselves with a few morsels of data analysis, including *double dipping* and *runs tests*.
+
+# Setup
+
+This section to be updated. 
+
+```{r setup, warning = FALSE, message = FALSE}
 library(flintyR)
+library(tidyverse)
 ```
 
-This is a test vignette. Basic application and population-genetic simulations will be included here.
+# Basic Example
+
+We start simple. This example is motivated by recent work of Lucy Gao and Daniela Witten, which they presented in the International Seminar on Selective Inference and in the R/Medicine 2020 Virtual Conference respectively.
+
+We simulate $\mathbf{X}$, a dataset consisting of $N=100$ samples, where each sample consists of $P=50$ independent features, each feature a realization of a standard Gaussian random variable. Mathematically, the entries $x_{np}\overset{\text{iid}}{\sim} N(0,1)$. 
+
+```{r 2_1, echo = TRUE}
+## Generate some data
+# Set seed for reproducibility
+set.seed(420)
+X <- matrix(rnorm(5000),
+            nrow = 100,
+            ncol = 50)
+
+# View data 
+X[1:6, 1:6]
+```
+
+Under such settings $\mathbf{X}$ is homogeneous and the samples $\mathbf{x}_1,\ldots,\mathbf{x}_N$ are exchangeable, but if we were handed $\mathbf{X}$ without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis. 
+
+```{r 2_2, echo = TRUE}
+## Cluster data
+X_df <- as.data.frame(scale(X))
+X_cluster <- kmeans(X_df, centers = 2, nstart = 25)
+
+# Assign cluster labels
+X_df$cluster <- X_cluster$cluster
+
+# Perform PCA to visualize
+X_pca <- princomp(X_df[,1:50])
+PC1and2 <- X_pca$scores[,1:2] %>% as.data.frame()
+PC1and2$cluster <- X_cluster$cluster 
+```
+
+By performing $k$-means clustering with $k=2$ as shown above, we obtain a cluster assignment. We can visualize this clustering by performing PCA on the samples and plotting the projection of each sample onto its first two principal components. 
+
+```{r 2_3, echo = TRUE}
+## Visualize clustering
+ggplot(PC1and2, aes(x = Comp.1, y = Comp.2)) +
+  geom_point(aes(colour = factor(cluster)),
+             shape = 10) +
+  theme_bw() +
+  xlab("PC1") +
+  ylab("PC2") +
+  guides(colour=guide_legend(title="Cluster")) +
+  ggtitle("A") +
+  theme(plot.title = element_text(face = "bold"))
+```
+
+Next, we perform Wilcoxon rank sum tests between the two populations for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at $\alpha=0.05$. Recall that the Wilcoxon rank sum test is a non-parametric two-sample test for difference in sample distributions (more precisely, whether any one distribution dominates the other or not). 
+
+```{r 2_4, echo = TRUE}
+## Differential analysis
+# Split into two clusters 
+X_df_1 <- X_df %>% filter(cluster == 1) 
+X_df_2 <- X_df %>% filter(cluster == 2) 
+
+# Compute p-values
+p_val_vector <- c()
+for (j in 1:50) {
+  # Perform differential analysis on feature j
+  da_result <- wilcox.test(x = X_df_1[,j], 
+                           y = X_df_2[,j])
+  # Print result if significant
+  p_val_vector <- c(p_val_vector, da_result$p.value)
+  if (da_result$p.value < 0.001) {
+    cat("The p-value for feature ", j, " is ", da_result$p.value, ".\n", 
+        sep = "")
+    cat("This is significant at FWER = 0.05 after Bonferroni correction.\n")
+  }
+}
+```
+
+We find six features that are statistically significant, which the user might erroneously report as discriminative features. We can visualize these six features by generating a Manhattan plot below.
+
+```{r 2_5, echo = TRUE}
+## Visualize differential analysis
+# Mutate the p-value vector for easier plotting
+p_val_vector <- cbind(p_val_vector, 1:50) %>% 
+  as.data.frame() %>%
+  `colnames<-`(c("p_value","feature")) %>% 
+  select(feature, p_value) %>%
+  mutate(log_p_value = -log10(p_value),
+         is_sig = (-log10(p_value) > 3)) 
+
+# Generate plot
+ggplot(p_val_vector, aes(x = feature, y = log_p_value)) +
+  geom_point(aes(colour = is_sig)) +
+  theme_bw() +
+  ylab(expression(-log[10](p))) +
+  geom_hline(yintercept = 3, lty = "dashed") +
+  scale_color_manual(values=c("#404040", "#d7191c")) + 
+  ggtitle("B") +
+  theme(plot.title = element_text(face = "bold"),
+        legend.position = "none")
+```
+
+# Dependent Features: Example from Population Genetics
+
+This section to be updated. 
