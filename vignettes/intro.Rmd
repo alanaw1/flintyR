@@ -35,6 +35,8 @@ This section to be updated.
 ```{r setup, warning = FALSE, message = FALSE}
 library(flintyR)
 library(tidyverse)
+library(doParallel)
+registerDoParallel()
 ```
 
 # Basic Example
@@ -50,10 +52,15 @@ set.seed(420)
 X <- matrix(rnorm(5000),
             nrow = 100,
             ncol = 50)
-
-# View data 
-X[1:6, 1:6]
 ```
+
+<details>
+  <summary><b>View the first few entries of X</b></summary>
+    ```{r 2_1_2, echo=TRUE, eval=TRUE}
+    # View data 
+    X[1:6, 1:6]
+    ```
+</details> 
 
 Under such settings $\mathbf{X}$ is homogeneous and the samples $\mathbf{x}_1,\ldots,\mathbf{x}_N$ are exchangeable, but if we were handed $\mathbf{X}$ without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis. 
 
@@ -86,7 +93,7 @@ ggplot(PC1and2, aes(x = Comp.1, y = Comp.2)) +
   theme(plot.title = element_text(face = "bold"))
 ```
 
-Next, we perform Wilcoxon rank sum tests between the two populations for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at $\alpha=0.05$. Recall that the Wilcoxon rank sum test is a non-parametric two-sample test for difference in sample distributions (more precisely, whether any one distribution dominates the other or not). 
+Next, we perform [Wilcoxon rank sum tests](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test) between the two populations for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at $\alpha=0.05$. Recall that the Wilcoxon rank sum (aka, Mann-Whitney) test is a non-parametric two-sample test for difference in sample distributions. 
 
 ```{r 2_4, echo = TRUE}
 ## Differential analysis
@@ -132,6 +139,27 @@ ggplot(p_val_vector, aes(x = feature, y = log_p_value)) +
   ggtitle("B") +
   theme(plot.title = element_text(face = "bold"),
         legend.position = "none")
+```
+
+## Fixing the Problem
+
+The process above, in which we first cluster the data and then perform differential analysis, is an example of *double dipping*.
+
+<details>
+  <summary><b>What is Double Dipping?</b></summary>
+    Double dipping arises when insufficient care is taken in data analysis that involves multiple stages of computational work. While there are at least three well-documented instances of the phenomenon ([Kriegerskorte et al., 2009](https://www.nature.com/articles/nn.2303)), here we focus on a two-stage pipeline involving clustering and differential analysis. We dip into the data first by clustering, and then dip again by performing differential analysis on the post-clustering data. This is problematic because the clustering method inherently searches for discriminative features to determine clusters. Thus we should not dip twice, or "double dip." 
+</details> 
+
+Fortunately, we can avoid risking double dipping by performing our exchangeability test on the dataset $\mathbf{X}$ as a first step. 
+
+```{r 2_6, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+## How to avoid risking double dipping
+# Compute p-value for test of homogeneity
+the_p_value <- getPValue(X)
+cat("The p-value for the exchangeability test is ", the_p_value, ".\n", sep = "")
+if (the_p_value > 0.05) {
+  cat("No evidence of heterogeneity at alpha = 0.05!\n")
+}
 ```
 
 # Dependent Features: Example from Population Genetics
