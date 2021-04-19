@@ -1,6 +1,5 @@
 library(Rcpp)
 library(RcppArmadillo)
-install.packages('doParallel')
 library(doParallel)
 registerDoParallel()
 
