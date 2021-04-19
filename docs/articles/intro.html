@@ -116,17 +116,20 @@
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">420</span><span class="op">)</span>
 <span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span>,
             nrow <span class="op">=</span> <span class="fl">100</span>,
-            ncol <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-
-<span class="co"># View data </span>
-<span class="va">X</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>
-<span class="co">#&gt;            [,1]       [,2]      [,3]       [,4]        [,5]        [,6]</span>
-<span class="co">#&gt; [1,]  0.2677109  1.1697031 -1.391893  1.9276736  0.50012380  0.09710544</span>
-<span class="co">#&gt; [2,] -0.9367075 -1.6044303 -1.235421 -0.4614786  0.93162155 -0.22835027</span>
-<span class="co">#&gt; [3,]  0.5962061  1.7238011 -1.728620  1.4165617 -0.66611422  1.79343602</span>
-<span class="co">#&gt; [4,] -0.3120436  0.0244604 -1.426386 -1.2235425 -1.93759405  0.62449384</span>
-<span class="co">#&gt; [5,]  0.3979791 -2.3207033 -1.051542  1.9308740 -0.06560023 -0.21070892</span>
-<span class="co">#&gt; [6,] -0.5147962 -1.0740352  1.410444 -0.1887267  0.53929135  0.43858110</span></code></pre></div>
+            ncol <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
+<p><details><summary><b>View the first few entries of X</b></summary></details></p>
+<pre><code>```r
+# View data 
+X[1:6, 1:6]
+#&gt;            [,1]       [,2]      [,3]       [,4]        [,5]        [,6]
+#&gt; [1,]  0.2677109  1.1697031 -1.391893  1.9276736  0.50012380  0.09710544
+#&gt; [2,] -0.9367075 -1.6044303 -1.235421 -0.4614786  0.93162155 -0.22835027
+#&gt; [3,]  0.5962061  1.7238011 -1.728620  1.4165617 -0.66611422  1.79343602
+#&gt; [4,] -0.3120436  0.0244604 -1.426386 -1.2235425 -1.93759405  0.62449384
+#&gt; [5,]  0.3979791 -2.3207033 -1.051542  1.9308740 -0.06560023 -0.21070892
+#&gt; [6,] -0.5147962 -1.0740352  1.410444 -0.1887267  0.53929135  0.43858110
+```</code></pre>
+<p></p>
 <p>Under such settings <span class="math inline">\(\mathbf{X}\)</span> is homogeneous and the samples <span class="math inline">\(\mathbf{x}_1,\ldots,\mathbf{x}_N\)</span> are exchangeable, but if we were handed <span class="math inline">\(\mathbf{X}\)</span> without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis.</p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Cluster data</span>
@@ -153,7 +156,7 @@
   <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">theme</span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="intro_files/figure-html/2_3-1.png" width="700"></p>
-<p>Next, we perform Wilcoxon rank sum tests between the two populations for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at <span class="math inline">\(\alpha=0.05\)</span>. Recall that the Wilcoxon rank sum test is a non-parametric two-sample test for difference in sample distributions (more precisely, whether any one distribution dominates the other or not).</p>
+<p>Next, we perform <a href="https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test">Wilcoxon rank sum tests</a> between the two populations for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at <span class="math inline">\(\alpha=0.05\)</span>. Recall that the Wilcoxon rank sum (aka, Mann-Whitney) test is a non-parametric two-sample test for difference in sample distributions.</p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Differential analysis</span>
 <span class="co"># Split into two clusters </span>
@@ -212,14 +215,14 @@
 <h2 class="hasAnchor">
 <a href="#fixing-the-problem" class="anchor"></a>Fixing the Problem</h2>
 <p>The process above, in which we first cluster the data and then perform differential analysis, is an example of <em>double dipping</em>.</p>
-<p><details><summary><b>What is Double Dipping?</b></summary><img src="intro_files/figure-html/unnamed-chunk-2-1.png" width="700"></details></p>
+<p><details><summary><b>What is Double Dipping?</b></summary> Double dipping arises when insufficient care is taken in data analysis that involves multiple stages of computational work. While there are at least three well-documented instances of the phenomenon (<a href="https://www.nature.com/articles/nn.2303">Kriegerskorte et al., 2009</a>), here we focus on a two-stage pipeline involving clustering and differential analysis. We dip into the data first by clustering, and then dip again by performing differential analysis on the post-clustering data. This is problematic because the clustering method inherently searches for discriminative features to determine clusters. Thus we should not dip twice, or "double dip." </details></p>
 <p>Fortunately, we can avoid risking double dipping by performing our exchangeability test on the dataset <span class="math inline">\(\mathbf{X}\)</span> as a first step.</p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## How to avoid risking double dipping</span>
 <span class="co"># Compute p-value for test of homogeneity</span>
 <span class="va">the_p_value</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"The p-value for the exchangeability test is "</span>, <span class="va">the_p_value</span>, <span class="st">".\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="co">#&gt; The p-value for the exchangeability test is 0.486.</span>
+<span class="co">#&gt; The p-value for the exchangeability test is 0.4798.</span>
 <span class="kw">if</span> <span class="op">(</span><span class="va">the_p_value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"No evidence of heterogeneity at alpha = 0.05!\n"</span><span class="op">)</span>
 <span class="op">}</span>
