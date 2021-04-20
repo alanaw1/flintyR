@@ -12,3 +12,6 @@ forcats
 foreach
 iterators
 doParallel
+ade4
+adegenet
+poppr
