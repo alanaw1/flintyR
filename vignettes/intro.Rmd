@@ -15,6 +15,12 @@ knitr::opts_chunk$set(
 ```
 
 **flinty** provides scientists a way to test if their datasets contain multiple subpopulations. This is an important question if the scientist wishes to infer quantities of interest from the dataset, for instance population-level parameters, without overlooking any latent heterogeneities. 
+<p align="center">
+<img src="intro_visual.png" width="600"/>
+</p>
+<p align="center">
+*Bruno sees the array in front of him but does not see the latent information at the back.*
+</p>
 
 Consider the following examples commonly encountered by practitioners. 
 
