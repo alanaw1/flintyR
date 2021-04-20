@@ -3,7 +3,7 @@
 This is the homepage of **flintyR**, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is under development. 
 
 
-![Bruno appears](../bruno_intro.png)
+![Bruno appears](bruno_intro.png)
 <p align="center">
 *Bruno is named after a famous statistican who studied exchangeability. Who might that [be](http://www.brunodefinetti.it/)?*
 </p>
