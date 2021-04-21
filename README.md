@@ -42,8 +42,8 @@ Examples involving real datasets can be found in the tutorials.
 
 We offer several tutorials on using our software.
 
-- Conceptual explorations of exchangeability
-- Application to avoiding risking double dipping
+- Conceptual explorations of exchangeability (see Exchangeability and Homogeneity)
+- Application to avoiding risking double dipping (see Introduction)
 - Application to single cell genomics 
 - Application to World Values Survey 
 

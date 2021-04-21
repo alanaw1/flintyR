@@ -1,0 +1,17 @@
+---
+title: "Exchangeability and Homogeneity"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exchangeable_Homogeneous}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This is the vignette for exchangeability and homogeneity.
