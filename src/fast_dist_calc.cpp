@@ -13,7 +13,7 @@ using namespace Rcpp;
 
 
 //' Binary Vector to Bit
-//' 
+//'
 //' Converts the first column of an integer matrix X
 //' into its base 2 or bit representation. Used to speed up
 //' Hamming distance vector computation.
@@ -31,7 +31,7 @@ unsigned long long binvec2int(IntegerMatrix x) {
 
 
 //' Fast Bitwise Hamming Distance Vector Computation
-//' 
+//'
 //' Takes in a binary matrix X, whose transpose t(X)
 //' has N rows, and computes a vector recording all
 //' {N choose 2} pairwise Hamming distances of t(X),
@@ -39,7 +39,7 @@ unsigned long long binvec2int(IntegerMatrix x) {
 //'
 //' @param X binary matrix (IntegerMatrix class )
 //' @return vector of Hamming distances (NumericVector class)
-//' @examples t(X) = [[1,0], [0,1], [1,1]] --> output = [2,1,1]
+//' @examples # t(X) = [[1,0], [0,1], [1,1]] --> output = [2,1,1]
 // [[Rcpp::export]]
 NumericVector hamming_bitwise(IntegerMatrix X) {
   // initialize some variables
@@ -90,16 +90,17 @@ NumericVector hamming_bitwise(IntegerMatrix X) {
 }
 
 //' Fast \eqn{l_p^p} Distance Vector Computation
-//' 
+//'
 //' Takes in a double matrix X, whose transpose t(X)
 //' has N rows, and computes a vector recording all
 //' \eqn{{N \choose 2}} pairwise \eqn{l_p^p} distances of t(X),
 //' ordered lexicographically.
 //'
 //' @param X double matrix (arma::mat class)
+//' @param p numeric Minkowski power (double class)
 //' @return vector of \eqn{l_p^p} distances (arma::vec class)
-//' @examples X = [[0.5,0.5],[0,1],[0.3,0.7]] --> lPVec = [x,y,z]
-//' with x = (0.5^p + 0.5^p)
+//' @examples # X = [[0.5,0.5],[0,1],[0.3,0.7]] --> lPVec = [x,y,z]
+//' # with x = (0.5^p + 0.5^p)
 // [[Rcpp::export]]
 arma::vec lp_distance(arma::mat X, double p) {
   // initialize some variables

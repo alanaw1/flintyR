@@ -8,6 +8,8 @@ lp_distance(X, p)
 }
 \arguments{
 \item{X}{double matrix (arma::mat class)}
+
+\item{p}{numeric Minkowski power (double class)}
 }
 \value{
 vector of \eqn{l_p^p} distances (arma::vec class)

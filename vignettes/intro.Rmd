@@ -36,7 +36,7 @@ Instead, in this vignette we shall describe our general method of exchangeabilit
 
 # Setup
 
-This section to be updated. 
+We start by loading **flintyR** alongside other useful packages.
 
 ```{r setup, warning = FALSE, message = FALSE}
 library(flintyR)
@@ -251,9 +251,9 @@ Similar to Section 2, we can visualize our clusters by plotting the projection o
 ```{r 3_3, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
 ## Visualize clustering
 # Perform PCA
-X_pca <- prcomp(X_df[,1:4067], scale = TRUE)
+X_pca <- prcomp(X_df[,1:(dim(X_df)[2]-1)], scale = TRUE)
 
-X_score_matrix <- scale(X_df[,1:4067]) %*% X_pca$rotation
+X_score_matrix <- scale(X_df[,1:(dim(X_df)[2]-1)]) %*% X_pca$rotation
 PC1and2 <- X_score_matrix[,1:2] %>% as.data.frame()
 PC1and2$cluster <- X_df$cluster 
 

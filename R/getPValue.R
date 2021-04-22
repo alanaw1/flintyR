@@ -33,6 +33,7 @@
 #' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}. Default is 2.
 #' @return The p-value to be used to test the null hypothesis of exchangeability
 #' @export
+#' @importFrom doParallel %dopar%
 #' @examples
 #' # Example 1 (get p-value of small matrix with independent features using exact test)
 #' suppressWarnings(require(doParallel))

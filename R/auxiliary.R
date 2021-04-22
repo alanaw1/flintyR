@@ -1,5 +1,5 @@
-library(Rcpp)
-library(RcppArmadillo)
+#library(Rcpp)
+#library(RcppArmadillo)
 library(doParallel)
 registerDoParallel()
 
@@ -177,7 +177,7 @@ naiveBlockPermute1 <- function(X,
 #'
 #' Dependencies: getBinVStat, getRealVStat
 #' @param X The N x P binary or real matrix
-#' @param block_labels A vector of length P, whose pth component indicates the block membership of feature p
+#' @param block_boundaries A vector of length at most P, whose entries indicate positions at which to demarcate blocks
 #' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return V(X'), where X' is a resampled by permutation of entries blockwise
 #' @examples

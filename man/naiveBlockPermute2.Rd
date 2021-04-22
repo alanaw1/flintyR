@@ -9,9 +9,9 @@ naiveBlockPermute2(X, block_boundaries, p = 2)
 \arguments{
 \item{X}{The N x P binary or real matrix}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
+\item{block_boundaries}{A vector of length at most P, whose entries indicate positions at which to demarcate blocks}
 
-\item{block_labels}{A vector of length P, whose pth component indicates the block membership of feature p}
+\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
 V(X'), where X' is a resampled by permutation of entries blockwise

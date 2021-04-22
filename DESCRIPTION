@@ -13,7 +13,8 @@ Description: Given a multivariate dataset and some knowledge about
               exchangeability, allowing the user to specify the feature dependencies
               by hand. See Aw, Spence and Song (2021) for the accompanying paper.
 License: GPL (>= 2)
-Imports: Rcpp (>= 1.0.6), doParallel
+Imports: Rcpp (>= 1.0.6), doParallel, foreach, assertthat, testthat, stats
+Suggests: rmarkdown, knitr, devtools
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
