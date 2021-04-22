@@ -1,7 +1,7 @@
 #library(Rcpp)
 #library(RcppArmadillo)
-library(doParallel)
-registerDoParallel()
+#library(doParallel)
+#registerDoParallel()
 
 #Rcpp::sourceCpp("./src/fast_dist_calc.cpp")
 
