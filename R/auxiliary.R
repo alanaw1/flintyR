@@ -225,6 +225,7 @@ naiveBlockPermute2 <- function(X,
 #' @param N Sample size, i.e., nrow(X)
 #' @return N x N matrix whose entries record the index
 #' corresponding  to the pair of labels (indexed by the matrix dims)
+#' @noRd
 #'
 buildForward <- function(N) {
   forward <- matrix(0, ncol = N, nrow = N)
@@ -249,6 +250,7 @@ buildForward <- function(N) {
 #' @param N Sample size, i.e., nrow(X)
 #' @return N x N matrix whose entries record the index
 #' corresponding  to the pair of labels (indexed by the matrix dims)
+#' @noRd
 #'
 buildReverse <- function(N) {
   reverse <- matrix(0,ncol = 2, nrow = choose(N,2))
