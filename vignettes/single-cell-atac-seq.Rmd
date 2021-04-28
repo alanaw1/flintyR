@@ -22,7 +22,7 @@ Key to discovering mechanisms from single cell data are analyses of heterogeneit
 <img src="ex_data/scATAC-seq/bmc_fig1.png" alt="Many resolutions of single cell statistical inference." width="500"/>
 </p>
 <p align="center">
-*Many levels of resolution at which to investigate single cells. Figure is reproduced from [Lähnemann et al. (2020)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1926-6) under the Creative Commons Attribution (CC-BY) license.* 
+*Many levels of resolution at which to investigate single cells. Figure reproduced from [Lähnemann et al. (2020)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1926-6) and [Wolf et al. (2019)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1663-x) under the Creative Commons Attribution (CC-BY) license.* 
 </p>
 
 Central to single cell analyses is the clustering of a large population of sampled cells from an experiment. Such clustering often partitions the large population into single cell communities that correspond to some known biological function (e.g., cell type or sampling batch). Once these cell communities are obtained, further analyses can be conducted *on* or *between* identified communities to generate biological hypotheses.

@@ -21,11 +21,11 @@ How many ways can a multivariate dataset be heterogeneous?
 - explore different types of heterogeneities, connecting them to a "working definition" of *statistical homogeneity*, 
 - explain how exchangeability and **flinty** relate to homogeneity.
 
-The punchline is that non-exchangeability is a specific type of statistical heterogeneity, but there are other types of statistical heterogeneities that still give rise to exchangeable data. Thus, users of our test should take care in interpreting results obtained from our test, or any other test of structured-ness of data (ex: the Tracy-Widom test of largest singular value).      
+The punchline is that non-exchangeability is a specific type of statistical heterogeneity, but there are other types of statistical heterogeneities that still give rise to exchangeable data. Thus, users of our test should take care in interpreting results obtained from our test, or any other test of structured-ness of data (e.g., the [Tracy-Widom test](https://rdrr.io/bioc/LEA/man/main_tracyWidom.html) of largest singular value).      
 
 # A Working Definition of Statistical Homogeneity
 
-Scientists frequently think about homogeneous populations, homogeneous proportions, and homogeneous samples. They run tests of homogeneity on labeled samples (ex: the $\chi^2$ test). With labeled samples, one could directly formalize homogeneity as "little to no difference with respect to labels." Indeed, the $\chi^2$ test of homogeneity is a test of whether categorical proportions are similar enough between distinctly labeled samples. So are many other tests of homogeneity defined (ex: [Cochran's test](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/cochvari.htm) for homogeneity of variances between $k$ groups, the [Potthoff-Whittinghill test](https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat01756) of homogeneity between two classes). The general test of homogeneity is typically a "test of homogeneity of quantity $x$ with respect to various groups of samples."   
+Scientists frequently think about homogeneous populations, homogeneous proportions, and homogeneous samples. They run tests of homogeneity on labeled samples (e.g., the $\chi^2$ test). With labeled samples, one could directly formalize homogeneity as "little to no difference with respect to labels." Indeed, the $\chi^2$ test of homogeneity is a test of whether categorical proportions are similar enough between distinctly labeled samples. So are many other tests of homogeneity defined (e.g., [Cochran's test](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/cochvari.htm) for homogeneity of variances between $k$ groups, the [Potthoff-Whittinghill test](https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat01756) of homogeneity between two classes). The general test of homogeneity is typically a "test of homogeneity of quantity $x$ with respect to various groups of samples."   
 
 Defining homogeneity without sample labels is less straightforward. Here are some approaches taken by others:
 
@@ -38,7 +38,7 @@ Mathematically, the description above says that given a dataset $\{\mathbf{x}_1,
 \begin{equation}
 d(F_\mathcal{S},F_{\mathcal{S}'}) \approx 0,\label{eq:1}
 \end{equation}
-where $d(\cdot,\cdot)$ is some measure of distance between distributions (ex: Wasserstein distance or total variation distance).
+where $d(\cdot,\cdot)$ is some measure of distance between distributions (e.g., Wasserstein distance or total variation distance).
 
 We adopt the description above as a working definition of statistical homogeneity, and evaluate how well such a definition relates to what scientists mean when they assume "homogeneous populations" and "homogeneous samples" prior to downstream analysis. 
 
