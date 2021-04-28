@@ -105,7 +105,7 @@ Furthermore, these clusters correspond to myeloid and lymphoid cell populations.
 <img src="ex_data/scATAC-seq/cell_annotation.jpg" alt="Pie charts summarizing cell type composition per cluster" width="800"/>
 </p>
 
-Before proceeding with our analysis, we note that the $79921$ features per individual cell correspond to physical regions along the human genome, and each feature records the number of reads, more precisely *Tn5cut sites*, mapped by that individual cell to the physical region. These read-based records measure chromatin activity and thus provide information about gene regulation.
+Before proceeding with our analysis, we note that the $79921$ features per individual cell correspond to physical regions along the human genome, and each feature records the number of reads, more precisely Tn5cut sites, mapped by that individual cell to the physical region. These read-based records measure chromatin activity and thus provide information about gene regulation.
 
 # Analysis 
 
@@ -113,7 +113,7 @@ Data processing has provided us with a dataset $\mathbf{X}\in\mathbb{N}^{N\times
 
 Our first goal is to check whether each cluster of cells looks homogeneous. Indeed, there may be latent stratification or heterogeneities unaccounted for during clustering.
 
-We first binarize $\mathbf{X}=(x_{ij})$ by setting each entry $x_{ij}=1$ if it is positive, and $x_{ij}=0$ otherwise. Such data compression results in loss of information. However, owing to our compression step itself \emph{reducing} variability, if our test reports non-exchangeability on the compressed version, then, all other things being equal, it is the case that the original sample exhibits heterogeneity. (This is a general intuition that may not be true if there exist appropriate statistical models for the original features in the uncompressed version. Hence, we place the caveat "all things being equal." To our knowledge, such a model still does not exist.)
+We first binarize $\mathbf{X}=(x_{ij})$ by setting each entry $x_{ij}=1$ if it is positive, and $x_{ij}=0$ otherwise. Such data compression results in loss of information. However, owing to our compression step itself *reducing* variability, if our test reports non-exchangeability on the compressed version, then, all other things being equal, it is the case that the original sample exhibits heterogeneity. (This is a general intuition that may not be true if there exist appropriate statistical models for the original features in the uncompressed version. Hence, we place the caveat "all things being equal." To our knowledge, such a model still does not exist.)
 
 Here is a snapshot of the binarized version of samples from the smallest cluster (Cluster 14).
 
@@ -151,7 +151,7 @@ There are more than 20 TAD calling approaches; see [Pal et al. (2019)](https://l
 
 <details>
   <summary><b>A Important Caveat</b></summary>
-    Because the single cell data provided by 10X Genomics is not accompanied by Hi-C contact maps of the same cells, we instead rely on an external Hi-C dataset consisting of human fetal lung fibroblast (IMR90) cells ([Dixon et al., 2012](https://www.nature.com/articles/nature11082)). This introduces one caveat to our analysis: we assume TADs identified from IMR90 cells are approximately identical to TADs in PBMC. Note that there is some evidence suggesting that TADs are reasonably preserved across cell types; see [Sauerwald and Kingsford (2018)](https://academic.oup.com/bioinformatics/article/34/13/i475/5045717) for instance. Careful quantification of the invariance of TADs toward cell type specification is a topic of ongoing research, and we direct the interested reader to, e.g., [Gong et al. (2018)](https://www.nature.com/articles/s41467-018-03017-1), [Krefting et al. (2018)](https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-018-0556-x), and [McArthur and Capra (2021)](https://www.sciencedirect.com/science/article/abs/pii/S000292972100001X). 
+    Because the single cell data provided by 10X Genomics is not accompanied by Hi-C contact maps of the same cells, we instead rely on an external Hi-C dataset consisting of human fetal lung fibroblast (IMR90) cells ([Dixon et al., 2012](https://www.nature.com/articles/nature11082)). This introduces one caveat to our analysis: we assume TADs identified from IMR90 cells are approximately identical to TADs in PBMC. Note that there is some evidence suggesting that TADs are reasonably preserved across cell types; see [Sauerwald and Kingsford (2018)](https://academic.oup.com/bioinformatics/article/34/13/i475/5045717) for instance. Careful quantification of the invariance of TADs toward cell type specification is a topic of ongoing research, and we direct the interested reader to recent work, e.g., [Gong et al. (2018)](https://www.nature.com/articles/s41467-018-03017-1), [Krefting et al. (2018)](https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-018-0556-x), and [McArthur and Capra (2021)](https://www.sciencedirect.com/science/article/abs/pii/S000292972100001X). 
 </details> 
 
 # Results
