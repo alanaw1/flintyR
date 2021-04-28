@@ -14,4 +14,35 @@ knitr::opts_chunk$set(
 )
 ```
 
-This is the vignette for exchangeability and homogeneity.
+How many ways can a multivariate dataset be heterogeneous? 
+
+📖 In this vignette, we will
+
+- explore different types of heterogeneities, connecting them to a "working definition" of *statistical homogeneity*, 
+- explain how exchangeability and **flinty** relate to homogeneity.
+
+The punchline is that non-exchangeability is a specific type of statistical heterogeneity, but there are other types of statistical heterogeneities that still give rise to exchangeable data. Thus, users of our test should take care in interpreting results obtained from our test, or any other test of structured-ness of data (ex: the Tracy-Widom test of largest singular value).      
+
+# A Working Definition of Statistical Homogeneity
+
+Scientists frequently think about homogeneous populations, homogeneous proportions, and homogeneous samples. They run tests of homogeneity on labeled samples (ex: the $\chi^2$ test). With labeled samples, one could directly formalize homogeneity as "little to no difference with respect to labels." Indeed, the $\chi^2$ test of homogeneity is a test of whether categorical proportions are similar enough between distinctly labeled samples. So are many other tests of homogeneity defined (ex: [Cochran's test](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/cochvari.htm) for homogeneity of variances between $k$ groups, the [Potthoff-Whittinghill test](https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat01756) of homogeneity between two classes). The general test of homogeneity is typically a "test of homogeneity of quantity $x$ with respect to various groups of samples."   
+
+Defining homogeneity without sample labels is less straightforward. Here are some approaches taken by others:
+
+- In Volume 5 of the *Encyclopedia of Statistical Sciences* (second edition [published](https://www.wiley.com/en-gb/Encyclopedia+of+Statistical+Sciences%2C+16+Volume+Set%2C+2nd+Edition-p-9780471150442) in 2006 by Wiley), on p. 3207 the entry "Homogeneity and Tests of Homogeneity" begins with the sentence, "homogeneity refers to sameness or similarity." The rest of the paragraph, and indeed the remainder of the entry, frames homogeneity with respect to a collection of populations. 
+- The environmental health book *Radiation-Induced Processes of Adaption: Research by Statistical Modeling* ([published](https://www.springer.com/gp/book/9789400766297) in 2013 by Springer) writes in their Glossary, on p. 173, that homogeneity "relate[s] to the validity of the often convenient assumption that the statistical properties of any one part of an overall dataset are the same as any other part."   
+
+The statistics encyclopedia does not provide any definition of homogeneity of a dataset without labels. This reflects our point in the beginning about how many tests of homogeneity typically require sample labels. On the other hand, the environmental health book describes a formalizable description of homogeneity, namely the clause about statistical properties of any one part looking the same as another. 
+
+Mathematically, the description above says that given a dataset $\{\mathbf{x}_1,\ldots,\mathbf{x}_N\} \subset \mathbb{R}^P$, for it to be homogeneous it should satisfy the following property: for any pair of disjoint subsamples $\mathcal{S}=\{\mathbf{x}_i\}$ and $\mathcal{S}'=\{\mathbf{x}_{i'}\}$, the distributions of the pair of subsamples $F_\mathcal{S}$ and $F_{\mathcal{S}'}$ should not differ by too much: 
+\begin{equation}
+d(F_\mathcal{S},F_{\mathcal{S}'}) \approx 0,\label{eq:1}
+\end{equation}
+where $d(\cdot,\cdot)$ is some measure of distance between distributions (ex: Wasserstein distance or total variation distance).
+
+We adopt the description above as a working definition of statistical homogeneity, and evaluate how well such a definition relates to what scientists mean when they assume "homogeneous populations" and "homogeneous samples" prior to downstream analysis. 
+
+# Heterogeneity: Scientific Intuition and Rigorous Examples
+
+To be written.
+

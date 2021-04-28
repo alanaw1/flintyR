@@ -211,7 +211,7 @@ If P or B is small, however, stick with permutations.</p>
 
 <span class='va'>X1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># binary matrix, small</span>
 <span class='fu'>getPValue</span><span class='op'>(</span><span class='va'>X1</span><span class='op'>)</span> <span class='co'># perform exact test with 5000 permutations</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.3682</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.361</div><div class='input'>
 <span class='co'># should be larger than 0.05</span>
 
 <span class='co'># Example 2 (get p-value of high-dim matrix with independent features using asymptotic test)</span>
