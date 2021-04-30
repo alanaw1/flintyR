@@ -176,7 +176,7 @@ rel_dir <- "ex_data/scATAC-seq"
 
 ## Are Clusters Homogeneous?
 
-Our first goal is to check whether each cluster of cells looks homogeneous. We run our test on Cluster 14 (which was loaded above), using features grouped into sets based on TAD membership identified by **DomainCaller**.
+Our first goal is to check whether each cluster of cells is homogeneous. We run our test on Cluster 14 (which was loaded above), using features grouped into sets based on TAD membership identified by **DomainCaller**.
 
 ```{r domain_caller, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
 ## Run test
@@ -273,12 +273,86 @@ getPValue(as.matrix(clust0_dendr_autosom),
 
 Note that we did not perform this subcluster analysis using TAD callers to partition features in Chromosome 1, owing to there being too little variability in Chromosome 1 within any subcluster for our analysis to be meaningful.  
 
-Thus, our test shows evidence of heterogeneity in the clusters and cell type subclusters, after accounting for either (1) correlations induced on peak read counts by the 3D structure of the genome, or (2) chromosome. However, as noted in our paper, an equally valid interpretation is that our accounting for chromatin-induced statistical dependencies between peaks is insufficient.
+Thus, our test shows evidence of heterogeneity in the clusters and cell type subclusters, after accounting for either (1) correlations induced on peak read counts by the 3D structure (TADs) of the genome, or (2) dependencies between peaks lying in the same chromosome. However, as noted in our paper, an equally valid interpretation is that our accounting for chromatin-induced or "same chromosome"-induced statistical dependencies between peaks is insufficient.
 
 ## What Drives Heterogeneity in Clusters?
 
-Given that all 15 clusters appear heterogeneous even after accounting for chromatin-induced dependencies, we shall attempt to explain what drives the heterogeneity.
+Given that all $15$ clusters appear heterogeneous even after accounting for chromatin-induced dependencies, we shall attempt to explain what drives the heterogeneity.
 
+There are two types of heterogeneities, one to do with differences in row sums of samples and another to do with the patterning of zeros and ones even if row sums are not too far apart. Going back to how we binarized our peak read counts, we can think of the first type of heterogeneity describing differences in the total number of *positive* peak read counts, across all measured peaks, between individual samples. The second type of heterogeneity describes differences in the configuration of positive peak read counts; for instance certain samples may have more positive peak read counts at Chromosome 4 while other samples may have more positive peak read counts at Chromosome 5, despite the total number of positive peak read counts across the genome being not too different. 
 
+While we do not have a conclusive biological interpretation of these two types of noise, we know that the first type of heterogeneity may arise due to technical or biologically meaningful noise (even within the same cell type, perhaps due to differences in physical location in a tissue).
 
+<p align="center">
+<img src="ex_data/scATAC-seq/two_hets.png" width="500"/>
+</p>
+<p align="center">
+*Bruno visualizes the two types of heterogeneities. Which one is which?*
+</p>
 
+To investigate the contributions by these two different types of heterogeneities to the overall heterogeneity, we will focus on the version of our test where we restrict ourselves to Chromosome 1 and group our features into sets based on TAD membership. TAD groupings are calculated using **TopDom**.    
+
+Let us consider Cluster 13 ($N=50$ samples) and Cluster 14 ($N=18$ samples), which are uniformly annotated as pDC cells and CD14+ monocytes. To see if the first or the second type of heterogeneity explains the overall heterogeneity, we run our test on subsamples whose row sums are restricted to lie within an interval. 
+
+<p align="center">
+<img src="ex_data/scATAC-seq/rowsum_hist.jpg" width="500"/>
+</p>
+<p align="center">
+*Histograms of row sums of samples for Clusters 13 and 14. Vertical dotted lines demarcate the range of row sums included in subsamples on which we run our test.*
+</p>
+
+Concretely, for Cluster 13, we include samples whose row sums are between $600$ and $700$ ($12$ such samples). 
+
+```{r rowsum_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Run test on Cluster 13
+# Choose cluster
+cl <- 14
+
+# Load binarized counts matrix for that cluster
+file_name <- paste0(rel_dir, "/bin_satija_keepzeros_", cl, ".RData")
+load(file_name)
+
+# Load TopDom feature groupings
+load(paste0(rel_dir, "/topdom_boundaries_chr1_rm0.RData"))
+
+# Subset to Chr1 and restrict row sums
+clust13_chr1_restr <- subsetted_data[,grepl("chr1:",colnames(subsetted_data))]
+clust13_chr1_restr <- clust13_chr1_restr[,-topdom_boundaries_chr1_rm0$discardIndices]
+clust13_chr1_restr <- clust13_chr1_restr[
+  which((rowSums(clust13_chr1_restr) < 700) & (rowSums(clust13_chr1_restr) > 600)),]
+nrow(clust13_chr1_restr)  
+
+# Compute p-value
+getPValue(as.matrix(clust13_chr1_restr),
+          block_boundaries = topdom_boundaries_chr1_rm0$blockBounds)
+```
+
+As seen above, the $p$-value is insignificant at $\alpha=0.05$.
+
+We run a similar analysis for Cluster 14 by including samples whose row sums are between $300$ and $400$ ($8$ such samples). We arrive at a similar conclusion. 
+
+```{r rowsum_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Run test on Cluster 14
+# Choose cluster
+cl <- 15
+
+# Load binarized counts matrix for that cluster
+file_name <- paste0(rel_dir, "/bin_satija_keepzeros_", cl, ".RData")
+load(file_name)
+
+# Load TopDom feature groupings
+load(paste0(rel_dir, "/topdom_boundaries_chr1_rm0.RData"))
+
+# Subset to Chr1 and restrict row sums
+clust14_chr1_restr <- subsetted_data[,grepl("chr1:",colnames(subsetted_data))]
+clust14_chr1_restr <- clust14_chr1_restr[,-topdom_boundaries_chr1_rm0$discardIndices]
+clust14_chr1_restr <- clust14_chr1_restr[
+  which((rowSums(clust14_chr1_restr) < 400) & (rowSums(clust14_chr1_restr) > 300)),]
+nrow(clust14_chr1_restr)  
+
+# Compute p-value
+getPValue(as.matrix(clust14_chr1_restr),
+          block_boundaries = topdom_boundaries_chr1_rm0$blockBounds)
+```
+
+Given that these cells make up smaller than $50\%$ of the total number of cells of their respective cluster, and the row sums for samples from either cluster have high variation, our analysis suggests that the heterogeneities of these two clusters are predominantly driven by the first type of heterogeneity.

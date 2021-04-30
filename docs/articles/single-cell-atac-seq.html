@@ -379,7 +379,7 @@ Because the single cell data provided by 10X Genomics is not accompanied by Hi-C
 <div id="are-clusters-homogeneous" class="section level2">
 <h2 class="hasAnchor">
 <a href="#are-clusters-homogeneous" class="anchor"></a>Are Clusters Homogeneous?</h2>
-<p>Our first goal is to check whether each cluster of cells looks homogeneous. We run our test on Cluster 14 (which was loaded above), using features grouped into sets based on TAD membership identified by <strong>DomainCaller</strong>.</p>
+<p>Our first goal is to check whether each cluster of cells is homogeneous. We run our test on Cluster 14 (which was loaded above), using features grouped into sets based on TAD membership identified by <strong>DomainCaller</strong>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run test</span>
 <span class="co"># Load the set membership of features obtained from calling TADs on Chr1 using DomainCaller</span>
@@ -467,14 +467,80 @@ Because the single cell data provided by 10X Genomics is not accompanied by Hi-C
 <span class="co"># Compute p-value using same block delimiters as earlier</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">clust0_dendr_autosom</span><span class="op">)</span>, 
           block_boundaries <span class="op">=</span> <span class="va">start_points</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.207</span></code></pre></div>
+<span class="co">#&gt; [1] 0.2016</span></code></pre></div>
 <p>Note that we did not perform this subcluster analysis using TAD callers to partition features in Chromosome 1, owing to there being too little variability in Chromosome 1 within any subcluster for our analysis to be meaningful.</p>
-<p>Thus, our test shows evidence of heterogeneity in the clusters and cell type subclusters, after accounting for either (1) correlations induced on peak read counts by the 3D structure of the genome, or (2) chromosome. However, as noted in our paper, an equally valid interpretation is that our accounting for chromatin-induced statistical dependencies between peaks is insufficient.</p>
+<p>Thus, our test shows evidence of heterogeneity in the clusters and cell type subclusters, after accounting for either (1) correlations induced on peak read counts by the 3D structure (TADs) of the genome, or (2) dependencies between peaks lying in the same chromosome. However, as noted in our paper, an equally valid interpretation is that our accounting for chromatin-induced or “same chromosome”-induced statistical dependencies between peaks is insufficient.</p>
 </div>
 <div id="what-drives-heterogeneity-in-clusters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#what-drives-heterogeneity-in-clusters" class="anchor"></a>What Drives Heterogeneity in Clusters?</h2>
-<p>Given that all 15 clusters appear heterogeneous even after accounting for chromatin-induced dependencies, we shall attempt to explain what drives the heterogeneity.</p>
+<p>Given that all <span class="math inline">\(15\)</span> clusters appear heterogeneous even after accounting for chromatin-induced dependencies, we shall attempt to explain what drives the heterogeneity.</p>
+<p>There are two types of heterogeneities, one to do with differences in row sums of samples and another to do with the patterning of zeros and ones even if row sums are not too far apart. Going back to how we binarized our peak read counts, we can think of the first type of heterogeneity describing differences in the total number of <em>positive</em> peak read counts, across all measured peaks, between individual samples. The second type of heterogeneity describes differences in the configuration of positive peak read counts; for instance certain samples may have more positive peak read counts at Chromosome 4 while other samples may have more positive peak read counts at Chromosome 5, despite the total number of positive peak read counts across the genome being not too different.</p>
+<p>While we do not have a conclusive biological interpretation of these two types of noise, we know that the first type of heterogeneity may arise due to technical or biologically meaningful noise (even within the same cell type, perhaps due to differences in physical location in a tissue).</p>
+<p align="center">
+<img src="ex_data/scATAC-seq/two_hets.png" width="500"></p>
+<p align="center">
+<em>Bruno visualizes the two types of heterogeneities. Which one is which?</em>
+</p>
+<p>To investigate the contributions by these two different types of heterogeneities to the overall heterogeneity, we will focus on the version of our test where we restrict ourselves to Chromosome 1 and group our features into sets based on TAD membership. TAD groupings are calculated using <strong>TopDom</strong>.</p>
+<p>Let us consider Cluster 13 (<span class="math inline">\(N=50\)</span> samples) and Cluster 14 (<span class="math inline">\(N=18\)</span> samples), which are uniformly annotated as pDC cells and CD14+ monocytes. To see if the first or the second type of heterogeneity explains the overall heterogeneity, we run our test on subsamples whose row sums are restricted to lie within an interval.</p>
+<p align="center">
+<img src="ex_data/scATAC-seq/rowsum_hist.jpg" width="500"></p>
+<p align="center">
+<em>Histograms of row sums of samples for Clusters 13 and 14. Vertical dotted lines demarcate the range of row sums included in subsamples on which we run our test.</em>
+</p>
+<p>Concretely, for Cluster 13, we include samples whose row sums are between <span class="math inline">\(600\)</span> and <span class="math inline">\(700\)</span> (<span class="math inline">\(12\)</span> such samples).</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Run test on Cluster 13</span>
+<span class="co"># Choose cluster</span>
+<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fl">14</span>
+
+<span class="co"># Load binarized counts matrix for that cluster</span>
+<span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"/bin_satija_keepzeros_"</span>, <span class="va">cl</span>, <span class="st">".RData"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="va">file_name</span><span class="op">)</span>
+
+<span class="co"># Load TopDom feature groupings</span>
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"/topdom_boundaries_chr1_rm0.RData"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Subset to Chr1 and restrict row sums</span>
+<span class="va">clust13_chr1_restr</span> <span class="op">&lt;-</span> <span class="va">subsetted_data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"chr1:"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">subsetted_data</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
+<span class="va">clust13_chr1_restr</span> <span class="op">&lt;-</span> <span class="va">clust13_chr1_restr</span><span class="op">[</span>,<span class="op">-</span><span class="va">topdom_boundaries_chr1_rm0</span><span class="op">$</span><span class="va">discardIndices</span><span class="op">]</span>
+<span class="va">clust13_chr1_restr</span> <span class="op">&lt;-</span> <span class="va">clust13_chr1_restr</span><span class="op">[</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">clust13_chr1_restr</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">700</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">clust13_chr1_restr</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">600</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">clust13_chr1_restr</span><span class="op">)</span>  
+<span class="co">#&gt; [1] 12</span>
+
+<span class="co"># Compute p-value</span>
+<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">clust13_chr1_restr</span><span class="op">)</span>,
+          block_boundaries <span class="op">=</span> <span class="va">topdom_boundaries_chr1_rm0</span><span class="op">$</span><span class="va">blockBounds</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.1962</span></code></pre></div>
+<p>As seen above, the <span class="math inline">\(p\)</span>-value is insignificant at <span class="math inline">\(\alpha=0.05\)</span>.</p>
+<p>We run a similar analysis for Cluster 14 by including samples whose row sums are between <span class="math inline">\(300\)</span> and <span class="math inline">\(400\)</span> (<span class="math inline">\(8\)</span> such samples). We arrive at a similar conclusion.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Run test on Cluster 14</span>
+<span class="co"># Choose cluster</span>
+<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fl">15</span>
+
+<span class="co"># Load binarized counts matrix for that cluster</span>
+<span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"/bin_satija_keepzeros_"</span>, <span class="va">cl</span>, <span class="st">".RData"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="va">file_name</span><span class="op">)</span>
+
+<span class="co"># Load TopDom feature groupings</span>
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"/topdom_boundaries_chr1_rm0.RData"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Subset to Chr1 and restrict row sums</span>
+<span class="va">clust14_chr1_restr</span> <span class="op">&lt;-</span> <span class="va">subsetted_data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"chr1:"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">subsetted_data</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
+<span class="va">clust14_chr1_restr</span> <span class="op">&lt;-</span> <span class="va">clust14_chr1_restr</span><span class="op">[</span>,<span class="op">-</span><span class="va">topdom_boundaries_chr1_rm0</span><span class="op">$</span><span class="va">discardIndices</span><span class="op">]</span>
+<span class="va">clust14_chr1_restr</span> <span class="op">&lt;-</span> <span class="va">clust14_chr1_restr</span><span class="op">[</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">clust14_chr1_restr</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">400</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">clust14_chr1_restr</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">300</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">clust14_chr1_restr</span><span class="op">)</span>  
+<span class="co">#&gt; [1] 7</span>
+
+<span class="co"># Compute p-value</span>
+<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">clust14_chr1_restr</span><span class="op">)</span>,
+          block_boundaries <span class="op">=</span> <span class="va">topdom_boundaries_chr1_rm0</span><span class="op">$</span><span class="va">blockBounds</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.0734</span></code></pre></div>
+<p>Given that these cells make up smaller than <span class="math inline">\(50\%\)</span> of the total number of cells of their respective cluster, and the row sums for samples from either cluster have high variation, our analysis suggests that the heterogeneities of these two clusters are predominantly driven by the first type of heterogeneity.</p>
 </div>
 </div>
   </div>
