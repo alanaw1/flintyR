@@ -293,10 +293,10 @@ In population-genetic datasets, the features are binarized single nucleotide pol
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform clustering</span>
 <span class="co"># Load library</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">poppr</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://grunwaldlab.github.io/poppr/">poppr</a></span><span class="op">)</span>
 
 <span class="co"># Compute Prevosti's distance matrix</span>
-<span class="va">sample_dist</span> <span class="op">&lt;-</span> <span class="fu">provesti.dist</span><span class="op">(</span><span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>
+<span class="va">sample_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://grunwaldlab.github.io/poppr/reference/genetic_distance.html">provesti.dist</a></span><span class="op">(</span><span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>
 
 <span class="co"># Perform hierarchical clustering</span>
 <span class="va">samples_hclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="va">sample_dist</span>, method <span class="op">=</span> <span class="st">"ward.D"</span><span class="op">)</span>
@@ -349,7 +349,7 @@ The runs test is a non-parametric test that counts the number of changes in a bi
 <span class="va">p_val_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">num_feat</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Perform differential analysis on feature j</span>
-  <span class="va">da_result</span> <span class="op">&lt;-</span> <span class="fu">tseries</span><span class="fu">::</span><span class="fu">runs.test</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">X_df_1</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>,y <span class="op">=</span> <span class="va">X_df_2</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">da_result</span> <span class="op">&lt;-</span> <span class="fu">tseries</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tseries/man/runs.test.html">runs.test</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">X_df_1</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>,y <span class="op">=</span> <span class="va">X_df_2</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
   <span class="co"># Print result if significant</span>
   <span class="va">p_val_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">p_val_vector</span>, <span class="va">da_result</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span>
 <span class="op">}</span>

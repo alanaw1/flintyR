@@ -111,14 +111,12 @@ Before proceeding with our analysis, we note that the $79921$ features per indiv
 
 Data processing has provided us with a dataset $\mathbf{X}\in\mathbb{N}^{N\times P}$ consisting of $N=6954$ single cells with $P=79921$ peak reads/counts features recorded per cell. Additionally, $\mathbf{X}$ has been partitioned into $15$ clusters that correspond to certain distinguishable blood cell populations. 
 
-Our first goal is to check whether each cluster of cells looks homogeneous. Indeed, there may be latent stratification or heterogeneities unaccounted for during clustering.
-
-We first binarize $\mathbf{X}=(x_{ij})$ by setting each entry $x_{ij}=1$ if it is positive, and $x_{ij}=0$ otherwise. Such data compression results in loss of information. However, owing to our compression step itself *reducing* variability, if our test reports non-exchangeability on the compressed version, then, all other things being equal, it is the case that the original sample exhibits heterogeneity. (This is a general intuition that may not be true if there exist appropriate statistical models for the original features in the uncompressed version. Hence, we place the caveat "all things being equal." To our knowledge, such a model still does not exist.)
+We binarize $\mathbf{X}=(x_{ij})$ by setting each entry $x_{ij}=1$ if it is positive, and $x_{ij}=0$ otherwise. Such data compression results in loss of information. However, owing to our compression step itself *reducing* variability, if our test reports non-exchangeability on the compressed version, then, all other things being equal, it is the case that the original sample exhibits heterogeneity. (This is a general intuition that may not be true if there exist appropriate statistical models for the original features in the uncompressed version. Hence, we place the caveat "all things being equal." To our knowledge, such a model still does not exist.)
 
 Here is a snapshot of the binarized version of samples from the smallest cluster (Cluster 14).
 
 ```{r pbmc_3, echo = TRUE}
-## Show Cluster 15 (first six cells and first six features) after binarization
+## Show Cluster 14 (first six cells and first six features) after binarization
 load("ex_data/scATAC-seq/bin_satija_keepzeros_15.RData")
 subsetted_data[1:6,1:6]
 ```
@@ -145,9 +143,18 @@ We will in fact account for dependencies arising from 3D organization of the gen
 
 Concretely, we use Hi-C data to partition our features into disjoint sets of dependent features (so-called "dependent blocks"), where we group features into the same sets based on whether they belong in the same topologically associating domain (TAD) as identified by Hi-C TAD callers.
 
+<p style="text-align:center;">
+<img src="ex_data/scATAC-seq/GM06990.jpg" alt="Hi-C Contact Map Reads." width="400"/>
+</p>
+<p align="center">
+*Scatterplot of a Hi-C interaction map of Chromosome 14 of a genome sequenced from [lymphoblastoid cells (GM06990)](https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=GM06990). Localized darker patches reveal local regions of increased contact. Plot produced using the Bioconductor package [LiebermanAidenHiC2009](https://bioconductor.org/packages/release/data/experiment/html/LiebermanAidenHiC2009.html) with help from [this vignette](https://bioconductor.riken.jp/packages/3.8/data/experiment/vignettes/LiebermanAidenHiC2009/inst/doc/LiebermanAidenHiC2009.pdf).* 
+</p>
+
 ## Methods to Call TADs on Hi-C Data
 
-There are more than 20 TAD calling approaches; see [Pal et al. (2019)](https://link.springer.com/article/10.1007/s12551-018-0489-1) for a summary of them. We consider two approaches, **DomainCaller** --- a method proposed by [Dixon et al. (2012)](https://www.nature.com/articles/nature11082) that relies on the directionality index --- and **TopDom** --- a newer approach that scores patterns of contact frequencies and tests these scores for statistical significance under a non-parametric null distribution [Shin et al. (2016)](https://academic.oup.com/nar/article/44/7/e70/2467818). Note both **DomainCaller** and **TopDom** are found reliable in a comprehensive meta-analysis of 22 TAD callers by [Zufferey et al. (2018)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1596-9).
+There are more than 20 TAD calling approaches; see [Pal et al. (2019)](https://link.springer.com/article/10.1007/s12551-018-0489-1) for a summary of them. We consider two approaches, **DomainCaller** --- a method proposed by [Dixon et al. (2012)](https://www.nature.com/articles/nature11082) that relies on the directionality index --- and **TopDom** --- a newer approach that scores patterns of contact frequencies and tests these scores for statistical significance under a non-parametric null distribution [Shin et al. (2016)](https://academic.oup.com/nar/article/44/7/e70/2467818). Note both **DomainCaller** and **TopDom** are found reliable in a comprehensive meta-analysis of 22 TAD callers by [Zufferey et al. (2018)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1596-9). (TADs were first described by Dixon and colleagues, so it should come as no surprise that their **DomainCaller** method identifies TADs well.)
+
+We provide a guide to generating TAD boundaries in a separate vignette.
 
 <details>
   <summary><b>A Important Caveat</b></summary>
@@ -156,4 +163,122 @@ There are more than 20 TAD calling approaches; see [Pal et al. (2019)](https://l
 
 # Results
 
-## Explanations
+```{r load_packages, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Load packages and set directories
+library(flintyR)
+library(Matrix)
+library(doParallel)
+# Register parallel computation
+registerDoParallel()
+# Relative directory
+rel_dir <- "ex_data/scATAC-seq"
+```
+
+## Are Clusters Homogeneous?
+
+Our first goal is to check whether each cluster of cells looks homogeneous. We run our test on Cluster 14 (which was loaded above), using features grouped into sets based on TAD membership identified by **DomainCaller**.
+
+```{r domain_caller, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Run test
+# Load the set membership of features obtained from calling TADs on Chr1 using DomainCaller
+load(paste0(rel_dir, "/domainCaller_boundaries_chr1.RData"))
+
+# Discard indices not assigned to a TAD (13 features)
+subsubsubsetted_data <- subsubsetted_data[,-boundaries_chr1$discardIndices]
+
+# Compute p-value (should be 0)
+getPValue(as.matrix(subsubsubsetted_data), 
+          block_boundaries = boundaries_chr1$blockBounds,
+          largeP = TRUE)
+```
+
+We obtain a $p$-value of $0$. We can run the test on another cluster of cells, say Cluster 12. 
+
+```{r domain_caller_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Run test on Cluster 12
+# Choose cluster
+cl <- 13
+
+# Load binarized counts matrix for that cluster
+file_name <- paste0(rel_dir, "/bin_satija_keepzeros_", cl, ".RData")
+load(file_name)
+
+# Restrict to chr1 only
+data_chr1_only <- subsetted_data[, grepl("chr1:",colnames(subsetted_data))]
+
+# Discard indices not assigned to a TAD
+data_chr1_only_tads <- data_chr1_only[,-boundaries_chr1$discardIndices]
+
+# How many blocks are there? 
+cat(length(boundaries_chr1$blockBounds), " independent blocks in Chr1.", sep = "")
+
+# Get p-value using the peak boundaries as block delimiters
+# Since N and P are large, use large P asymptotic test
+getPValue(as.matrix(data_chr1_only_tads),
+          block_boundaries = boundaries_chr1$blockBounds,
+          largeP = TRUE)
+
+```
+
+We observe a $p$-value of $0$ for Cluster 12 as well. In fact, our test reports zero $p$-values for each cluster. This is true even when we use TAD membership identified by **TopDom**, which we do not show above.
+
+In our paper, we also describe a second and completely different approach of grouping features by chromosome membership, using the 22 autosomes. This does not require any TAD information or Hi-C data, and amounts to assuming that peak reads within the same chromosome are dependent, while peak reads between different chromosomes are independent. We demonstrate this below using Cluster 12, for completeness. We also observe $p$-values of $0$ for all clusters using this approach.
+
+```{r chr_grouping, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Run test on Cluster 12 keeping all chromosomes (except X, Y and mt)
+# Check which feature records the last autosomal region
+colnames(subsetted_data[,77911:77912])
+
+# Keep only autosomal features
+clust12_autosom <- subsetted_data[,1:77911]
+
+# These are the block boundaries for the 22 autosomes 
+# (which can be generated with the grepl trick in previous chunk)
+start_points <- c(1,7825,14007,19004,22111,26085,30952,34837,38137,41387,
+                  45121,49166,53330,55072,57827,60463,63382,67513,69010,
+                  72757,75089,76121)
+
+# Compute p-value (should be 0)
+getPValue(as.matrix(clust12_autosom), 
+          block_boundaries = start_points)
+```
+
+We saw earlier that the $15$ clusters contain different cell types, so we can also further subdivide our clusters into subclusters comprised uniformly of a particular cell type (e.g., CD4+ cells). We did that and ran the test using all 22 chromosomes again, but obtained zero $p$-values for the subclusters, except for the subcluster of four dendritic cells from Cluster 0. These four dendritic cells appear exchangeable at a significance level $\alpha = 0.05$. 
+
+```{r chr_grouping_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Run test on Cluster 0
+# Choose cluster
+cl <- 1
+
+# Load binarized counts matrix for that cluster
+file_name <- paste0(rel_dir, "/bin_satija_keepzeros_", cl, ".RData")
+load(file_name)
+
+# Load cell type annotation for 6954 cells
+load(paste0(rel_dir, "/scATAC-seq_annotation_cluster.RData"))
+
+# Select cell IDs for dendritic cells in Cluster 0
+selected_subcluster <- 
+  rownames(satija.cell.annot.cluster[which(satija.cell.annot.cluster$cluster == (cl - 1) &
+                                       satija.cell.annot.cluster$annotation == 'Dendritic cell'), ])
+selected_subcluster
+
+# Keep only autosomal features
+clust0_dendr_autosom <- subsetted_data[selected_subcluster, 1:77911]
+
+# Compute p-value using same block delimiters as earlier
+getPValue(as.matrix(clust0_dendr_autosom), 
+          block_boundaries = start_points)
+```
+
+Note that we did not perform this subcluster analysis using TAD callers to partition features in Chromosome 1, owing to there being too little variability in Chromosome 1 within any subcluster for our analysis to be meaningful.  
+
+Thus, our test shows evidence of heterogeneity in the clusters and cell type subclusters, after accounting for either (1) correlations induced on peak read counts by the 3D structure of the genome, or (2) chromosome. However, as noted in our paper, an equally valid interpretation is that our accounting for chromatin-induced statistical dependencies between peaks is insufficient.
+
+## What Drives Heterogeneity in Clusters?
+
+Given that all 15 clusters appear heterogeneous even after accounting for chromatin-induced dependencies, we shall attempt to explain what drives the heterogeneity.
+
+
+
+
