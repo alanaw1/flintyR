@@ -91,17 +91,18 @@
 
     
     
-<p>How many ways can a multivariate dataset be heterogeneous?</p>
+<p>How many ways can a multivariate dataset be heterogeneous? What has exchangeability got to do with it?</p>
 <p>📖 In this vignette, we will</p>
 <ul>
 <li>explore different types of heterogeneities, connecting them to a “working definition” of <em>statistical homogeneity</em>,</li>
-<li>explain how exchangeability and <strong>flinty</strong> relate to homogeneity.</li>
+<li>explain how “statistical homogeneity” is better replaced by exchangeability (when trying to detect subpopulations in a given sample)</li>
+<li>investigate, using <strong>flinty</strong>, the tension between sample exchangeability and feature independence</li>
 </ul>
-<p>The punchline is that non-exchangeability is a specific type of statistical heterogeneity, but there are other types of statistical heterogeneities that still give rise to exchangeable data. Thus, users of our test should take care in interpreting results obtained from our test, or any other test of structured-ness of data (e.g., the <a href="https://rdrr.io/bioc/LEA/man/main_tracyWidom.html">Tracy-Widom test</a> of largest singular value).</p>
+<p>The punchline is that non-exchangeability is a mathematically concrete way to capture our intuition of existence of subpopulations in a given sample, and there are types of statistical heterogeneities that still give rise to exchangeable data. Thus, users of our test should take care in interpreting results obtained from our test, or any other test of structured-ness of data (e.g., the <a href="https://rdrr.io/bioc/LEA/man/main_tracyWidom.html">Tracy-Widom test</a> of largest singular value).</p>
 <div id="a-working-definition-of-statistical-homogeneity" class="section level1">
 <h1 class="hasAnchor">
-<a href="#a-working-definition-of-statistical-homogeneity" class="anchor"></a>A Working Definition of Statistical Homogeneity</h1>
-<p>Scientists frequently think about homogeneous populations, homogeneous proportions, and homogeneous samples. They run tests of homogeneity on labeled samples (e.g., the <span class="math inline">\(\chi^2\)</span> test). With labeled samples, one could directly formalize homogeneity as “little to no difference with respect to labels.” Indeed, the <span class="math inline">\(\chi^2\)</span> test of homogeneity is a test of whether categorical proportions are similar enough between distinctly labeled samples. So are many other tests of homogeneity defined (e.g., <a href="https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/cochvari.htm">Cochran’s test</a> for homogeneity of variances between <span class="math inline">\(k\)</span> groups, the <a href="https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat01756">Potthoff-Whittinghill test</a> of homogeneity between two classes). The general test of homogeneity is typically a “test of homogeneity of quantity <span class="math inline">\(x\)</span> with respect to various groups of samples.”</p>
+<a href="#a-working-definition-of-statistical-homogeneity" class="anchor"></a>A “Working Definition” of Statistical Homogeneity</h1>
+<p>Scientists frequently think about homogeneous populations, homogeneous proportions, and homogeneous samples. We run tests of homogeneity on labeled samples (e.g., the <span class="math inline">\(\chi^2\)</span> test). With labeled samples, one could directly formalize homogeneity as “little to no difference with respect to labels.” Indeed, the <span class="math inline">\(\chi^2\)</span> test of homogeneity is a test of whether categorical proportions are similar enough between distinctly labeled samples. So are many other tests of homogeneity defined (e.g., <a href="https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/cochvari.htm">Cochran’s test</a> for homogeneity of variances between <span class="math inline">\(k\)</span> groups, the <a href="https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat01756">Potthoff-Whittinghill test</a> of homogeneity between two classes). The general test of homogeneity is typically a “test of homogeneity of quantity <span class="math inline">\(x\)</span> with respect to various groups of samples.”</p>
 <p>Defining homogeneity without sample labels is less straightforward. Here are some approaches taken by others:</p>
 <ul>
 <li>In Volume 5 of the <em>Encyclopedia of Statistical Sciences</em> (second edition <a href="https://www.wiley.com/en-gb/Encyclopedia+of+Statistical+Sciences%2C+16+Volume+Set%2C+2nd+Edition-p-9780471150442">published</a> in 2006 by Wiley), on p. 3207 the entry “Homogeneity and Tests of Homogeneity” begins with the sentence, “homogeneity refers to sameness or similarity.” The rest of the paragraph, and indeed the remainder of the entry, frames homogeneity with respect to a collection of populations.</li>
@@ -111,12 +112,130 @@
 <p>Mathematically, the description above says that given a dataset <span class="math inline">\(\{\mathbf{x}_1,\ldots,\mathbf{x}_N\} \subset \mathbb{R}^P\)</span>, for it to be homogeneous it should satisfy the following property: for any pair of disjoint subsamples <span class="math inline">\(\mathcal{S}=\{\mathbf{x}_i\}\)</span> and <span class="math inline">\(\mathcal{S}'=\{\mathbf{x}_{i'}\}\)</span>, the distributions of the pair of subsamples <span class="math inline">\(F_\mathcal{S}\)</span> and <span class="math inline">\(F_{\mathcal{S}'}\)</span> should not differ by too much: <span class="math display">\[\begin{equation}
 d(F_\mathcal{S},F_{\mathcal{S}'}) \approx 0,\label{eq:1}
 \end{equation}\]</span> where <span class="math inline">\(d(\cdot,\cdot)\)</span> is some measure of distance between distributions (e.g., Wasserstein distance or total variation distance).</p>
-<p>We adopt the description above as a working definition of statistical homogeneity, and evaluate how well such a definition relates to what scientists mean when they assume “homogeneous populations” and “homogeneous samples” prior to downstream analysis.</p>
+<p>Suppose we adopt the description above as a working definition of statistical homogeneity. We shall explain why this definition is problematic.</p>
+<div id="a-single-population-doesnt-imply-statistical-homogeneity" class="section level2">
+<h2 class="hasAnchor">
+<a href="#a-single-population-doesnt-imply-statistical-homogeneity" class="anchor"></a>A Single Population Doesn’t Imply “Statistical Homogeneity”</h2>
+<p>Let us define a population, for which there are <span class="math inline">\(P\)</span> observable features. These features are statistically independent and identically distributed according to the mixture distribution <span class="math inline">\(\frac{1}{2}N(-2,1) + \frac{1}{2}N(2,1)\)</span>. This means that we flip a fair coin to decide whether a feature is drawn from <span class="math inline">\(N(-2,1)\)</span> or from <span class="math inline">\(N(2,1)\)</span>.</p>
+<p>For illustrative purposes, let’s assume that <span class="math inline">\(P=2\)</span> and draw <span class="math inline">\(N=40\)</span> samples from this distribution.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Helper function to draw samples</span>
+<span class="va">drawSamples</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">N</span><span class="op">)</span>  <span class="op">{</span>
+  <span class="co"># create sequence to return</span>
+  <span class="va">to_return</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+  
+  <span class="co"># grow the sequence</span>
+  <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">N</span><span class="op">)</span> <span class="op">{</span>
+    <span class="co"># flip a fair coin</span>
+    <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0.5</span><span class="op">)</span> 
+    
+    <span class="co"># if heads...</span>
+    <span class="kw">if</span> <span class="op">(</span><span class="va">p</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
+      <span class="va">to_return</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">to_return</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">1</span>, mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> 
+    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+      <span class="co"># if tails...</span>
+      <span class="va">to_return</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">to_return</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">1</span>, mean <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+    <span class="op">}</span>
+  <span class="op">}</span>
+  
+  <span class="co"># return</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">to_return</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co">## Generate array</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
+<span class="va">ex_array</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu">drawSamples</span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">## Annotate positive and negative labels</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="va">ex_array</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ex_array</span><span class="op">)</span>
+<span class="va">ex_array</span><span class="op">$</span><span class="va">POSLAB</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="op">(</span><span class="va">ex_array</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">ex_array</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span>
+                      <span class="op">(</span><span class="va">ex_array</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">ex_array</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> 
+
+<span class="va">ex_array</span> <span class="op">&lt;-</span> <span class="va">ex_array</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">ex_array</span><span class="op">$</span><span class="va">POSLAB</span><span class="op">)</span>,<span class="op">]</span>
+
+<span class="co">## Print</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">ex_array</span><span class="op">)</span>
+<span class="co">#&gt;             V1         V2 POSLAB</span>
+<span class="co">#&gt; 6  -1.98622806 -2.2519641     -1</span>
+<span class="co">#&gt; 11 -0.42206811 -3.7976124     -1</span>
+<span class="co">#&gt; 15 -0.27976384 -1.8282297     -1</span>
+<span class="co">#&gt; 17 -1.07187288 -2.1035184     -1</span>
+<span class="co">#&gt; 19 -2.88744463 -2.8259549     -1</span>
+<span class="co">#&gt; 20 -0.89933137 -1.5167392     -1</span>
+<span class="co">#&gt; 24 -3.58347390 -2.1220018     -1</span>
+<span class="co">#&gt; 25 -0.46670339 -1.7728245     -1</span>
+<span class="co">#&gt; 28 -0.23978627 -1.5496600     -1</span>
+<span class="co">#&gt; 29 -2.78119689 -2.6229225     -1</span>
+<span class="co">#&gt; 35 -0.80789690 -1.2874858     -1</span>
+<span class="co">#&gt; 36 -2.36881809 -1.7987080     -1</span>
+<span class="co">#&gt; 37 -1.66402782 -1.8842061     -1</span>
+<span class="co">#&gt; 38 -1.57271087 -1.5292104     -1</span>
+<span class="co">#&gt; 1  -1.21497757  1.3543091      0</span>
+<span class="co">#&gt; 2  -1.65135050  2.3919333      0</span>
+<span class="co">#&gt; 3   1.37711402 -0.7146051      0</span>
+<span class="co">#&gt; 4   0.07743048 -2.9836134      0</span>
+<span class="co">#&gt; 7   2.11479879 -2.2323998      0</span>
+<span class="co">#&gt; 9   3.35407495 -2.1500867      0</span>
+<span class="co">#&gt; 14 -2.94244327  1.6624908      0</span>
+<span class="co">#&gt; 21 -1.94058234  1.2836487      0</span>
+<span class="co">#&gt; 22 -0.98055658  1.9465417      0</span>
+<span class="co">#&gt; 23 -1.53559759  2.5631673      0</span>
+<span class="co">#&gt; 26 -2.08707112  1.4912997      0</span>
+<span class="co">#&gt; 27  4.59310821 -2.0767792      0</span>
+<span class="co">#&gt; 30  1.96562251 -3.1957732      0</span>
+<span class="co">#&gt; 31 -1.53005963  1.4059371      0</span>
+<span class="co">#&gt; 32  1.27444279 -4.7007150      0</span>
+<span class="co">#&gt; 33  2.60824840 -3.4950350      0</span>
+<span class="co">#&gt; 39 -2.07556434  1.5973352      0</span>
+<span class="co">#&gt; 40 -3.50559994  0.1976965      0</span>
+<span class="co">#&gt; 5   2.16989432  2.1221998      1</span>
+<span class="co">#&gt; 8   1.72717482  1.9570100      1</span>
+<span class="co">#&gt; 10  3.60447011  0.9606129      1</span>
+<span class="co">#&gt; 12  2.13138902  0.6074574      1</span>
+<span class="co">#&gt; 13  1.29390807  1.2390690      1</span>
+<span class="co">#&gt; 16  3.20811525  2.6332890      1</span>
+<span class="co">#&gt; 18  0.54455665  2.5339593      1</span>
+<span class="co">#&gt; 34  1.49970920  2.4869767      1</span></code></pre></div>
+<p>Notice we have added positive labels in the third column to annotate whether both features are positive or negative. The example shows that this sample forms two clusters of negative and positive observation pairs, <span class="math inline">\(\mathcal{S}_-\)</span> and <span class="math inline">\(\mathcal{S}_+\)</span>. Clearly these disjoint subsamples are far apart, thus rendering the dataset itself not statistically homogeneous under the working definition. See the 2D plot below for a visualization.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Plot 2D </span>
+<span class="va">ratio</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">ex_array</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">V1</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">V2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># compute ratio to fix make plot square</span>
+
+<span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ex_array</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">V1</span>, y <span class="op">=</span> <span class="va">V2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">POSLAB</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">coord_fixed</span><span class="op">(</span>ratio <span class="op">=</span> <span class="va">ratio</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"POSLAB"</span><span class="op">)</span></code></pre></div>
+<p><img src="ex_vs_hom_files/figure-html/example_2-1.png" width="700"></p>
+<p>This observation is true in a more general setting. For <span class="math inline">\(P\)</span> features independently distributed according to the mixture distribution described above, it is always possible to draw a finite sample consisting of <span class="math inline">\(N\)</span> observations, which contains two disjoint subsamples that are far apart. Here is some mathematical intuition. For each observation <span class="math inline">\(\mathbf{x}_n\)</span>, let <span class="math inline">\(\mathbf{1}\{\mathbf{x}_n &gt; \mathbf{0}\}\)</span> and <span class="math inline">\(\mathbf{1}\{\mathbf{x}_n &lt; \mathbf{0}\}\)</span> denote, respectively, the event that it is positive and the event that it is negative. A positive observation <span class="math inline">\(\mathbf{x}_n=(x_{n1},\ldots,x_{nP})\)</span> means that each element is positive; likewise for a negative observation. Each component of <span class="math inline">\(\mathbf{x}_n\)</span> is IID according to the mixture distribution that is symmetric about <span class="math inline">\(0\)</span>. This implies that each element <span class="math inline">\(x_{nj}\)</span> satisfies <span class="math inline">\(\mathbb{P}(x_{nj}&gt;0) =\mathbb{P}(x_{nj}&lt;0) = 0.5\)</span>. Multiplying these probabilities, we see that <span class="math inline">\(\mathbb{P}(\mathbf{x}_n &gt; \mathbf{0})=\mathbb{P}(\mathbf{x}_n &lt; \mathbf{0})=0.5^P\)</span>. The indicators are thus Bernoulli distributed with success probability <span class="math inline">\(0.5^P\)</span>. Let <span class="math inline">\(K_+\)</span> and <span class="math inline">\(K_-\)</span> denote the number of positive and negative observations contained in a random draw. Since our observations are independently drawn, we see that for any pair of natural numbers <span class="math inline">\((k_+,k_-)\)</span>, <span class="math display">\[\begin{equation*}
+\mathbb{P}(K_+=k_+, K_-=k_-) = {N\choose k_+}{N-k_+ \choose k_-} \left(\frac{1}{2^P}\right)^{k_+ + k_-}.
+\end{equation*}\]</span> In particular, there is a positive probability that the finite sample drawn at random contains two sets <span class="math inline">\(\mathcal{S}_+, \mathcal{S}_-\)</span> of sizes <span class="math inline">\(k_+\)</span> and <span class="math inline">\(k_-\)</span>. These two sets containing positive observations and negative observations exclusively, we see that they are necessarily far apart.</p>
+<p>In fact, it can be shown that for large enough sample sizes, with high probability a finite sample drawn will contain two reasonably large disjoint subsamples <span class="math inline">\(\mathcal{S}_+\)</span> and <span class="math inline">\(\mathcal{S}_-\)</span> that are far apart (i.e., with total variation distance <span class="math inline">\(d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) \geqslant 0.5\)</span>).</p>
+<details><summary><b>I like maths. Show me the mathematical details.</b>
+</summary>
+Chernoff bound and subGaussian argument.
+</details><p>The example above and its generalization show that even if our data originates from a single population, statistical heterogeneity may still arise in finite samples. It also points to the need for a careful solution for deciding whether a finite sample originated from a single population.</p>
+<p>We will see how exchangeability provides such a solution. To motivate our discussion about exchangeability later, let us first see a few examples of heterogeneous samples.</p>
 </div>
-<div id="heterogeneity-scientific-intuition-and-rigorous-examples" class="section level1">
+<div id="examples-of-heterogeneity" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examples-of-heterogeneity" class="anchor"></a>Examples of Heterogeneity</h2>
+<ol style="list-style-type: decimal">
+<li>Mixture Distributions and Independent Features</li>
+<li>Mixture Distributions and Conditionally Independent Features (I)</li>
+<li>Mixture Distributions and Conditionally Independent Features (II)</li>
+</ol>
+</div>
+</div>
+<div id="exchangeability" class="section level1">
 <h1 class="hasAnchor">
-<a href="#heterogeneity-scientific-intuition-and-rigorous-examples" class="anchor"></a>Heterogeneity: Scientific Intuition and Rigorous Examples</h1>
+<a href="#exchangeability" class="anchor"></a>Exchangeability</h1>
 <p>To be written.</p>
+<div id="tension-between-sample-exchangeability-and-feature-independence" class="section level2">
+<h2 class="hasAnchor">
+<a href="#tension-between-sample-exchangeability-and-feature-independence" class="anchor"></a>Tension between Sample Exchangeability and Feature Independence</h2>
+</div>
 </div>
   </div>
 

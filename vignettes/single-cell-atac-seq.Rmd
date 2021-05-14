@@ -64,7 +64,7 @@ pbmc <- CreateSeuratObject(
   meta.data = metadata
 )
 
-pbmc <- SetFragments(
+pbmc <- Signac::SetFragments(
   object = pbmc,
   file = "ex_data/scATAC-seq/atac_v1_pbmc_10k_fragments.tsv.gz"
 ) 

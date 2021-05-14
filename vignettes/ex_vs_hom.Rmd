@@ -14,18 +14,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-How many ways can a multivariate dataset be heterogeneous? 
+How many ways can a multivariate dataset be heterogeneous? What has exchangeability got to do with it? 
 
 📖 In this vignette, we will
 
 - explore different types of heterogeneities, connecting them to a "working definition" of *statistical homogeneity*, 
-- explain how exchangeability and **flinty** relate to homogeneity.
+- explain how "statistical homogeneity" is better replaced by exchangeability (when trying to detect subpopulations in a given sample)
+- investigate, using **flinty**, the tension between sample exchangeability and feature independence
 
-The punchline is that non-exchangeability is a specific type of statistical heterogeneity, but there are other types of statistical heterogeneities that still give rise to exchangeable data. Thus, users of our test should take care in interpreting results obtained from our test, or any other test of structured-ness of data (e.g., the [Tracy-Widom test](https://rdrr.io/bioc/LEA/man/main_tracyWidom.html) of largest singular value).      
+The punchline is that non-exchangeability is a mathematically concrete way to capture our intuition of existence of subpopulations in a given sample, and there are types of statistical heterogeneities that still give rise to exchangeable data. Thus, users of our test should take care in interpreting results obtained from our test, or any other test of structured-ness of data (e.g., the [Tracy-Widom test](https://rdrr.io/bioc/LEA/man/main_tracyWidom.html) of largest singular value).      
 
-# A Working Definition of Statistical Homogeneity
+# A "Working Definition" of Statistical Homogeneity
 
-Scientists frequently think about homogeneous populations, homogeneous proportions, and homogeneous samples. They run tests of homogeneity on labeled samples (e.g., the $\chi^2$ test). With labeled samples, one could directly formalize homogeneity as "little to no difference with respect to labels." Indeed, the $\chi^2$ test of homogeneity is a test of whether categorical proportions are similar enough between distinctly labeled samples. So are many other tests of homogeneity defined (e.g., [Cochran's test](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/cochvari.htm) for homogeneity of variances between $k$ groups, the [Potthoff-Whittinghill test](https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat01756) of homogeneity between two classes). The general test of homogeneity is typically a "test of homogeneity of quantity $x$ with respect to various groups of samples."   
+Scientists frequently think about homogeneous populations, homogeneous proportions, and homogeneous samples. We run tests of homogeneity on labeled samples (e.g., the $\chi^2$ test). With labeled samples, one could directly formalize homogeneity as "little to no difference with respect to labels." Indeed, the $\chi^2$ test of homogeneity is a test of whether categorical proportions are similar enough between distinctly labeled samples. So are many other tests of homogeneity defined (e.g., [Cochran's test](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/cochvari.htm) for homogeneity of variances between $k$ groups, the [Potthoff-Whittinghill test](https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat01756) of homogeneity between two classes). The general test of homogeneity is typically a "test of homogeneity of quantity $x$ with respect to various groups of samples."   
 
 Defining homogeneity without sample labels is less straightforward. Here are some approaches taken by others:
 
@@ -40,9 +41,92 @@ d(F_\mathcal{S},F_{\mathcal{S}'}) \approx 0,\label{eq:1}
 \end{equation}
 where $d(\cdot,\cdot)$ is some measure of distance between distributions (e.g., Wasserstein distance or total variation distance).
 
-We adopt the description above as a working definition of statistical homogeneity, and evaluate how well such a definition relates to what scientists mean when they assume "homogeneous populations" and "homogeneous samples" prior to downstream analysis. 
+Suppose we adopt the description above as a working definition of statistical homogeneity. We shall explain why this definition is problematic. 
 
-# Heterogeneity: Scientific Intuition and Rigorous Examples
+## A Single Population Doesn't Imply "Statistical Homogeneity"
+
+Let us define a population, for which there are $P$ observable features. These features are statistically independent and identically distributed according to the mixture distribution $\frac{1}{2}N(-2,1) + \frac{1}{2}N(2,1)$. This means that we flip a fair coin to decide whether a feature is drawn from $N(-2,1)$ or from $N(2,1)$.    
+
+For illustrative purposes, let's assume that $P=2$ and draw $N=40$ samples from this distribution. 
+
+```{r example, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Helper function to draw samples
+drawSamples <- function(N)  {
+  # create sequence to return
+  to_return <- c()
+  
+  # grow the sequence
+  for (n in 1:N) {
+    # flip a fair coin
+    p <- rbinom(1,1,0.5) 
+    
+    # if heads...
+    if (p == 1) {
+      to_return <- c(to_return, rnorm(1, mean = 2, sd = 1)) 
+    } else {
+      # if tails...
+      to_return <- c(to_return, rnorm(1, mean = -2, sd = 1))
+    }
+  }
+  
+  # return
+  return(to_return)
+}
+
+## Generate array
+set.seed(2021)
+ex_array <- replicate(2, drawSamples(40))
+
+## Annotate positive and negative labels
+library(tidyverse)
+ex_array <- as.data.frame(ex_array)
+ex_array$POSLAB <- (-1 * (ex_array[,1] < 0 & ex_array[,2] < 0) +
+                      (ex_array[,1] > 0 & ex_array[,2] > 0)) 
+
+ex_array <- ex_array[order(ex_array$POSLAB),]
+
+## Print
+print(ex_array)
+```
+Notice we have added positive labels in the third column to annotate whether both features are positive or negative. The example shows that this sample forms two clusters of negative and positive observation pairs, $\mathcal{S}_-$ and $\mathcal{S}_+$. Clearly these disjoint subsamples are far apart, thus rendering the dataset itself not statistically homogeneous under the working definition. See the 2D plot below for a visualization.
+
+```{r example_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Plot 2D 
+ratio <- with(ex_array, diff(range(V1))/diff(range(V2))) # compute ratio to fix make plot square
+
+ggplot(data = ex_array, aes(x = V1, y = V2)) +
+  geom_point(aes(colour = factor(POSLAB))) +
+  coord_fixed(ratio = ratio) +
+  theme_bw() +
+  labs(colour = "POSLAB")
+```
+
+This observation is true in a more general setting. For $P$ features independently distributed according to the mixture distribution described above, it is always possible to draw a finite sample consisting of $N$ observations, which contains two disjoint subsamples that are far apart. Here is some mathematical intuition. For each observation $\mathbf{x}_n$, let $\mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $\mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$ denote, respectively, the event that it is positive and the event that it is negative. A positive observation $\mathbf{x}_n=(x_{n1},\ldots,x_{nP})$ means that each element is positive; likewise for a negative observation. Each component of $\mathbf{x}_n$ is IID according to the mixture distribution that is symmetric about $0$. This implies that each element $x_{nj}$ satisfies $\mathbb{P}(x_{nj}>0) =\mathbb{P}(x_{nj}<0) = 0.5$. Multiplying these probabilities, we see that $\mathbb{P}(\mathbf{x}_n > \mathbf{0})=\mathbb{P}(\mathbf{x}_n < \mathbf{0})=0.5^P$. The indicators are thus Bernoulli distributed with success probability $0.5^P$. Let $K_+$ and $K_-$ denote the number of positive and negative observations contained in a random draw. Since our observations are independently drawn, we see that for any pair of natural numbers $(k_+,k_-)$,
+\begin{equation*}
+\mathbb{P}(K_+=k_+, K_-=k_-) = {N\choose k_+}{N-k_+ \choose k_-} \left(\frac{1}{2^P}\right)^{k_+ + k_-}.
+\end{equation*}
+In particular, there is a positive probability that the finite sample drawn at random contains two sets $\mathcal{S}_+, \mathcal{S}_-$ of sizes $k_+$ and $k_-$. These two sets containing positive observations and negative observations exclusively, we see that they are necessarily far apart. 
+
+In fact, it can be shown that for large enough sample sizes, with high probability a finite sample drawn will contain two reasonably large disjoint subsamples $\mathcal{S}_+$ and $\mathcal{S}_-$ that are far apart (i.e., with total variation distance $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) \geqslant 0.5$).
+
+<details>
+  <summary><b>I like maths. Show me the mathematical details.</b></summary>
+     Chernoff bound and subGaussian argument. 
+</details> 
+
+The example above and its generalization show that even if our data originates from a single population, statistical heterogeneity may still arise in finite samples. It also points to the need for a careful solution for deciding whether a finite sample originated from a single population. 
+
+We will see how exchangeability provides such a solution. To motivate our discussion about exchangeability later, let us first see a few examples of heterogeneous samples.    
+
+## Examples of Heterogeneity
+
+1. Mixture Distributions and Independent Features 
+2. Mixture Distributions and Conditionally Independent Features (I)
+3. Mixture Distributions and Conditionally Independent Features (II)
+
+# Exchangeability 
 
 To be written.
+
+## Tension between Sample Exchangeability and Feature Independence
 

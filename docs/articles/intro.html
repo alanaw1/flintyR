@@ -222,7 +222,7 @@ Double dipping arises when insufficient care is taken in data analysis that invo
 <span class="co"># Compute p-value for test of homogeneity</span>
 <span class="va">the_p_value</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"The p-value for the exchangeability test is "</span>, <span class="va">the_p_value</span>, <span class="st">".\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="co">#&gt; The p-value for the exchangeability test is 0.4874.</span>
+<span class="co">#&gt; The p-value for the exchangeability test is 0.478.</span>
 <span class="kw">if</span> <span class="op">(</span><span class="va">the_p_value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"No evidence of heterogeneity at alpha = 0.05!\n"</span><span class="op">)</span>
 <span class="op">}</span>
@@ -284,11 +284,11 @@ In population-genetic datasets, the features are binarized single nucleotide pol
 <span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>
 <span class="co">#&gt;      rs1_1 rs1_2 rs1_3 rs1_4 rs1_5 rs1_6</span>
 <span class="co">#&gt; [1,]     0     0     1     0     0     0</span>
-<span class="co">#&gt; [2,]     0     0     0     0     0     0</span>
+<span class="co">#&gt; [2,]     0     0     0     1     0     0</span>
 <span class="co">#&gt; [3,]     0     0     1     0     0     0</span>
-<span class="co">#&gt; [4,]     0     0     0     0     0     0</span>
-<span class="co">#&gt; [5,]     0     0     1     0     0     0</span>
-<span class="co">#&gt; [6,]     0     0     0     0     0     1</span></code></pre></div>
+<span class="co">#&gt; [4,]     0     0     0     1     0     0</span>
+<span class="co">#&gt; [5,]     0     0     0     0     0     0</span>
+<span class="co">#&gt; [6,]     0     0     0     1     0     0</span></code></pre></div>
 <p>As in the basic example, we cluster the samples into two clusters. Here, we use Prevosti’s distance (<a href="https://link.springer.com/content/pdf/10.1007/BF00831894.pdf">Prevosti et al., 1975</a>), a popular measure of genetic distance, and perform hierarchical clustering with Ward linkage.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform clustering</span>
@@ -355,7 +355,7 @@ The runs test is a non-parametric test that counts the number of changes in a bi
 <span class="op">}</span>
 <span class="va">n_sig_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_val_vector</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">/</span> <span class="va">num_feat</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"The number of significant variants at FWER = 0.05 is "</span>, <span class="va">n_sig_vars</span>, <span class="st">"."</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="co">#&gt; The number of significant variants at FWER = 0.05 is 19.</span></code></pre></div>
+<span class="co">#&gt; The number of significant variants at FWER = 0.05 is 54.</span></code></pre></div>
 <p>We find many features that are statistically significant. We can visualize them using a Manhattan plot, as usual.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Visualize differential analysis</span>
@@ -398,7 +398,7 @@ The runs test is a non-parametric test that counts the number of changes in a bi
 <span class="co"># Note: this takes about 2-3 minutes to run</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="va">X_data</span><span class="op">$</span><span class="va">data</span>, 
           block_boundaries <span class="op">=</span> <span class="va">X_data</span><span class="op">$</span><span class="va">bounds</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.2022</span></code></pre></div>
+<span class="co">#&gt; [1] 0.0246</span></code></pre></div>
 <p>Now, we obtain a <span class="math inline">\(p\)</span>-value that is well above a typical cut-off threshold. Hence, we conclude correctly that at <span class="math inline">\(\alpha=0.05\)</span> there is insufficient evidence that <span class="math inline">\(\mathbf{X}\)</span> is heterogeneous.</p>
 </div>
 </div>
