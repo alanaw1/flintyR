@@ -107,11 +107,41 @@ This observation is true in a more general setting. For $P$ features independent
 \end{equation*}
 In particular, there is a positive probability that the finite sample drawn at random contains two sets $\mathcal{S}_+, \mathcal{S}_-$ of sizes $k_+$ and $k_-$. These two sets containing positive observations and negative observations exclusively, we see that they are necessarily far apart. 
 
-In fact, it can be shown that for large enough sample sizes, with high probability a finite sample drawn will contain two reasonably large disjoint subsamples $\mathcal{S}_+$ and $\mathcal{S}_-$ that are far apart (i.e., with total variation distance $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) \geqslant 0.5$).
+In fact, it can be shown that for large enough sample sizes, with high probability a finite sample drawn will contain two reasonably large disjoint subsamples $\mathcal{S}_+$ and $\mathcal{S}_-$ that are far apart (i.e., with total variation distance $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) =1$).
 
 <details>
   <summary><b>I like maths. Show me the mathematical details.</b></summary>
-     Chernoff bound and subGaussian argument. 
+     Observe that $K_+$ and $K_-$, defined above, can be written as $K_+=\sum_{n=1}^N \mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $K_-=\sum_{n=1}^N \mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$. We already saw that the indicator events $\mathbf{1}\{\cdot\}$ are Bernoulli distributed with success probability $0.5^P$. Thus $K_+$ and $K_-$ are both $\text{Bin}(N,0.5^P)$ distributed.<br/> 
+     Bernoulli distributions are subGaussian with subGaussian parameter $\sigma^2=0.25$, regardless of the success probability $p$. Thus $\text{Bin}(N,p)$ distributions are subGaussian with subGaussian parameter $\sigma^2=0.25N$. Being subGaussian implies that a distribution has nice tail bounds. More precisely, Chernoff's bound implies that $K_+$ and $K_-$ satisfy the following concentration inequalities: for any positive $\epsilon$,
+\begin{eqnarray*}
+\mathbb{P}(|K_+ - \mathbb{E}[K_+]| > \epsilon) & \leqslant & 2\exp\left(-\frac{2\epsilon^2}{N}\right), \\
+\mathbb{P}(|K_- - \mathbb{E}[K_-]| > \epsilon) & \leqslant & 2\exp\left(-\frac{2\epsilon^2}{N}\right).
+\end{eqnarray*}
+Let's use these concentration inequalities to show that for a finite sample drawn, $K_+$ and $K_-$ will be close to their expectations with high probability. Then as $N$ becomes large enough, we will see that $K_+$ and $K_-$ become reasonably large.<br/> 
+     First, by linearity of expectation we have 
+\begin{equation*}
+\mathbb{E}[K_+] = \mathbb{E}[K_-] = \frac{N}{2^P}.
+\end{equation*}
+     Next, by the union bound 
+\begin{eqnarray*}
+\mathbb{P}(|K_+ - \mathbb{E}[K_+]| > \epsilon \vee |K_- - \mathbb{E}[K_-]| > \epsilon) & \leqslant & \mathbb{P}(|K_+ - \mathbb{E}[K_+]| > \epsilon) + \mathbb{P}(|K_- - \mathbb{E}[K_-]| > \epsilon) \\
+& \leqslant & 4 \exp\left(-\frac{2\epsilon^2}{N}\right),
+\end{eqnarray*}
+which implies that the complementary event (the "good" event) satisfies
+\begin{equation*}
+\mathbb{P}(|K_+ - \mathbb{E}[K_+]| \leqslant \epsilon \wedge |K_- - \mathbb{E}[K_-]| \leqslant \epsilon) \geqslant 1 - 4 \exp\left(-\frac{2\epsilon^2}{N}\right).
+\end{equation*}
+Now set $\epsilon = N^{0.55}$ and let $N=M \cdot 2^P$ (so that $N$ is some multiple $M$ of $2^P$ where we shall choose $M$ large enough). The last inequality says that with probability at least $1 - 4\exp\left(-2N^{0.1}\right)=1-4\exp\left(-2 \cdot 2^{0.1P} \cdot M^{0.1}\right)$, a random sample contains $K_+$ and $K_-$ positive and negative observations, with
+\begin{equation*}
+M - 2^{0.55P}\cdot M^{0.55} \leqslant K_+, K_- \leqslant M + 2^{0.55P}\cdot M^{0.55}.
+\end{equation*}
+This shows that $K_+$ and $K_-$ grow like $M$ with probability $1-4\exp\left(-2 \cdot 2^{0.1P} \cdot M^{0.1}\right)$, a quantity that approaches $1$ as $M\to\infty$. Thus, given fixed $P$, for $M$ large enough (so that the sample size $N$ is also large), we have two reasonably large disjoint subsamples $\mathcal{S}_+$ and $\mathcal{S}_-$ that are far apart. <br/>
+     For perspective, set $P=5$ and $M=100$. We draw $N=M\times 2^P = 3200$ observations at random from the population. The argument above says that with probability at least $1-4 \exp\left(-2 \cdot 2^{0.1P} \cdot M^{0.1}\right) = 0.95$, the sample will have $K_+$ and $K_-$ positive and negative samples, with $K_+$ and $K_-$ lying between $M - 2^{0.55P}\cdot M^{0.55}\approx 15.3$ and $M - 2^{0.55P}\cdot M^{0.55}\approx 184.7$.<br/>  
+     To finish the argument, we have to quantify "far apart" in terms of some distance computed between the two empirical distributions obtained from the positive and negative sets, $\mathcal{S}_+$ and $\mathcal{S}_-$. We shall use the total variation distance, 
+\begin{equation*}
+d_\text{TV}(F,F') = \sup\{|\mu_F(A) - \mu_{F'}(A)|: A \subseteq \mathbb{R}^P\}.
+\end{equation*}
+     The total variation distance is the largest possible difference between the probabilities that the two probability distributions $\mu_F$ and $\mu_F'$ can assign to the same event. It also ranges between $0$ and $1$. Now for $\mathcal{S}_+$ and $\mathcal{S}_-$, the corresponding empirical distributions, denoted by $\mu_+$ and $\mu_-$, are fully supported on $\mathbb{R}_+^P$ and $\mathbb{R}_-^P$ respectively. Thus the largest possible difference is at least the difference between the probabilities that $\mu_+$ and $\mu_-$ assign to the set of positive $P$-dimensional reals, which is $1$. Therefore $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) \geqslant 1$, which explicitly quantifies that the subsamples are distributionally far apart. (In fact it is equal to $1$, since $d_\text{TV}$ cannot exceed $1$ as was mentioned earlier.)   
 </details> 
 
 The example above and its generalization show that even if our data originates from a single population, statistical heterogeneity may still arise in finite samples. It also points to the need for a careful solution for deciding whether a finite sample originated from a single population. 

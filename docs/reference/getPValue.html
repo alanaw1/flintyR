@@ -211,7 +211,7 @@ If P or B is small, however, stick with permutations.</p>
 
 <span class='va'>X1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># binary matrix, small</span>
 <span class='fu'>getPValue</span><span class='op'>(</span><span class='va'>X1</span><span class='op'>)</span> <span class='co'># perform exact test with 5000 permutations</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.356</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.3534</div><div class='input'>
 <span class='co'># should be larger than 0.05</span>
 
 <span class='co'># Example 2 (get p-value of high-dim matrix with independent features using asymptotic test)</span>
@@ -227,7 +227,7 @@ If P or B is small, however, stick with permutations.</p>
 
 <span class='va'>X3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>10</span>, ncol <span class='op'>=</span> <span class='fl'>1000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>1e4</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>getPValue</span><span class='op'>(</span><span class='va'>X3</span>, block_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>5</span><span class='op'>)</span>, <span class='fl'>200</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.176</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.1938</div><div class='input'>
 <span class='co'># Warning message: # there are features that have zero variation (i.e., all 0s or 1s)</span>
 <span class='co'># In getPValue(X3, block_labels = rep(c(1, 2, 3, 4, 5), 200)) :</span>
 <span class='co'># There exist columns with all ones or all zeros for binary X.</span>
