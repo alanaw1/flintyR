@@ -101,18 +101,18 @@ ggplot(data = ex_array, aes(x = V1, y = V2)) +
   labs(colour = "POSLAB")
 ```
 
-This observation is true in a more general setting. For $P$ features independently distributed according to the mixture distribution described above, it is always possible to draw a finite sample consisting of $N$ observations, which contains two disjoint subsamples that are far apart. Here is some mathematical intuition. For each observation $\mathbf{x}_n$, let $\mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $\mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$ denote, respectively, the event that it is positive and the event that it is negative. A positive observation $\mathbf{x}_n=(x_{n1},\ldots,x_{nP})$ means that each element is positive; likewise for a negative observation. Each component of $\mathbf{x}_n$ is IID according to the mixture distribution that is symmetric about $0$. This implies that each element $x_{nj}$ satisfies $\mathbb{P}(x_{nj}>0) =\mathbb{P}(x_{nj}<0) = 0.5$. Multiplying these probabilities, we see that $\mathbb{P}(\mathbf{x}_n > \mathbf{0})=\mathbb{P}(\mathbf{x}_n < \mathbf{0})=0.5^P$. The indicators are thus Bernoulli distributed with success probability $0.5^P$. Let $K_+$ and $K_-$ denote the number of positive and negative observations contained in a random draw. Since our observations are independently drawn, we see that for any pair of natural numbers $(k_+,k_-)$,
+This observation is true in a more general setting. For $P$ features independently distributed according to the mixture distribution described above, it is always possible to draw a finite sample consisting of $N$ observations, which contains two disjoint subsamples that are far apart. Here is some mathematical intuition. For each observation $\mathbf{x}_n$, let $\mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $\mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$ denote, respectively, the event that it is positive and the event that it is negative. A positive observation $\mathbf{x}_n=(x_{n1},\ldots,x_{nP})$ means that each element $x_{nj}$ is positive; likewise for a negative observation. Each component of $\mathbf{x}_n$ is IID according to the mixture distribution that is symmetric about $0$. This implies that each element $x_{nj}$ satisfies $\mathbb{P}(x_{nj}>0) =\mathbb{P}(x_{nj}<0) = 0.5$. Multiplying these probabilities, we see that $\mathbb{P}(\mathbf{x}_n > \mathbf{0})=\mathbb{P}(\mathbf{x}_n < \mathbf{0})=0.5^P$. The indicators are thus Bernoulli distributed with success probability $0.5^P$. Let $K_+$ and $K_-$ denote the number of positive and negative observations contained in a random draw. Since our observations are independently drawn, we see that for any pair of natural numbers $(k_+,k_-)$,
 \begin{equation*}
 \mathbb{P}(K_+=k_+, K_-=k_-) = {N\choose k_+}{N-k_+ \choose k_-} \left(\frac{1}{2^P}\right)^{k_+ + k_-}.
 \end{equation*}
 In particular, there is a positive probability that the finite sample drawn at random contains two sets $\mathcal{S}_+, \mathcal{S}_-$ of sizes $k_+$ and $k_-$. These two sets containing positive observations and negative observations exclusively, we see that they are necessarily far apart. 
 
-In fact, it can be shown that for large enough sample sizes, with high probability a finite sample drawn will contain two reasonably large disjoint subsamples $\mathcal{S}_+$ and $\mathcal{S}_-$ that are far apart (i.e., with total variation distance $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) =1$).
+In fact, it can be shown that for large enough sample sizes, with high probability a finite sample drawn will contain two reasonably large disjoint subsamples $\mathcal{S}_+$ and $\mathcal{S}_-$ that are far apart (i.e., with total variation distance $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) =1$). 
 
 <details>
-  <summary><b>I like maths. Show me the mathematical details.</b></summary>
-     Observe that $K_+$ and $K_-$, defined above, can be written as $K_+=\sum_{n=1}^N \mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $K_-=\sum_{n=1}^N \mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$. We already saw that the indicator events $\mathbf{1}\{\cdot\}$ are Bernoulli distributed with success probability $0.5^P$. Thus $K_+$ and $K_-$ are both $\text{Bin}(N,0.5^P)$ distributed.<br/> 
-     Bernoulli distributions are subGaussian with subGaussian parameter $\sigma^2=0.25$, regardless of the success probability $p$. Thus $\text{Bin}(N,p)$ distributions are subGaussian with subGaussian parameter $\sigma^2=0.25N$. Being subGaussian implies that a distribution has nice tail bounds. More precisely, Chernoff's bound implies that $K_+$ and $K_-$ satisfy the following concentration inequalities: for any positive $\epsilon$,
+  <summary><b>I like maths. Show me a proof.</b></summary>
+     Fantastic. Observe that $K_+$ and $K_-$, defined above, can be written as $K_+=\sum_{n=1}^N \mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $K_-=\sum_{n=1}^N \mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$. We already saw that the indicator events $\mathbf{1}\{\cdot\}$ are Bernoulli distributed with success probability $0.5^P$. Thus $K_+$ and $K_-$ are both $\text{Bin}(N,0.5^P)$ distributed.<br/> 
+     Bernoulli distributions are subGaussian with subGaussian parameter $\sigma^2=0.25$, regardless of the success probability $p$. Thus $\text{Bin}(N,p)$ distributions are subGaussian with subGaussian parameter $\sigma^2=0.25N$. Being subGaussian implies that a distribution has nice tail bounds. More precisely, Chernoff's bound (see Chapter 2 of [this text](https://www.cambridge.org/core/books/highdimensional-statistics/8A91ECEEC38F46DAB53E9FF8757C7A4E) or the last page of [this course note](https://math.mit.edu/~goemans/18310S15/chernoff-notes.pdf)) implies that $K_+$ and $K_-$ satisfy the following concentration inequalities: for any positive $\epsilon$,
 \begin{eqnarray*}
 \mathbb{P}(|K_+ - \mathbb{E}[K_+]| > \epsilon) & \leqslant & 2\exp\left(-\frac{2\epsilon^2}{N}\right), \\
 \mathbb{P}(|K_- - \mathbb{E}[K_-]| > \epsilon) & \leqslant & 2\exp\left(-\frac{2\epsilon^2}{N}\right).
@@ -141,22 +141,128 @@ This shows that $K_+$ and $K_-$ grow like $M$ with probability $1-4\exp\left(-2 
 \begin{equation*}
 d_\text{TV}(F,F') = \sup\{|\mu_F(A) - \mu_{F'}(A)|: A \subseteq \mathbb{R}^P\}.
 \end{equation*}
-     The total variation distance is the largest possible difference between the probabilities that the two probability distributions $\mu_F$ and $\mu_F'$ can assign to the same event. It also ranges between $0$ and $1$. Now for $\mathcal{S}_+$ and $\mathcal{S}_-$, the corresponding empirical distributions, denoted by $\mu_+$ and $\mu_-$, are fully supported on $\mathbb{R}_+^P$ and $\mathbb{R}_-^P$ respectively. Thus the largest possible difference is at least the difference between the probabilities that $\mu_+$ and $\mu_-$ assign to the set of positive $P$-dimensional reals, which is $1$. Therefore $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) \geqslant 1$, which explicitly quantifies that the subsamples are distributionally far apart. (In fact it is equal to $1$, since $d_\text{TV}$ cannot exceed $1$ as was mentioned earlier.)
+     The total variation distance is the largest possible difference between the probabilities that the two probability distributions $\mu_F$ and $\mu_F'$ can assign to the same event. It ranges between $0$ and $1$. Now for $\mathcal{S}_+$ and $\mathcal{S}_-$, the corresponding empirical distributions, denoted by $\mu_+$ and $\mu_-$, are fully supported on $\mathbb{R}_+^P$ and $\mathbb{R}_-^P$ respectively. Thus the largest possible difference is at least the difference between the probabilities that $\mu_+$ and $\mu_-$ assign to the set of positive $P$-dimensional reals, which is $1$. Therefore $d_{\text{TV}}(F_{\mathcal{S}_+},F_{\mathcal{S}_-}) \geqslant 1$, which explicitly quantifies that the subsamples are distributionally far apart. (In fact it is equal to $1$, since $d_\text{TV}$ cannot exceed $1$ as was mentioned earlier.)
 </details> 
 <br/> 
-The example above and its generalization show that even if our data originates from a single population, statistical heterogeneity may still arise in finite samples. It also points to the need for a careful solution for deciding whether a finite sample originated from a single population. 
+The example above and its generalization show that even if our data originates from a single population, statistical heterogeneity may still arise in finite samples. They demonstrate the need for careful methods to decide whether a finite sample originated from a single population. (Granted, this single population contains $2^P$ clusters, but for large values of $P$ one needs exponentially larger values of $N$ to capture these clusters. This is why we often do not consider clustering a sample into $2^P$ roughly evenly-sized subsamples each containing only a few samples.)  
 
-We will see how exchangeability provides such a solution. To motivate our discussion about exchangeability later, let us first see a few examples of heterogeneous samples.    
+## Hypothesis Testing and Limitations of Parametric Approaches 
 
-## Examples of Heterogeneity
+To decide whether a finite sample originated from a single population given that it was sampled at random, we must ask if patterns observed in the finite sample occur due to chance or to the presence of some signal. 
 
-1. Mixture Distributions and Independent Features 
-2. Mixture Distributions and Conditionally Independent Features (I)
-3. Mixture Distributions and Conditionally Independent Features (II)
+If we have enough information about the population to describe its distribution reasonably accurately (e.g., as a mixture of Gaussians like in the example above), then we could compute the probability of observing the particular finite sample, or at least estimate this probability, say by estimating the distributional parameters using maximum likelihood estimators obtained from the finite sample. We can then reject or accept the null hypothesis that our finite sample was drawn from the particular distribution, at some specified significance level $\alpha$. This is precisely what we are doing when we perform hypothesis testing. 
+
+Unfortunately, in many real scenarios we don't have enough information. There could be
+
+- A lack of reasonable justification for a model choice (e.g., why should we always expect a feature to be modeled well by Gaussians even if it has worked well so far on limited samples?) 
+- Insufficient domain knowledge to assume a model (e.g., what kind of distribution should we use to model our data given that we have very little knowledge about its statistical properties?)
+- Complex dependencies preventing a clear model choice (e.g., how can we decide between multiple equally complex hierarchical models when they both seem to fit the data well?)
+
+On top of model-driven concerns, there are other technical difficulties.
+
+- For models that have massive numbers of parameters rendering densities extremely small (risking numerical underflow issues), what is a reasonable low-dimensional test statistic based on which to compute the probability of observing our sample? 
+- The more complex and expressive a model, the more difficult it is to identify or compute sufficient statistics, which are potential candidates for test statistics especially when estimating distributional parameters is intractable or noisy. 
+
+Given the potential challenge of asserting a parametric model over our finite sample, we need strategies that avoid parametric modelling. One such strategy exploits the exchangeability of finite samples drawn from a population.    
 
 # Exchangeability 
 
-To be written.
+A finite sequence $(\mathbf{x}_1,\ldots,\mathbf{x}_N)$ of random variables is called exchangeable if 
+\begin{equation*}
+(\mathbf{x}_1,\ldots,\mathbf{x}_N) \overset{D}{=}(\mathbf{x}_{\pi(1)},\ldots,\mathbf{x}_{\pi(N)})
+\end{equation*}
+for each permutation $\pi$ of $\{1,\ldots,N\}$. This definition is relevant to sampling from a population: a finite sample drawn via random sampling from a large population is exchangeable. 
+
+So how can exchangeability help us avoid parametric modelling while detecting the existence of subpopulations? Let us see a few examples of heterogeneous samples first, relating them to exchangeability.  
+
+## Examples of Exchangeable and Heterogeneous Samples
+
+1. Mixture Distributions and Independent Features
+    - We saw this in the example above. 
+2. Mixture Distributions and Conditionally Independent Features (I)
+    - Let each $\mathbf{x}_n\overset{\text{iid}}{\sim} \frac{1}{2}F_1 + \frac{1}{2}F_2$, where the two source distributions contributing to the mixture are given by $F_1 = \bigotimes_{i=1}^4 N(i^2, 1)$ and $F_2 =\bigotimes_{i=1}^4 N(1/i^2, 1)$. The $\otimes$ notation here means that the $P=4$ features are generated independently according to unit variance Gaussian distributions.     
+3. Mixture Distributions and Conditionally Independent Features (II)
+    - Let $\mathbf{x}_n\overset{\text{iid}}{\sim} \frac{1}{2}F_1 + \frac{1}{2}F_2$, but now $F_1 = N(1,1) \otimes N(4,1) \otimes N(-4,1) \otimes N(-1,1)$ and $F_2 = N(-1,1) \otimes N(-4,1) \otimes N(4,1)\otimes N(1,1)$. 
+
+Each of these examples generates heterogeneous finite samples, and their finite samples are exchangeable by definition. However, hopefully most readers will agree that only the last two examples represent the existence of subpopulations for which the joint distribution of their features cannot be modeled in a straightforward manner. Indeed, even though the first example generates samples containing $2^P$ clusters, we are able to mathematically describe its features as independent distributions. Additionally, comparing the last two examples reveals that distinct subpopulations can generate a variety of heterogeneities: Example 2 generates samples whose row sums differ by subpopulation, whereas Example 3 generates samples whose row sums look more homogeneous. We provide numerical examples below. 
+
+```{r example_3, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Helper functions to generate samples
+drawSamplesEx2 <- function(N) {
+  to_return <- replicate(N, {p <- rbinom(1,1,0.5)
+  if (p == 1) {rnorm(4, mean = c(1,4,9,16))} else { rnorm(4, mean = c(1,1/4,1/9,1/16))}
+  })
+  return(t(to_return))
+}
+
+drawSamplesEx3 <- function(N) {
+  to_return <- replicate(N, {p <- rbinom(1,1,0.5)
+  if (p == 1) {rnorm(4, mean = c(1,4,-4,-1))} else { rnorm(4, mean = c(-1,-4,4,1))}
+  })
+  return(t(to_return))
+}
+
+## Generate N = 40 observations for each example
+ex_2 <- drawSamplesEx2(40) %>% 
+  as.data.frame()
+ex_2$ROWSUM <- rowSums(ex_2)
+ex_3 <- drawSamplesEx3(40) %>% 
+  as.data.frame()
+ex_3$ROWSUM <- rowSums(ex_3)
+
+## Print
+print(ex_2)
+cat("Variance of row sums for ex_2 is ", var(ex_2$ROWSUM), ".", sep = "")
+print(ex_3)
+cat("Variance of row sums for ex_3 is ", var(ex_3$ROWSUM), ".", sep = "")
+```
+
+Recall that we want to exploit exchangeability to detect the existence of statistically meaningful populations. The examples above show that exchangeability alone is insufficient for detecting hidden subpopulations from a finite sample. However, observe that a key difference between Examples 2 and 3 and Example 1 lies in feature dependencies. In Examples 2 and 3, the features are *not independent but conditionally independent*, where conditioning is done on the latent distribution membership. This suggests that feature dependency plays a role in *aligning* non-exchangeability with the existence of hidden subpopulations.          
 
 ## Tension between Sample Exchangeability and Feature Independence
+
+Consider Examples 1 and 2. To set the stage, suppose we have samples drawn from these two examples. Assume we have neither information about the generative model nor information about the observation labels (i.e., the subpopulation labels are latent). However, we know the samples were drawn from some population at random. With this information let us use **flinty** to detect exchangeability. We consider what happens when additional information is provided successively.  
+
+```{r load_flinty, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Load packages and set directories
+library(flintyR)
+library(doParallel)
+# Register parallel computation
+registerDoParallel()
+```
+
+**Scenario 1: We do not have information about feature dependencies.** We might assume that the features are independent. This is correct for the array generated by Example 1, but not for Example 2. 
+
+```{r scenario_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Compute p-values 
+getPValue(as.matrix(ex_array[,1:2])) # Example 1 array
+getPValue(as.matrix(ex_2[,1:4])) # Example 2 array
+```
+
+We see that at $\alpha=0.05$ we would consider Example 1's array exchangeable, but not Example 2's array. This demonstrates that feature dependencies can manifest as sample non-exchangeability, so that sample exchangeability is contingent on accounting for feature dependencies.    
+
+**Scenario 2: We have information about feature dependencies.** We know that the features in Example 1 are independent, so nothing changes from the previous scenario when running our test of exchangeability. However, for Example 2 we no longer run the independent features test, but run the dependent features test with all $P=4$ features grouped together as a block. This is because the features cannot be split into two or more independent sets of features.   
+
+```{r scenario_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Compute p-value for Example 2 array again
+getPValue(as.matrix(ex_2[,1:4]), block_labels = c(1,1,1,1))
+```
+Now we see that Example 2's array is considered exchangeable.
+
+By running **flinty** on our example datasets, we have revealed the tension between feature dependencies and sample exchangeability: a sample can appear non-exchangeable without us knowing if it is truly non-exchangeable or actually a consequence of feature dependencies. It is only with information about feature dependencies that we can have confidence in a claim about the sample being non-exchangeable.
+
+<p style="text-align:center;">
+<img src="ex_vs_hom_visual.png" alt="Visualization of tension." width="800"/>
+</p>
+<p align="center">
+*Bruno sees how the accurate detection of non-exchangeability depends upon knowledge about the statistical dependencies between features, if not the generative mechanism itself.* 
+</p>
+
+<details>
+  <summary><b>Is there a mathematical basis for this?</b></summary>
+Yes there is, and Bruno's musings have hinted at it. The tension we've described is related to one of the fundamental problems in the analysis of multivariate data: given a $N\times P$ dataset $\mathbf{X}$, how can we tease apart information that is shared between feature correlations and sample correlations? More concretely, to learn something about the samples we require some information or assumptions about the features, and vice-versa. </br>
+     How is information shared between feature correlations and sample correlations? This simple fact comes from a basic result in linear algebra: the trace of a matrix is equal to the trace of its transpose. Starting with the dataset $\mathbf{X}$, suppose we doubly standardize it; this means we transform it so that we obtain a version $\overset{\circ}{\mathbf{X}}$ for which the columns and rows of $\overset{\circ}{\mathbf{X}}$ have zero mean and unit variance. Then, $\overset{\circ}{\mathbf{X}}\overset{\circ}{\mathbf{X}}^T$ and $\overset{\circ}{\mathbf{X}}^T\overset{\circ}{\mathbf{X}}$ record the sample and feature covariances respectively. Yet these two covariances share the same eigenvalues, up to inclusion of additional eigenvalues with value $0$. In particular, the sums of eigenvalues, which are the traces, are equal: $\text{tr}\left(\overset{\circ}{\mathbf{X}}\overset{\circ}{\mathbf{X}}^T\right)=\text{tr}\left(\overset{\circ}{\mathbf{X}}^T\overset{\circ}{\mathbf{X}}\right)$. This phenomenon is clearly explained and also explored in the context of testing for sample independence by a [2009 paper](https://projecteuclid.org/journals/annals-of-applied-statistics/volume-3/issue-3/Are-a-set-of-microarrays-independent-of-each-other/10.1214/09-AOAS236.full) of Efron.</br>          
+     More broadly, a dataset $\mathbf{X}$ could arise from a multitude of generative processes: one in which observations come from multiple distinct generative processes, each with their own patterns of feature dependencies (sample and feature non-independence), one in which observations come from multiple generative processes that share the same partition of feature dependencies (sample non-independence but shared dependency structure), or one in which observations come from the same generative process (sample independence and shared dependency structure). The first scenario leads to [transposable arrays](https://doi.org/10.1111/j.1467-9868.2011.01027.x), a topic regarding which we leave the reader to pursue at their own interest.    
+</details>
+
 

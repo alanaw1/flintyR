@@ -122,7 +122,7 @@ getPValue <- function(X,
                       p = 2) {
   # [!] Check data matrix X is a matrix
   assertthat::assert_that(is.matrix(X),
-                          msg = "X must be a 2D matrix, see ?getPValue for examples.")
+                          msg = "X must be a 2D matrix, see ?getPValue for examples. Try as.matrix(X).")
 
   # [!] Warning if there exist non-varying features for binary matrix
   if (all(X == 0 | X == 1)) {
@@ -182,6 +182,12 @@ getPValue <- function(X,
     # [!] Check for non-conventional labeling
     assertthat::assert_that(max(block_labels) == length(unique(block_labels)),
                             msg = "Block labels are not from 1 to B. Please relabel blocks using this convention.")
+  }
+  
+  # EDGE CASES: a single block is specified -- sample should automatically be exchangeable  
+  if (max(block_labels) == 1) {
+    cat("All blocks are labeled 1, i.e., no independent sets of features detected, so samples are assumed exchangeable.\n")
+    return(1)
   }
 
   # Perform the test corresponding to largeP and largeN switches
