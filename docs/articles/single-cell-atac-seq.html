@@ -467,7 +467,7 @@ Because the single cell data provided by 10X Genomics is not accompanied by Hi-C
 <span class="co"># Compute p-value using same block delimiters as earlier</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">clust0_dendr_autosom</span><span class="op">)</span>, 
           block_boundaries <span class="op">=</span> <span class="va">start_points</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.2056</span></code></pre></div>
+<span class="co">#&gt; [1] 0.2058</span></code></pre></div>
 <p>Note that we did not perform this subcluster analysis using TAD callers to partition features in Chromosome 1, owing to there being too little variability in Chromosome 1 within any subcluster for our analysis to be meaningful.</p>
 <p>Thus, our test shows evidence of heterogeneity in the clusters and cell type subclusters, after accounting for either (1) correlations induced on peak read counts by the 3D structure (TADs) of the genome, or (2) dependencies between peaks lying in the same chromosome. However, as noted in our paper, an equally valid interpretation is that our accounting for chromatin-induced or “same chromosome”-induced statistical dependencies between peaks is insufficient.</p>
 </div>

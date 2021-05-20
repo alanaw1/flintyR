@@ -239,7 +239,7 @@ getPValue(as.matrix(ex_array[,1:2])) # Example 1 array
 getPValue(as.matrix(ex_2[,1:4])) # Example 2 array
 ```
 
-We see that at $\alpha=0.05$ we would consider Example 1's array exchangeable, but not Example 2's array. This demonstrates that feature dependencies can manifest as sample non-exchangeability, so that sample exchangeability is contingent on accounting for feature dependencies.    
+We see that at $\alpha=0.05$ we would consider Example 1's array exchangeable, but not Example 2's array. In other words, the array from Example 2 is not consistent with simultaneously being exchangeable and having independent columns. This demonstrates that treating features as independent when they are in fact not can lead to the appearance of sample non-exchangeability. Thus, sample exchangeability is *contingent on* accounting for feature dependencies.    
 
 **Scenario 2: We have information about feature dependencies.** We know that the features in Example 1 are independent, so nothing changes from the previous scenario when running our test of exchangeability. However, for Example 2 we no longer run the independent features test, but run the dependent features test with all $P=4$ features grouped together as a block. This is because the features cannot be split into two or more independent sets of features.   
 
