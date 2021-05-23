@@ -91,7 +91,7 @@
 
     
     
-<p>In psychological studies, decades of analyses of data originating from primarily Western, Educated, Industrial, Rich and Democratic (WEIRD) societies has led to the lack of replicability and generalizability of findings (<a href="https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-inthe-world/BF84F7517D56AFF7B7EB58411A554C17">Henrich et al., 2010</a>). This has motivated the development of metrics that quantify meaningful cultural differences between societies (<a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782">Muthukrishna et al., 2020</a>), which bear on the validity of porting results obtained from analyzing one population over to another different population.</p>
+<p>In psychological studies, decades of analyses of data originating from primarily Western, Educated, Industrial, Rich and Democratic (WEIRD) societies have contributed to the lack of replicability and generalizability of findings (<a href="https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-inthe-world/BF84F7517D56AFF7B7EB58411A554C17">Henrich et al., 2010</a>). This has motivated the development of metrics that quantify meaningful cultural differences between societies (<a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782">Muthukrishna et al., 2020</a>), which bear on the validity of porting results obtained from analyzing one population over to another different population.</p>
 <p>In contrast to between-society differences that reflect important cultural heterogeneities, differences within putatively singular populations or societies could suggest the presence of distinct communities that reflect meaningful sociological or demographic characteristics. For example, it is known that genealogical communities exist within the United States, and the persistence of homogamous mating in such communities (the determinants of which include, some scholars have suggested, geographic isolation and homophilous sorting by transmitted cultural traits; see <a href="https://www.jstor.org/stable/223487?seq=1">Kalmijn, 1998</a> and <a href="https://press.princeton.edu/books/paperback/9780691082837/cultural-transmission-and-evolution-mpb-16-volume-16">Feldman and Cavalli-Sforza, 1981</a>) is manifested in genetic differences (<a href="https://www.nature.com/articles/ncomms14238">Han et al., 2017</a>). See the caption in the Figure below and pay attention to the French Canadians, the Amish, the New Mexicans and the Scandinavians.</p>
 <p style="text-align:center;">
 <img src="ex_data/WVS/naturecomms_fig3.jpeg" alt="Distribution of ancestral birth locations in North America associated with IBD clusters.." width="500"></p>
@@ -100,13 +100,14 @@
 </p>
 <p>📖 In this vignette, we will:</p>
 <ul>
-<li>show how <strong>flinty</strong> can be used to provide evidence for the presence of distinct subpopulations within a single-population sample of individual responses to survey questionnaire data,</li>
-<li>demonstrate how <strong>flinty</strong> can generate exchangeable subsamples of individual “culturomes”.</li>
+<li>show how <strong>flinty</strong> can be used to provide evidence for the presence of distinct subpopulations within a single-population sample of individual responses to survey questionnaires,</li>
+<li>demonstrate how <strong>flinty</strong> can generate exchangeable subsamples of individual “culturomes”, in the absence of labels on the individuals.</li>
 </ul>
 <div id="world-values-survey-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#world-values-survey-data" class="anchor"></a>World Values Survey Data</h1>
-<p>To be continued.</p>
+<p>We obtain publicly available survey questionnaire response data from the <a href="https://www.worldvaluessurvey.org/wvs.jsp">World Values Survey (WVS)</a>. The WVS is a research program aimed at understanding how beliefs, values and norms change over time and across nations globally. Motivated by the question of within-society differences, we focus on interrogating the cultural homogeneity of Singaporeans based on a representative collection of responses to the WVS questionnaire. To illustrate our method we use data from Wave 6 of the WVS that was released in 2012. A report (<a href="https://lkyspp.nus.edu.sg/docs/default-source/ips/ips-exchange-series-17.pdf">Mathew, Teo, Tay and Wang, 2021</a>) analyzing Singaporeans from Wave 7 of the WVS (released 2020) has been published by the Institute of Policy Studies; here is a <a href="https://lkyspp.nus.edu.sg/ips/news/details/attitudes-towards-institutions-politics-and-policies-key-findings-from-the-world-value-survey">press release</a>.</p>
+<p>The code below loads and describes the WVS data <em>before</em> running data processing steps.</p>
 </div>
   </div>
 
