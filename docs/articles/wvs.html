@@ -92,9 +92,14 @@
     
     
 <p>In psychological studies, decades of analyses of data originating from primarily Western, Educated, Industrial, Rich and Democratic (WEIRD) societies have contributed to the lack of replicability and generalizability of findings (<a href="https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-inthe-world/BF84F7517D56AFF7B7EB58411A554C17">Henrich et al., 2010</a>). This has motivated the development of metrics that quantify meaningful cultural differences between societies (<a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782">Muthukrishna et al., 2020</a>), which bear on the validity of porting results obtained from analyzing one population over to another different population.</p>
-<p>In contrast to between-society differences that reflect important cultural heterogeneities, differences within putatively singular populations or societies could suggest the presence of distinct communities that reflect meaningful sociological or demographic characteristics. For example, it is known that genealogical communities exist within the United States, and the persistence of homogamous mating in such communities (the determinants of which include, some scholars have suggested, geographic isolation and homophilous sorting by transmitted cultural traits; see <a href="https://www.jstor.org/stable/223487?seq=1">Kalmijn, 1998</a> and <a href="https://press.princeton.edu/books/paperback/9780691082837/cultural-transmission-and-evolution-mpb-16-volume-16">Feldman and Cavalli-Sforza, 1981</a>) is manifested in genetic differences (<a href="https://www.nature.com/articles/ncomms14238">Han et al., 2017</a>). See the caption in the Figure below and pay attention to the French Canadians, the Amish, the New Mexicans and the Scandinavians.</p>
 <p style="text-align:center;">
-<img src="ex_data/WVS/naturecomms_fig3.jpeg" alt="Distribution of ancestral birth locations in North America associated with IBD clusters.." width="500"></p>
+<img src="ex_data/WVS/aps_fig6.jpg" alt="" width="500"></p>
+<p align="center">
+<em>2D <a href="https://www.jstor.org/stable/2110441?seq=1">non-metric multidimensional scaling (NMDS)</a> plot generated from a distance matrix summarising how culturally distinct regions are. Each entry of the distance matrix reports the cultural fixation index (<span class="math inline">\(\text{CF}_{ST}\)</span>) between two regions. Also shown are distances within the regions, which capture within-nation variation. Figure reproduced from <a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782">Muthukrishna et al. (2020)</a>, with permission from Michael Muthukrishna.</em>
+</p>
+In contrast to between-society differences that reflect important cultural heterogeneities, differences within putatively singular populations or societies could suggest the presence of distinct communities that reflect meaningful sociological or demographic characteristics. For example, it is known that genealogical communities exist within the United States, and the persistence of homogamous mating in such communities (the determinants of which include, some scholars have suggested, geographic isolation and homophilous sorting by transmitted cultural traits; see <a href="https://www.jstor.org/stable/223487?seq=1">Kalmijn, 1998</a> and <a href="https://press.princeton.edu/books/paperback/9780691082837/cultural-transmission-and-evolution-mpb-16-volume-16">Feldman and Cavalli-Sforza, 1981</a>) is manifested in genetic differences (<a href="https://www.nature.com/articles/ncomms14238">Han et al., 2017</a>). See the caption in the Figure below and pay attention to the French Canadians, the Amish, the New Mexicans and the Scandinavians.
+<p style="text-align:center;">
+<img src="ex_data/WVS/naturecomms_fig3.jpeg" alt="Distribution of ancestral birth locations in North America associated with IBD clusters" width="500"></p>
 <p align="center">
 <em>Distribution of ancestral birth locations in North America associated with clusters of individuals. A higher odds ratio (OR) implies that most present-day descendants of individuals from that ancestral birth location belong to the same cluster. Figure reproduced from <a href="https://www.nature.com/articles/ncomms14238">Han et al. (2017)</a> under the Creative Commons Attribution (CC-BY) license.</em>
 </p>
@@ -106,8 +111,225 @@
 <div id="world-values-survey-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#world-values-survey-data" class="anchor"></a>World Values Survey Data</h1>
-<p>We obtain publicly available survey questionnaire response data from the <a href="https://www.worldvaluessurvey.org/wvs.jsp">World Values Survey (WVS)</a>. The WVS is a research program aimed at understanding how beliefs, values and norms change over time and across nations globally. Motivated by the question of within-society differences, we focus on interrogating the cultural homogeneity of Singaporeans based on a representative collection of responses to the WVS questionnaire. To illustrate our method we use data from Wave 6 of the WVS that was released in 2012. A report (<a href="https://lkyspp.nus.edu.sg/docs/default-source/ips/ips-exchange-series-17.pdf">Mathew, Teo, Tay and Wang, 2021</a>) analyzing Singaporeans from Wave 7 of the WVS (released 2020) has been published by the Institute of Policy Studies; here is a <a href="https://lkyspp.nus.edu.sg/ips/news/details/attitudes-towards-institutions-politics-and-policies-key-findings-from-the-world-value-survey">press release</a>.</p>
+<p>We obtain publicly available survey questionnaire response data from the <a href="https://www.worldvaluessurvey.org/wvs.jsp">World Values Survey (WVS)</a>. The WVS is a research program aimed at understanding how beliefs, values and norms change over time and across nations globally; it is the largest non-commercial, cross-national, and time-series survey of public attitudes and values around the world. Motivated by the question of within-society differences, we focus on interrogating the cultural homogeneity of Singaporeans based on a representative collection of responses to the WVS questionnaire. To illustrate our method we use data from Wave 6 of the WVS that was released in 2012. (A report by <a href="https://lkyspp.nus.edu.sg/docs/default-source/ips/ips-exchange-series-17.pdf">Mathew, Teo, Tay and Wang, 2021</a> analyzing Singaporeans from 2020’s Wave 7 of the WVS has been published by the Institute of Policy Studies; here is a <a href="https://lkyspp.nus.edu.sg/ips/news/details/attitudes-towards-institutions-politics-and-policies-key-findings-from-the-world-value-survey">press release</a>.)</p>
 <p>The code below loads and describes the WVS data <em>before</em> running data processing steps.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Load packages</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+
+<span class="co">## Load the data</span>
+<span class="co">## This file can be downloaded with registration from the WVS website</span>
+<span class="va">wvs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"ex_data/WVS/F00007762-WV6_Data_R_v20180912.Rds"</span><span class="op">)</span>
+
+<span class="co"># How many samples and how many features?</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">wvs</span><span class="op">)</span>
+<span class="co">#&gt; [1] 89565   440</span>
+
+<span class="co"># Show the wvs tibble before processing...</span>
+<span class="va">wvs</span>
+<span class="co">#&gt; # A tibble: 89,565 x 440</span>
+<span class="co">#&gt;       V1    V2   V2A    V3    V4    V5    V6    V7    V8    V9   V10   V11   V12</span>
+<span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1     6    12    12     1     1     1     1    -2     1     1     2     1     1</span>
+<span class="co">#&gt;  2     6    12    12     2     1     2     3     4     2     2     2     2     2</span>
+<span class="co">#&gt;  3     6    12    12     3     1     3     2     4     2     1     2     2     2</span>
+<span class="co">#&gt;  4     6    12    12     4     1     1     3     4     3     1     2     1     2</span>
+<span class="co">#&gt;  5     6    12    12     5     1     1     1     2     1     1     1     3     2</span>
+<span class="co">#&gt;  6     6    12    12     6     1     2     2     2     4     1     2     1     2</span>
+<span class="co">#&gt;  7     6    12    12     7     1     1     1     1     1     1     2     2     1</span>
+<span class="co">#&gt;  8     6    12    12     8     1     1     1     1     2     2     2     1     2</span>
+<span class="co">#&gt;  9     6    12    12     9     1     1     1     2     2     2     2     2     2</span>
+<span class="co">#&gt; 10     6    12    12    10     1     1     1     2     1     1     1     1     2</span>
+<span class="co">#&gt; # … with 89,555 more rows, and 427 more variables: V13 &lt;dbl&gt;, V14 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V15 &lt;dbl&gt;, V16 &lt;dbl&gt;, V17 &lt;dbl&gt;, V18 &lt;dbl&gt;, V19 &lt;dbl&gt;, V20 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V21 &lt;dbl&gt;, V22 &lt;dbl&gt;, V23 &lt;dbl&gt;, V24 &lt;dbl&gt;, V25 &lt;dbl&gt;, V26 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V27 &lt;dbl&gt;, V28 &lt;dbl&gt;, V29 &lt;dbl&gt;, V30 &lt;dbl&gt;, V31 &lt;dbl&gt;, V32 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V33 &lt;dbl&gt;, V34 &lt;dbl&gt;, V35 &lt;dbl&gt;, V36 &lt;dbl&gt;, V37 &lt;dbl&gt;, V38 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V39 &lt;dbl&gt;, V40 &lt;dbl&gt;, V41 &lt;dbl&gt;, V42 &lt;dbl&gt;, V43 &lt;dbl&gt;, V44 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V44_ES &lt;dbl&gt;, V45 &lt;dbl&gt;, V46 &lt;dbl&gt;, V47 &lt;dbl&gt;, V48 &lt;dbl&gt;, V49 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V50 &lt;dbl&gt;, V51 &lt;dbl&gt;, V52 &lt;dbl&gt;, V53 &lt;dbl&gt;, V54 &lt;dbl&gt;, V55 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V56 &lt;dbl&gt;, V56_NZ &lt;dbl&gt;, V57 &lt;dbl&gt;, V58 &lt;dbl&gt;, V59 &lt;dbl&gt;, V60 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V61 &lt;dbl&gt;, V62 &lt;dbl&gt;, V63 &lt;dbl&gt;, V64 &lt;dbl&gt;, V65 &lt;dbl&gt;, V66 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V67 &lt;dbl&gt;, V68 &lt;dbl&gt;, V69 &lt;dbl&gt;, V70 &lt;dbl&gt;, V71 &lt;dbl&gt;, V72 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V73 &lt;dbl&gt;, V74 &lt;dbl&gt;, V74B &lt;dbl&gt;, V75 &lt;dbl&gt;, V76 &lt;dbl&gt;, V77 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V78 &lt;dbl&gt;, V79 &lt;dbl&gt;, V80 &lt;dbl&gt;, V81 &lt;dbl&gt;, V82 &lt;dbl&gt;, V83 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V84 &lt;dbl&gt;, V85 &lt;dbl&gt;, V86 &lt;dbl&gt;, V87 &lt;dbl&gt;, V88 &lt;dbl&gt;, V89 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V90 &lt;dbl&gt;, V91 &lt;dbl&gt;, V92 &lt;dbl&gt;, V93 &lt;dbl&gt;, V94 &lt;dbl&gt;, V95 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V96 &lt;dbl&gt;, V97 &lt;dbl&gt;, V98 &lt;dbl&gt;, V99 &lt;dbl&gt;, V100 &lt;dbl&gt;, V101 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V102 &lt;dbl&gt;, V103 &lt;dbl&gt;, V104 &lt;dbl&gt;, V105 &lt;dbl&gt;, V106 &lt;dbl&gt;, V107 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   V108 &lt;dbl&gt;, V109 &lt;dbl&gt;, …</span>
+
+<span class="co"># What doe each feature correspond to? </span>
+<span class="va">feature_anno</span> <span class="op">&lt;-</span> <span class="va">wvs</span> <span class="op">%&gt;%</span> <span class="fu">map_chr</span><span class="op">(</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">label</span><span class="op">)</span> 
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">feature_anno</span><span class="op">)</span>
+<span class="co">#&gt;                                 V1                                 V2 </span>
+<span class="co">#&gt;                             "Wave"                     "Country Code" </span>
+<span class="co">#&gt;                                V2A                                 V3 </span>
+<span class="co">#&gt; "Country/regions [with split ups]"                 "Interview number" </span>
+<span class="co">#&gt;                                 V4                                 V5 </span>
+<span class="co">#&gt;        "Important in life: Family"       "Important in life: Friends"</span>
+
+<span class="co"># What are the labels  (i.e., categories) attached to feature V2?</span>
+<span class="co"># [!] Numbers do not indicate the number of samples with that label in the full dataset</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">wvs</span><span class="op">$</span><span class="va">V2</span>, <span class="st">"labels"</span><span class="op">)</span>
+<span class="co">#&gt;    Missing; Unknown Not asked in survey      Not applicable           No answer </span>
+<span class="co">#&gt;                  -5                  -4                  -3                  -2 </span>
+<span class="co">#&gt;          Don't know             Algeria          Azerbaijan           Argentina </span>
+<span class="co">#&gt;                  -1                  12                  31                  32 </span>
+<span class="co">#&gt;           Australia             Armenia              Brazil             Belarus </span>
+<span class="co">#&gt;                  36                  51                  76                 112 </span>
+<span class="co">#&gt;               Chile               China              Taiwan            Colombia </span>
+<span class="co">#&gt;                 152                 156                 158                 170 </span>
+<span class="co">#&gt;              Cyprus             Ecuador             Estonia             Georgia </span>
+<span class="co">#&gt;                 196                 218                 233                 268 </span>
+<span class="co">#&gt;           Palestine             Germany               Ghana               Haiti </span>
+<span class="co">#&gt;                 275                 276                 288                 332 </span>
+<span class="co">#&gt;           Hong Kong               India                Iraq               Japan </span>
+<span class="co">#&gt;                 344                 356                 368                 392 </span>
+<span class="co">#&gt;          Kazakhstan              Jordan         South Korea              Kuwait </span>
+<span class="co">#&gt;                 398                 400                 410                 414 </span>
+<span class="co">#&gt;          Kyrgyzstan             Lebanon               Libya            Malaysia </span>
+<span class="co">#&gt;                 417                 422                 434                 458 </span>
+<span class="co">#&gt;              Mexico             Morocco         Netherlands         New Zealand </span>
+<span class="co">#&gt;                 484                 504                 528                 554 </span>
+<span class="co">#&gt;             Nigeria            Pakistan                Peru         Philippines </span>
+<span class="co">#&gt;                 566                 586                 604                 608 </span>
+<span class="co">#&gt;              Poland               Qatar             Romania              Russia </span>
+<span class="co">#&gt;                 616                 634                 642                 643 </span>
+<span class="co">#&gt;              Rwanda           Singapore            Slovenia        South Africa </span>
+<span class="co">#&gt;                 646                 702                 705                 710 </span>
+<span class="co">#&gt;            Zimbabwe               Spain              Sweden            Thailand </span>
+<span class="co">#&gt;                 716                 724                 752                 764 </span>
+<span class="co">#&gt; Trinidad and Tobago             Tunisia              Turkey             Ukraine </span>
+<span class="co">#&gt;                 780                 788                 792                 804 </span>
+<span class="co">#&gt;               Egypt       United States             Uruguay          Uzbekistan </span>
+<span class="co">#&gt;                 818                 840                 858                 860 </span>
+<span class="co">#&gt;               Yemen </span>
+<span class="co">#&gt;                 887</span></code></pre></div>
+<div id="data-processing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#data-processing" class="anchor"></a>Data Processing</h2>
+<p>We mirror the approach taken by Muthukrishna et al. (2020) — itself built on the work of <a href="https://doi.org/10.1073/pnas.0903232106">Bell, Richerson and McElreath (2009)</a> — to include only a subset of the questions as features and to recode responses to those questions. Concretely, we</p>
+<ol style="list-style-type: decimal">
+<li>Remove questions exploring personal idiosyncrasies rather than cultural beliefs (e.g., self-reported state of health is discarded);<br>
+</li>
+<li>Recode by pooling similar responses into a single numerical categorical response (e.g., “very important” and “rather important” are pooled);</li>
+<li>One-hot encode the resulting categorical responses.</li>
+</ol>
+<details><summary><b>Not enough details for you?</b>
+</summary>
+Good. Regarding Step 2 (recoding by pooling), you may download the code book <a href="https://michael.muthukrishna.com/cultural-distance-data/">here</a>. The authors have also developed a <a href="http://culturaldistance.com/">Cultural Distance Web App</a> that you can use to explore cultural distances if you are interested. Regarding Step 3 (one-hot encoding), as an example we consider the variable. After recoding there are three categories, 0, 1 and 2. Since differences between categories 0, 1 and 2 are not assumed to depend on the choice of categories, we transform 0, 1 and 2 into <span class="math inline">\(3\)</span>-bits 100, 010 and 001, so that when computing Hamming distances between the categories, differences between categories are agnostic to the categories themselves.
+</details><p>To facilitate our presentation, we have saved data generated from performing Steps 1 and 2 above. Below is code to load and preview this saved file.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Load the data </span>
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"ex_data/WVS/all_MM_num_filtered_recode.RData"</span><span class="op">)</span>
+
+<span class="co">## View data</span>
+<span class="va">wv_num_filtered_</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
+<span class="co">#&gt;         Wave Country Code Country/regions [with split ups] Interview number</span>
+<span class="co">#&gt; 1  2010-2013      Algeria                          Algeria                1</span>
+<span class="co">#&gt; 2  2010-2013      Algeria                          Algeria                2</span>
+<span class="co">#&gt; 3  2010-2013      Algeria                          Algeria                3</span>
+<span class="co">#&gt; 4  2010-2013      Algeria                          Algeria                4</span>
+<span class="co">#&gt; 5  2010-2013      Algeria                          Algeria                5</span>
+<span class="co">#&gt; 6  2010-2013      Algeria                          Algeria                6</span>
+<span class="co">#&gt; 7  2010-2013      Algeria                          Algeria                7</span>
+<span class="co">#&gt; 8  2010-2013      Algeria                          Algeria                8</span>
+<span class="co">#&gt; 9  2010-2013      Algeria                          Algeria                9</span>
+<span class="co">#&gt; 10 2010-2013      Algeria                          Algeria               10</span>
+<span class="co">#&gt;    Important in life: Family Important in life: Friends</span>
+<span class="co">#&gt; 1                          1                          1</span>
+<span class="co">#&gt; 2                          1                          1</span>
+<span class="co">#&gt; 3                          1                          2</span>
+<span class="co">#&gt; 4                          1                          1</span>
+<span class="co">#&gt; 5                          1                          1</span>
+<span class="co">#&gt; 6                          1                          1</span>
+<span class="co">#&gt; 7                          1                          1</span>
+<span class="co">#&gt; 8                          1                          1</span>
+<span class="co">#&gt; 9                          1                          1</span>
+<span class="co">#&gt; 10                         1                          1</span>
+<span class="co">#&gt;    Important in life: Leisure time Important in life: Politics</span>
+<span class="co">#&gt; 1                                1                          NA</span>
+<span class="co">#&gt; 2                                2                           2</span>
+<span class="co">#&gt; 3                                1                           2</span>
+<span class="co">#&gt; 4                                2                           2</span>
+<span class="co">#&gt; 5                                1                           1</span>
+<span class="co">#&gt; 6                                1                           1</span>
+<span class="co">#&gt; 7                                1                           1</span>
+<span class="co">#&gt; 8                                1                           1</span>
+<span class="co">#&gt; 9                                1                           1</span>
+<span class="co">#&gt; 10                               1                           1</span>
+<span class="co">#&gt;    Important in life: Work Important in life: Religion</span>
+<span class="co">#&gt; 1                        1                           1</span>
+<span class="co">#&gt; 2                        1                           1</span>
+<span class="co">#&gt; 3                        1                           1</span>
+<span class="co">#&gt; 4                        2                           1</span>
+<span class="co">#&gt; 5                        1                           1</span>
+<span class="co">#&gt; 6                        2                           1</span>
+<span class="co">#&gt; 7                        1                           1</span>
+<span class="co">#&gt; 8                        1                           1</span>
+<span class="co">#&gt; 9                        1                           1</span>
+<span class="co">#&gt; 10                       1                           1</span></code></pre></div>
+<p>As a final step, we restrict our samples to individuals from Singapore.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Select individuals from Singapore</span>
+<span class="va">wv_filtered_sg</span> <span class="op">&lt;-</span> <span class="va">wv_num_filtered_</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`Country Code`</span> <span class="op">==</span> <span class="st">"Singapore"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">select_if</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">remove_missing</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="va">as.factor</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">## View data</span>
+<span class="va">wv_filtered_sg</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
+<span class="co">#&gt;         Wave Country Code Country/regions [with split ups] Interview number</span>
+<span class="co">#&gt; 1  2010-2013    Singapore                        Singapore             1001</span>
+<span class="co">#&gt; 2  2010-2013    Singapore                        Singapore             1002</span>
+<span class="co">#&gt; 3  2010-2013    Singapore                        Singapore             1003</span>
+<span class="co">#&gt; 5  2010-2013    Singapore                        Singapore             1005</span>
+<span class="co">#&gt; 7  2010-2013    Singapore                        Singapore             1007</span>
+<span class="co">#&gt; 8  2010-2013    Singapore                        Singapore             1008</span>
+<span class="co">#&gt; 9  2010-2013    Singapore                        Singapore             1009</span>
+<span class="co">#&gt; 10 2010-2013    Singapore                        Singapore             1010</span>
+<span class="co">#&gt; 11 2010-2013    Singapore                        Singapore             1011</span>
+<span class="co">#&gt; 12 2010-2013    Singapore                        Singapore             1012</span>
+<span class="co">#&gt;    Important in life: Family Important in life: Friends</span>
+<span class="co">#&gt; 1                          1                          1</span>
+<span class="co">#&gt; 2                          1                          1</span>
+<span class="co">#&gt; 3                          1                          1</span>
+<span class="co">#&gt; 5                          1                          1</span>
+<span class="co">#&gt; 7                          1                          1</span>
+<span class="co">#&gt; 8                          1                          1</span>
+<span class="co">#&gt; 9                          1                          1</span>
+<span class="co">#&gt; 10                         1                          1</span>
+<span class="co">#&gt; 11                         1                          1</span>
+<span class="co">#&gt; 12                         1                          1</span>
+<span class="co">#&gt;    Important in life: Leisure time Important in life: Politics</span>
+<span class="co">#&gt; 1                                1                           2</span>
+<span class="co">#&gt; 2                                1                           2</span>
+<span class="co">#&gt; 3                                1                           2</span>
+<span class="co">#&gt; 5                                1                           1</span>
+<span class="co">#&gt; 7                                1                           1</span>
+<span class="co">#&gt; 8                                1                           1</span>
+<span class="co">#&gt; 9                                1                           1</span>
+<span class="co">#&gt; 10                               1                           1</span>
+<span class="co">#&gt; 11                               1                           1</span>
+<span class="co">#&gt; 12                               1                           2</span>
+<span class="co">#&gt;    Important in life: Work Important in life: Religion</span>
+<span class="co">#&gt; 1                        1                           2</span>
+<span class="co">#&gt; 2                        1                           1</span>
+<span class="co">#&gt; 3                        1                           2</span>
+<span class="co">#&gt; 5                        1                           1</span>
+<span class="co">#&gt; 7                        1                           2</span>
+<span class="co">#&gt; 8                        1                           1</span>
+<span class="co">#&gt; 9                        1                           2</span>
+<span class="co">#&gt; 10                       1                           1</span>
+<span class="co">#&gt; 11                       1                           1</span>
+<span class="co">#&gt; 12                       1                           1</span>
+
+<span class="co">## Get data dimensions</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">)</span>
+<span class="co">#&gt; [1] 1715   51</span></code></pre></div>
+</div>
 </div>
   </div>
 
