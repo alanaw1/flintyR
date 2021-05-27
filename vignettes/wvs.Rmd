@@ -70,13 +70,11 @@ attr(wvs$V2, "labels")
 We mirror the approach taken by Muthukrishna et al. (2020) --- itself built on the work of [Bell, Richerson and McElreath (2009)](https://doi.org/10.1073/pnas.0903232106) --- to include only a subset of the questions as features and to recode responses to those questions. Concretely, we
 
 1. Remove questions exploring personal idiosyncrasies rather than cultural beliefs (e.g., self-reported state of health is discarded);   
-2. Recode by pooling similar responses into a single numerical categorical response (e.g., "very important" and "rather important" are pooled);
-3. One-hot encode the resulting categorical responses.
+2. Recode by pooling similar responses into a single numerical categorical response (e.g., "very important" and "rather important" are pooled)
 
 <details>
   <summary><b>Not enough details for you?</b></summary>
-    Good. Regarding Step 2 (recoding by pooling), you may download the code book [here](https://michael.muthukrishna.com/cultural-distance-data/). The authors have also developed a [Cultural Distance Web App](http://culturaldistance.com/) that you can use to explore cultural distances if you are interested.</br></br>
-    Regarding Step 3 (one-hot encoding), as an example we consider the variable. After recoding there are three categories, 0, 1 and 2. Since differences between categories 0, 1 and 2 are not assumed to depend on the choice of categories, we transform 0, 1 and 2 into $3$-bits 100, 010 and 001, so that when computing Hamming distances between the categories, differences between categories are agnostic to the categories themselves. 
+    Good. Regarding Steps 1 and 2 (recoding by pooling), you may download the code book [here](https://michael.muthukrishna.com/cultural-distance-data/). The authors have also developed a [Cultural Distance Web App](http://culturaldistance.com/) that you can use to explore cultural distances if you are interested.
 </details>
 
 To facilitate our presentation, we have saved data generated from performing Steps 1 and 2 above. Below is code to load and preview this saved file.
@@ -89,7 +87,7 @@ load("ex_data/WVS/all_MM_num_filtered_recode.RData")
 wv_num_filtered_[1:10, 1:10]
 ```
 
-As a final step, we restrict our samples to individuals from Singapore. 
+We restrict our samples to individuals from Singapore. We obtain a dataset $\mathbf{X}$ with $N=1715$ observations and $51$ categorical features, the first four of which are individual metadata. Thus there are $P=47$ questionnaire response features in total.   
 
 ```{r wvs_3, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
 ## Select individuals from Singapore
@@ -105,3 +103,219 @@ wv_filtered_sg[1:10, 1:10]
 ## Get data dimensions
 dim(wv_filtered_sg)
 ```
+
+
+
+
+## One-Hot Encoding
+
+A challenge in measuring distances between categorical survey response variables is to determine which distance correctly measures "how far apart" we believe different pairs of categories should be. For example, should "strongly agree" and "not applicable" be more far apart than "strongly disagree" and "not applicable"? (This always depends on the downstream task; e.g., are distances used for visualization, or for classification, or something else?)  
+
+To compute Hamming distances between categorical variables, we perform *one-hot encoding* of all categorical variables with more than two categories. One-hot encoding means we assume that distances between pairs of categories are agnostic to the categories themselves. For example, consider the variable "Justifiable: Homosexuality". After recoding there are three categories, 0, 1 and 2. Since differences between categories 0, 1 and 2 are assumed not to depend on the choice of categories, we transform 0, 1 and 2 into $3$-bits 100, 010 and 001, so that when computing Hamming distances between the categories, differences between any pair of categories is $1$.   
+
+```{r wvs_4, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Binarize array and generate block delimiters
+library(mltools) # for one_hot to work
+wv_filtered_sg_bin <- one_hot(data.table::as.data.table(wv_filtered_sg[,5:51]))
+
+## Check dimension of one-hot encoded matrix
+dim(wv_filtered_sg_bin)
+
+## Get block delimiters 
+block_membership <- c()
+for (p in 1:47) {
+  # Count number of levels in the factor 
+  k <- length(levels(wv_filtered_sg[,p+4]))
+  
+  # Add to block delimiter vector accordingly
+  block_membership <- c(block_membership,
+                        rep(p,k))
+}
+
+block_delims <- c()
+for (p in 1:47) {
+  # Find position of first occurrence of p in block_membership 
+  block_delims <- c(block_delims,match(p,block_membership))
+}
+```
+
+# Results
+
+## How do responses correlate with one another? 
+
+Before we run any tests of exchangeability, let us visualize, using a heatmap and a dendrogram, how responses to the different survey questions correlate with one another. To generate our dendrogram, we perform hierarchical clustering with Ward linkage and distance matrix constructed from sample-sample correlations. (See p. 21 of [Charrad et al., 2014](https://www.jstatsoft.org/article/view/v061i06) for an explanation of the Ward linkage.) Note that we do not need the one-hot encoded version of $\mathbf{X}$ to accomplish this step.
+
+```{r wvs_5, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Generate a dendrogram + heat map to visualize correlations
+library(dendextend) # for ladderize to work
+features_hclust_Euclidean_ward <- hclust(as.dist(1-cor(t(apply(wv_filtered_sg[,-(1:4)], 1, as.numeric)))), 
+                                           method = "ward.D")
+features_dend <- as.dendrogram(features_hclust_Euclidean_ward) # generate dendrogram for plotting heat map with
+
+library(RColorBrewer) # for brewer.pal to work
+color.scheme <- rev(brewer.pal(10,"RdBu")) # generate the color scheme to use
+
+heatmap(cor(t(apply(wv_filtered_sg[,-(1:4)], 1, as.numeric))),
+        Rowv = ladderize(features_dend),
+        Colv = ladderize(features_dend),
+        cexRow = 0.3,
+        cexCol = 0.3,
+        margins = c(2,2))
+```
+
+Even though we have to zoom into the figure for details, we already see that there are groups of features that are more correlated with one another. Here are three examples:
+
+- Group 1: Responses to Question IDs 38 to 46 (rightmost clade of dendrogram)
+- Group 2: Responses to Question IDs 6, 33, 34, 35, and 36 (next rightmost clade after Group 1 clade)
+- Group 3: Responses to Question IDs 4, 5, and 24 (a very small clade left of Group 2 clade)
+
+The questions corresponding to the IDs are printed below.   
+
+```{r wvs_6, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Print table of responses with IDs
+kableExtra::kable(data.frame(ID = 1:length(rownames(t(wv_filtered_sg[,-(1:4)]))),
+                             Question = rownames(t(wv_filtered_sg[,-(1:4)]))))
+```
+
+We thus see that Group 1 corresponds to "government and the law", Group 2 corresponds to religion, and Group 3 corresponds to politics. Interestingly, "Important in life: Work" is grouped with politics. 
+
+## Are Singaporeans Culturally Homogeneous?
+
+Our first goal is to check whether our entire sample is homogeneous. We run our test, using block delimiters that demarcate one-hot encoded responses.   
+
+```{r wvs_7, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Load packages and set directories
+library(flintyR)
+library(doParallel)
+# Register parallel computation
+registerDoParallel()
+
+## Get p-value
+getPValue(as.matrix(wv_filtered_sg_bin),  
+          block_boundaries = block_delims,
+          largeP = TRUE) # since P is almost 50 we use asymptotic test
+```
+
+We obtain a $p$-value of $0$. This is not surprising, given that (as we've just seen) the assumption of statistical independence between responses is likely false. Next, we try grouping these features into $B$ blocks ($B\leqslant P$) based on the same hierarchical clustering procedure we used to visualize correlations. We still find that no matter how many blocks $B$ we select (amounting to cutting the clustering dendrogram to form $B$ clusters), we still obtain $p=0$. Below, we show an example of this computation for $B=6$.
+
+```{r wvs_8, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Cluster features into k = 6 groups to obtain feature grouping
+dist_matrix_Euclidean <- stats::dist(t(data.matrix(wv_filtered_sg[,5:51])), method = "euclidean") # L2 distance
+hclust_Euclidean_ward <- hclust(dist_matrix_Euclidean, method = "ward.D")
+clusters <- cutree(hclust_Euclidean_ward, k = 6) %>%
+  as.data.frame()
+
+## Get block delimiters from group membership
+block_membership <- c()
+for (p in 1:47) {
+  # Count number of levels in the factor 
+  k <- length(levels(wv_filtered_sg[,p+4]))
+  
+  # Add to block delimiter vector accordingly
+  which_group <- clusters[p,]  
+  block_membership <- c(block_membership,
+                        rep(which_group,k))
+}
+
+## Compute p-value with block boundaries obtained from feature grouping
+getPValue(as.matrix(wv_filtered_sg_bin),
+          block_labels = block_membership)
+```
+
+This suggests the correlation structure between the features is complex, and it is likely that there are clusters within the samples that have distinct cluster-specific correlation structures between their features. In a demographic context, we suspect that there are distinct communities of Singaporeans, wherein the responses to the WVS questions have correlation patterns unique to the community.
+
+## What Patterns of Variation Characterize Exchangeable Clusters of Singaporeans?
+
+Motivated by evidence of heterogeneity, we try to find distinct communities of Singaporeans within our sample. Similar to how we grouped our features, we cluster the samples using hierarchical clustering with Ward linkage and distance matrix constructed from Euclidean distances computed between samples. We assume that such a clustering is efficacious at recovering demographically meaningful communities. We obtain $K=10$ as the optimal number of clusters using the Dindex metric. (See p. 14 of [Charrad et al., 2014](https://www.jstatsoft.org/article/view/v061i06) for an explanation of how the Dindex works.)
+
+```{r wvs_9, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Perform tuning to decide the optimal number of clusters 
+## K to group samples into
+library(NbClust) # for NbClust to work
+res <- NbClust(data.matrix(wv_filtered_sg[,5:51]),
+               distance = "euclidean", 
+               min.nc = 2, 
+               max.nc = 12, 
+               method = "ward.D2",
+               index = "dindex")
+
+## Minimize clustering gain on Dindex
+-diff(res$All.index) #  minimized at q = 11, so N_opt = (q - 1) = 10
+
+## Perform hierarchical clustering
+samples_dist_matrix_Euclidean <- stats::dist(data.matrix(wv_filtered_sg[,5:51]), method = "euclidean") # L2 distance
+samples_hclust_Euclidean_ward <- hclust(samples_dist_matrix_Euclidean, method = "ward.D")
+
+## Obtain cluster membership for K = 10 clusters
+samples_clusters <- cutree(samples_hclust_Euclidean_ward, k = 10)
+```
+
+After obtaining $10$ clusters, we group the features independently *for each sample cluster* using the same hierarchical clustering approach. We then perform the block version of our test at multiple number of blocks $B$ partitioning our features, where each configuration corresponds to cutting the clustering dendrogram to form $B$ feature clusters. Below, we demonstrate an example of this procedure for one cluster containing $241$ individuals.
+
+```{r wvs_10, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Select subsample corresponding to Cluster 8
+sg_c8 <- wv_filtered_sg[which(samples_clusters == 8),]
+sg_c8 <- sg_c8[,-(1:4)] # remove metadata
+
+## Check that each feature has at least two categorical levels 
+sg_c8 %>% 
+  map(levels) %>% # get levels per feature
+  map(length) %>% # get number of levels 
+  unlist() %>% 
+  as.vector() # collapse into vector
+
+## Perform feature clustering
+c8features_hclust_Euclidean_ward <- hclust(as.dist(1-cor(t(apply(data.matrix(sg_c8), 1, as.numeric)))), 
+                                           method = "ward.D")
+c8features_clusters <- cutree(c8features_hclust_Euclidean_ward, k = 10) 
+
+## Binarize array
+sg_c8_bin <- one_hot(data.table::as.data.table(sg_c8))
+
+## Get block delimiters from group membership
+block_membership <- c()
+for (p in 1:47) {
+  # Count number of levels in the factor 
+  k <- length(levels(sg_c8[,p]))
+  
+  # Add to block delimiter vector accordingly
+  which_group <- c8features_clusters[p]  
+  block_membership <- c(block_membership,
+                        rep(which_group,k))
+}
+
+## Compute p-value with block boundaries obtained from feature grouping
+getPValue(as.matrix(sg_c8_bin),
+          block_labels = block_membership)
+```
+
+After performing the steps described, we find that all but one cluster (Cluster 8, shown in the code chunk above) returned significant $p$-values that imply heterogeneity. However, for the only homogeneous cluster, we find that up to $B=10$ blocks, the samples appear homogeneous. This is no longer true when we treat all $P=47$ features as statistically independent. Thus, for this cluster, the variation in responses can be attributed to partitionable feature dependencies.  
+
+```{r wvs_11, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Compute p-value when assuming features are statistically independent
+# [!] This should return p-value of 0
+getPValue(as.matrix(sg_c8_bin),  
+          block_boundaries = block_delims,
+          largeP = TRUE) # since P is almost 50 we use asymptotic test
+```
+
+Now that we have found an exchangeable cluster of Singaporeans, we characterize the feature dependencies for this community of individuals. 
+
+```{r wvs_12, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Generate heatmap with dendrogram capturing feature-feature correlations
+c8features_dend <- as.dendrogram(c8features_hclust_Euclidean_ward)
+heatmap(cor(t(apply(data.matrix(sg_c8), 1, as.numeric))),
+        Rowv = ladderize(c8features_dend),
+        Colv = ladderize(c8features_dend),
+        cexRow = 0.3,
+        cexCol = 0.3,
+        margins = c(2,2))
+```
+
+Here, we see that there are groups of features that are more correlated with one another. Here are three examples:
+
+- Group 1: Responses to Question IDs 26, 27, and 28 (rightmost clade of dendrogram)
+- Group 2: Responses to Question IDs 38 to 40 (next rightmost clade after Group 1 clade)
+- Group 3: Responses to Question IDs 41 to 46 (clade a little right of the middle of dendrogram)
+
+By looking back at the questions corresponding to the IDs, we see that Group 1 has to do with corporate culture. Moreover, unlike in the entire sample where Groups 2 and 3 were previously seen to be grouped as one, here they are grouped separately. Upon closer inspection, we notice that IDs 38 to 40 pertain more to obeying civil laws, while IDs 41 to 46 pertain more to moral and/or religious values. Thus, for this cluster we find a different relationship between two groups of traits that were previously agglomerated into one when viewed sample-wide.    
