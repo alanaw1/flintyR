@@ -277,18 +277,18 @@ In population-genetic datasets, the features are binarized single nucleotide pol
 <span class="op">}</span>
 
 <span class="co"># Generate </span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">420</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
 <span class="va">X_data</span> <span class="op">&lt;-</span> <span class="fu">getExHaplotypes</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, num_blocks <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 
 <span class="co"># View</span>
 <span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>
 <span class="co">#&gt;      rs1_1 rs1_2 rs1_3 rs1_4 rs1_5 rs1_6</span>
-<span class="co">#&gt; [1,]     0     0     1     0     0     0</span>
-<span class="co">#&gt; [2,]     0     0     0     1     0     0</span>
-<span class="co">#&gt; [3,]     0     0     1     0     0     0</span>
-<span class="co">#&gt; [4,]     0     0     0     1     0     0</span>
+<span class="co">#&gt; [1,]     0     0     1     1     0     0</span>
+<span class="co">#&gt; [2,]     0     0     1     1     0     0</span>
+<span class="co">#&gt; [3,]     0     0     0     0     0     0</span>
+<span class="co">#&gt; [4,]     0     0     0     0     0     0</span>
 <span class="co">#&gt; [5,]     0     0     0     0     0     0</span>
-<span class="co">#&gt; [6,]     0     0     0     1     0     0</span></code></pre></div>
+<span class="co">#&gt; [6,]     0     0     0     0     0     0</span></code></pre></div>
 <p>As in the basic example, we cluster the samples into two clusters. Here, we use Prevosti’s distance (<a href="https://link.springer.com/content/pdf/10.1007/BF00831894.pdf">Prevosti et al., 1975</a>), a popular measure of genetic distance, and perform hierarchical clustering with Ward linkage.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform clustering</span>
@@ -303,7 +303,7 @@ In population-genetic datasets, the features are binarized single nucleotide pol
 
 <span class="co"># Obtain cluster labels</span>
 <span class="va">k</span> <span class="op">=</span> <span class="fl">2</span>
-<span class="va">samples_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">samples_hclust</span>, <span class="va">k</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">samples_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://talgalili.github.io/dendextend/reference/cutree-methods.html">cutree</a></span><span class="op">(</span><span class="va">samples_hclust</span>, <span class="va">k</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">samples_clusters</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 

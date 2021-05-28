@@ -214,7 +214,7 @@ getExHaplotypes <- function(N, num_blocks) {
 }
 
 # Generate 
-set.seed(420)
+set.seed(2021)
 X_data <- getExHaplotypes(N = 100, num_blocks = 10)
 
 # View
