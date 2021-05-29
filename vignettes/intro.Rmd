@@ -339,7 +339,7 @@ If we were naïve, we'd reject the null hypothesis and conclude incorrectly the 
 
 To apply our test correctly, we must account for feature-feature dependencies. In our case, our features are grouped into chromosome blocks, where within each chromosome the SNPs are correlated owing to genetic recombination.
 
-```{r 3_7, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+```{r 3_7, echo = TRUE, warning = FALSE, message = FALSE, cache = FALSE}
 ## Compute p-value under independent blocks null
 # Note: this takes about 2-3 minutes to run
 getPValue(X_data$data, 
