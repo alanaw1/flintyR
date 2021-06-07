@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The purpose of this vignette is to cover all the bases of our work. In particular, we will
+This vignette explores more thoroughly some aspects of our work that might be overlooked in the other vignettes or in our paper. In particular, we will
 
 - Explain how we generate TAD boundaries for analyzing 10X Single Cell ATAC-seq data 
 - Demonstrate how our method works on data involving only independent sets of pairwise distances (see Section 4.1 of our paper)
