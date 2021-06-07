@@ -72,10 +72,7 @@ We mirror the approach taken by Muthukrishna et al. (2020) --- itself built on t
 1. Remove questions exploring personal idiosyncrasies rather than cultural beliefs (e.g., self-reported state of health is discarded);   
 2. Recode by pooling similar responses into a single numerical categorical response (e.g., "very important" and "rather important" are pooled)
 
-<details>
-  <summary><b>Not enough details for you?</b></summary>
-    Good. Regarding Steps 1 and 2 (recoding by pooling), you may download the code book [here](https://michael.muthukrishna.com/cultural-distance-data/). The authors have also developed a [Cultural Distance Web App](http://culturaldistance.com/) that you can use to explore cultural distances if you are interested.
-</details>
+We provide scripts accomplishing this in our [Github repo](https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/wvs).
 
 To facilitate our presentation, we have saved data generated from performing Steps 1 and 2 above. Below is code to load and preview this saved file.
 

@@ -57,6 +57,9 @@
       <a href="../articles/ex_vs_hom.html">Exchangeability and Homogeneity</a>
     </li>
     <li>
+      <a href="../articles/extras.html">Extras</a>
+    </li>
+    <li>
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
@@ -215,10 +218,8 @@ In contrast to between-society differences that reflect important cultural heter
 </li>
 <li>Recode by pooling similar responses into a single numerical categorical response (e.g., “very important” and “rather important” are pooled)</li>
 </ol>
-<details><summary><b>Not enough details for you?</b>
-</summary>
-Good. Regarding Steps 1 and 2 (recoding by pooling), you may download the code book <a href="https://michael.muthukrishna.com/cultural-distance-data/">here</a>. The authors have also developed a <a href="http://culturaldistance.com/">Cultural Distance Web App</a> that you can use to explore cultural distances if you are interested.
-</details><p>To facilitate our presentation, we have saved data generated from performing Steps 1 and 2 above. Below is code to load and preview this saved file.</p>
+<p>We provide scripts accomplishing this in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/wvs">Github repo</a>.</p>
+<p>To facilitate our presentation, we have saved data generated from performing Steps 1 and 2 above. Below is code to load and preview this saved file.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load the data </span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"ex_data/WVS/all_MM_num_filtered_recode.RData"</span><span class="op">)</span>
@@ -898,7 +899,7 @@ samples_clusters &lt;- cutree(samples_hclust_Euclidean_ward, k = 10)</code></pre
 <span class="co">## Compute p-value with block boundaries obtained from feature grouping</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">sg_c8_bin</span><span class="op">)</span>,
           block_labels <span class="op">=</span> <span class="va">block_membership</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.1402</span></code></pre></div>
+<span class="co">#&gt; [1] 0.1628</span></code></pre></div>
 <p>After performing the steps described, we find that all but one cluster (Cluster 8, shown in the code chunk above) returned significant <span class="math inline">\(p\)</span>-values that imply heterogeneity. However, for the only homogeneous cluster, we find that up to <span class="math inline">\(B=10\)</span> blocks, the samples appear homogeneous. This is no longer true when we treat all <span class="math inline">\(P=47\)</span> features as statistically independent. Thus, for this cluster, the variation in responses can be attributed to partitionable feature dependencies.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Compute p-value when assuming features are statistically independent</span>

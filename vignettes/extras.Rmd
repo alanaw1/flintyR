@@ -1,0 +1,37 @@
+---
+title: "Extras"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Extras}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The purpose of this vignette is to cover all the bases of our work. In particular, we will
+
+- Explain how we generate TAD boundaries for analyzing 10X Single Cell ATAC-seq data 
+- Demonstrate how our method works on data involving only independent sets of pairwise distances (see Section 4.1 of our paper)
+- Provide a population genetics example of how to run our method from the terminal
+
+If you've come here for the details, you're in the right place 🙂
+
+# Generating Topologically Associating Domains for scATAC-seq Data Analysis
+
+*This Section supplements our [Analysis of Single Cell ATAC-seq Data](https://alanaw1.github.io/flintyR/articles/single-cell-atac-seq.html) vignette.*
+
+To be updated. 
+
+# Test of Exchangeability Using Pairwise Distances
+
+To be updated. 
+
+# Running Our Test from Terminal
+
+To be updated.
