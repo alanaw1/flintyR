@@ -105,7 +105,35 @@
 <h1 class="hasAnchor">
 <a href="#generating-topologically-associating-domains-for-scatac-seq-data-analysis" class="anchor"></a>Generating Topologically Associating Domains for scATAC-seq Data Analysis</h1>
 <p><em>This Section supplements our <a href="https://alanaw1.github.io/flintyR/articles/single-cell-atac-seq.html">Analysis of Single Cell ATAC-seq Data</a> vignette.</em></p>
-<p>To be updated.</p>
+<div id="what-are-topologically-associating-domains-tads" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-are-topologically-associating-domains-tads" class="anchor"></a>What are Topologically Associating Domains (TADs)?</h2>
+<p><em>Adapted from two review papers, <a href="https://doi.org/10.1016/j.molcel.2016.05.018">Dixon et al. (2016)</a> appearing in Molecular Cell and <a href="https://doi.org/10.1126/sciadv.aaw1668">Szabo et al. (2019)</a> appearing in Science Advances.</em></p>
+<p>To understand TADs, we must first understand how a eukaryotic genome organises itself in space. Scientists already proposed, more than one hundred years ago, that chromosomes in “resting” interphase nuclei (i.e., not undergoing division) exist as chromosome territories. The figure below shows the writing of the late 19th century German zoologist Theodor Boveri, in which he described the looping of chromosomes amongst other ideas he had about “chromosome individuality.”</p>
+<p align="center">
+<img src="boveri_p202.png" width="400"></p>
+<p align="center">
+<em>Obtained from <a href="https://www.biodiversitylibrary.org/page/52621809">Boveri (1909)</a>, available freely through the Biodiversity Heritage Library.</em>
+</p>
+<p>Similar to how chromosomes in the genome organise themselves territorially, each chromosome also has its own organisation, also referred to as chromosome folding. Within each chromosome are histone proteins, around which DNA is wound. Such compact DNA-histone complexes are called chromatin. The degree of packing of these complexes (i.e., how tightly compact or loose) is a dynamic process that depends on the stage of the cell cycle the cell is at.</p>
+<p>Recent technologies have allowed the quantification of the folding patterns described above. Notably, chromosome conformation capture methods like Hi-C (<a href="https://doi.org/10.1126/science.1181369">Lieberman-Aiden et al., 2009</a>) have uncovered packing patterns across different scales, measured through interactions (chromosomal contact frequencies).</p>
+<ul>
+<li>At large scales, chromosomes segregate into regions of preferential long-range interactions, forming two mutually excluded types of chromatin. These types correspond to gene-rich and active chromatin and to repressive chromatin.<br>
+</li>
+<li>At a scale of tens to hundreds of kilobases, chromosomes fold into domains with preferential intradomain interactions compared to interdomain interactions. These contact domains are called TADs.</li>
+</ul>
+<p align="center">
+<img src="szabo_fig1.jpg" width="400"></p>
+<p align="center">
+<em>Hierarchical folding of the eukaryotic genome. (A) Many levels of chromatin folding, from the finest (DNA-histone association) to the coarsest (segregation of chromatin into active and repressed compartments). Each chromosome occupies its own territory within the nucleus. (B) Schematic representation of Hi-C maps at different genomic scales, reflecting different layers of high-order chromosome folding. Genomic coordinates are indicated along both axes. Figure reproduced from <a href="https://advances.sciencemag.org/content/5/4/eaaw1668">Szabo et al. (2019)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
+</p>
+</div>
+<div id="how-do-we-find-tads" class="section level2">
+<h2 class="hasAnchor">
+<a href="#how-do-we-find-tads" class="anchor"></a>How do we find TADs?</h2>
+<p>Hi-C experiments measure contact frequencies across the genome, thus allowing scientists to identify TADs, which are the chromatin regions more frequently interacting within themselves than among each other. Before we discuss quantitative methods, it will be useful to see what our data looks like.</p>
+<p>To be continued.</p>
+</div>
 </div>
 <div id="test-of-exchangeability-using-pairwise-distances" class="section level1">
 <h1 class="hasAnchor">
