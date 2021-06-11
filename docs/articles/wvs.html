@@ -94,7 +94,7 @@
 
     
     
-<p><em>We are grateful to Rachel Spicer, <a href="https://www.lse.ac.uk/PBS/People/Rachel-Spicer">Post Doctoral Fellow</a> at the London School of Economics and Political Science, for feedback on enhancing accessibility and reproducibility of this vignette.</em></p>
+<p><em>We are grateful to <a href="https://www.lse.ac.uk/PBS/People/Rachel-Spicer">Rachel Spicer</a>, Post Doctoral Fellow at the London School of Economics and Political Science, for feedback on enhancing accessibility and reproducibility of this vignette.</em></p>
 <p>In psychological studies, decades of analyses of data originating from primarily Western, Educated, Industrial, Rich and Democratic (WEIRD) societies have contributed to the lack of replicability and generalizability of findings (<a href="https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-inthe-world/BF84F7517D56AFF7B7EB58411A554C17">Henrich et al., 2010</a>). This has motivated the development of metrics that quantify meaningful cultural differences between societies (<a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782">Muthukrishna et al., 2020</a>), which bear on the validity of porting results obtained from analyzing one population over to another different population.</p>
 <p style="text-align:center;">
 <img src="ex_data/WVS/aps_fig6.jpg" alt="" width="500"></p>
@@ -901,7 +901,7 @@ samples_clusters &lt;- cutree(samples_hclust_Euclidean_ward, k = 10)</code></pre
 <span class="co">## Compute p-value with block boundaries obtained from feature grouping</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">sg_c8_bin</span><span class="op">)</span>,
           block_labels <span class="op">=</span> <span class="va">block_membership</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.1424</span></code></pre></div>
+<span class="co">#&gt; [1] 0.1446</span></code></pre></div>
 <p>After performing the steps described, we find that all but one cluster (Cluster 8, shown in the code chunk above) returned significant <span class="math inline">\(p\)</span>-values that imply heterogeneity. However, for the only homogeneous cluster, we find that up to <span class="math inline">\(B=10\)</span> blocks, the samples appear homogeneous. This is no longer true when we treat all <span class="math inline">\(P=47\)</span> features as statistically independent. Thus, for this cluster, the variation in responses can be attributed to partitionable feature dependencies.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Compute p-value when assuming features are statistically independent</span>

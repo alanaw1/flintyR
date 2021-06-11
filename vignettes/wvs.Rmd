@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-*We are grateful to Rachel Spicer, [Post Doctoral Fellow](https://www.lse.ac.uk/PBS/People/Rachel-Spicer) at the London School of Economics and Political Science, for feedback on enhancing accessibility and reproducibility of this vignette.*
+*We are grateful to [Rachel Spicer](https://www.lse.ac.uk/PBS/People/Rachel-Spicer), Post Doctoral Fellow at the London School of Economics and Political Science, for feedback on enhancing accessibility and reproducibility of this vignette.*
 
 In psychological studies, decades of analyses of data originating from primarily Western, Educated, Industrial, Rich and Democratic (WEIRD) societies have contributed to the lack of replicability and generalizability of findings ([Henrich et al., 2010](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-inthe-world/BF84F7517D56AFF7B7EB58411A554C17)). This has motivated the development of metrics that quantify meaningful cultural differences between societies ([Muthukrishna et al., 2020](https://journals.sagepub.com/doi/full/10.1177/0956797620916782)), which bear on the validity of porting results obtained from analyzing one population over to another different population. 
 
