@@ -132,7 +132,7 @@
 <div id="how-do-we-find-tads" class="section level2">
 <h2 class="hasAnchor">
 <a href="#how-do-we-find-tads" class="anchor"></a>How do we find TADs?</h2>
-<p>Hi-C experiments measure contact frequencies across the genome, thus allowing scientists to identify TADs, which are the chromatin regions more frequently interacting within themselves than among each other. Before we discuss quantitative methods, it will be useful to see what our data looks like. Below, we load Hi-C contact maps obtained from human fibroblast cells (IMR90), as reported in <a href="https://www.nature.com/articles/nature11082">Dixon et al. (2012)</a>.</p>
+<p>Hi-C experiments measure contact frequencies across the genome, thus allowing scientists to identify TADs, which are the chromatin regions more frequently interacting within themselves than among each other. Before we discuss quantitative methods, it will be useful to see what our data looks like. Below, we load Hi-C contact maps obtained from human fibroblast cells (IMR90), as reported in <a href="https://www.nature.com/articles/nature11082">Dixon et al. (2012)</a>. The reason our data is named <code>hic_imr90_40</code> is that the Hi-C contact reads are binned at <span class="math inline">\(40,000\)</span> bp resolution; this means that read counts are combined across genomic regions of length <span class="math inline">\(40,000\)</span> bp.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load libraries </span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
@@ -152,19 +152,19 @@
 <span class="co">#&gt; 1209797816 bytes</span>
 
 <span class="co"># What does a Hi-C map look like?</span>
-<span class="va">hic_imr90_40</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
+<span class="va">hic_imr90_40</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">[</span><span class="fl">11</span><span class="op">:</span><span class="fl">20</span>,<span class="fl">11</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span>
 <span class="co">#&gt; 10 x 10 sparse Matrix of class "dsCMatrix"</span>
-<span class="co">#&gt;                              </span>
-<span class="co">#&gt; 1  24   .  . . .   .  . . . .</span>
-<span class="co">#&gt; 2   . 538  . . .   .  . . . .</span>
-<span class="co">#&gt; 3   .   . 64 . .   .  . . . .</span>
-<span class="co">#&gt; 4   .   .  . . .   .  . . . .</span>
-<span class="co">#&gt; 5   .   .  . . .   .  . . . .</span>
-<span class="co">#&gt; 6   .   .  . . . 128  . . . .</span>
-<span class="co">#&gt; 7   .   .  . . .   . 58 . . .</span>
-<span class="co">#&gt; 8   .   .  . . .   .  . . . .</span>
-<span class="co">#&gt; 9   .   .  . . .   .  . . 8 .</span>
-<span class="co">#&gt; 10  .   .  . . .   .  . . . .</span>
+<span class="co">#&gt;                                      </span>
+<span class="co">#&gt; 11 . .  .    .   .  .  .   .   .    .</span>
+<span class="co">#&gt; 12 . 2  .    .   .  .  .   .   .    .</span>
+<span class="co">#&gt; 13 . . 22    2   .  .  .   .   .    1</span>
+<span class="co">#&gt; 14 . .  2 2206 456  .  .   .   2    1</span>
+<span class="co">#&gt; 15 . .  .  456  42  .  .   .   .    1</span>
+<span class="co">#&gt; 16 . .  .    .   . 40  .   .   2    1</span>
+<span class="co">#&gt; 17 . .  .    .   .  . 54   1   1    6</span>
+<span class="co">#&gt; 18 . .  .    .   .  .  1 532  10    9</span>
+<span class="co">#&gt; 19 . .  .    2   .  2  1  10 920   18</span>
+<span class="co">#&gt; 20 . .  1    1   1  1  6   9  18 1240</span>
 
 <span class="co"># How are Hi-C features labeled?</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">hic_imr90_40</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">xgi</span><span class="op">)</span>
@@ -179,6 +179,101 @@
 <span class="co">#&gt;   6     chr1 200001-240000      * |           6</span>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></code></pre></div>
+<p>For the rest of this vignette we restrict to Chromosomes 1 and 2, consistent with what we report in our paper. As part of pre-processing, we perform the following steps, as described in Sections 4 and 5.3 of the <strong>HiTC</strong> <a href="https://bioconductor.org/packages/release/bioc/vignettes/HiTC/inst/doc/HiC_analysis.pdf">vignette</a>.</p>
+<ul>
+<li>Binning contact frequency measurements into windows of size <span class="math inline">\(500,000\)</span> bp (i.e., <em>reducing</em> the resolution from the original <span class="math inline">\(40,000\)</span> bp)</li>
+<li>Normalising binned contact frequencies with Iterative Correction and Eigenvector decomposition (ICE)</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Restrict Hi-C data to chr1 and chr2</span>
+<span class="va">sset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">reduce</a></span><span class="op">(</span><span class="va">hic_imr90_40</span>, chr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"chr1"</span>, <span class="st">"chr2"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">## Bin contact frequencies</span>
+<span class="va">imr90_500</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="fu">mclapply</span><span class="op">(</span><span class="va">sset</span>, <span class="va">binningC</span>, 
+                              binsize<span class="op">=</span><span class="fl">500000</span>, 
+                              bin.adjust<span class="op">=</span><span class="cn">FALSE</span>, 
+                              method<span class="op">=</span><span class="st">"sum"</span>,
+                              step <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">## Perform ICE normalization</span>
+<span class="va">imr90_500_ICE</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/normICE.html">normICE</a></span><span class="op">(</span><span class="va">imr90_500</span>, max_iter<span class="op">=</span><span class="fl">1000</span><span class="op">)</span> <span class="co"># converged at iteration 764</span>
+
+<span class="co">## Visualise transformed output of contact map</span>
+<span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/mapC.html">mapC</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">)</span>, trim.range<span class="op">=</span><span class="fl">.95</span>,
+     col.pos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="extras_files/figure-html/hi_c_2-1.png" width="700"></p>
+<p>We are now ready to identify TADs on our pre-processed dataset. As mentioned earlier, TADs are distinguished by intra-regional increase in interactions and inter-regional scarcity of interactions. We see this in the heat map above and can heuristically define TADs by inspection. However, to identify TADs in an automated fashion, we need systematic algorithms.</p>
+<p>Here, we introduce two such systematic approaches. The first approach, called <strong>domainCaller</strong>, uses the Directionality Index (DI) to call TADs. Let the set of all <span class="math inline">\(40,000\)</span> bp resolution counts be <span class="math inline">\(\mathscr{X}\)</span>. For each bin of contact frequencies <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
+\text{DI}(x) = \left(\frac{B(x) - A(x)}{|B(x) - A(x)|}\right) \left(\frac{(A(x) - E(x))^2}{E(x)} + \frac{(B(x) - E(x))^2}{E(x)}\right),
+\end{equation*}\]</span> where</p>
+<ul>
+<li>
+<span class="math inline">\(A(x)\)</span> is the number of reads that map from <span class="math inline">\(x\)</span> to the upstream <span class="math inline">\(2\)</span>Mb</li>
+<li>
+<span class="math inline">\(B(x)\)</span> is the number of reads that map from <span class="math inline">\(x\)</span> to the downstream <span class="math inline">\(2\)</span>Mb</li>
+<li>
+<span class="math inline">\(E(x) = \frac{1}{2}(A(x) + B(x))\)</span> is the expected number of reads under null of <em>no directional bias</em>
+</li>
+</ul>
+<p>What <strong>domainCaller</strong> does is the following.</p>
+<ol style="list-style-type: decimal">
+<li>Perform DI computation across all bins <span class="math inline">\(x\in\mathscr{X}\)</span>, obtaining a set of DIs <span class="math inline">\(\{\text{DI}(x):x\in \mathscr{X}\}\)</span>.</li>
+<li>Fit a hidden Markov model (HMM) to <span class="math inline">\(\{\text{DI}(x):x\in \mathscr{X}\}\)</span>.</li>
+<li>Use the inferred HMM states to define regions and classify them into TADs.</li>
+</ol>
+<p>In Step 2 and Step 3, the HMM used is a three-state model (upstream bias, downstream bias, and no bias) with transition probabilities between successive bins. Details of this HMM can be found in Supplementary Figure 28 of <a href="https://www.nature.com/articles/nature11082">Dixon et al. (2012)</a>.</p>
+<p>One subtlety about TAD calling in Step 3: rather than inferring domains only, <em>both</em> domains and boundaries are inferred. A domain is initiated at the beginning of a single downstream biased state, and ends with the last state that is upstream biased. Regions between domains are classified as topological boundaries.</p>
+<p>Fortunately, <strong>Hi-TC</strong> has made available the output of running <strong>domainCaller</strong> on our dataset. This is useful for us to gain intuition about what TADs look like, in preparation for the second approach we will introduce. Below, we load the <strong>domainCaller</strong> output.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Inspect domainCaller output</span>
+<span class="va">tads_imr90</span><span class="op">@</span><span class="va">ranges</span>
+<span class="co">#&gt; IRanges object with 2338 ranges and 0 metadata columns:</span>
+<span class="co">#&gt;                start       end     width</span>
+<span class="co">#&gt;            &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;</span>
+<span class="co">#&gt;      TAD-1    770138   1290137    520000</span>
+<span class="co">#&gt;      TAD-2   1290138   1850140    560003</span>
+<span class="co">#&gt;      TAD-3   1850141   2330140    480000</span>
+<span class="co">#&gt;      TAD-4   2330141   3610140   1280000</span>
+<span class="co">#&gt;      TAD-5   3770141   6077413   2307273</span>
+<span class="co">#&gt;        ...       ...       ...       ...</span>
+<span class="co">#&gt;   TAD-2334 146992309 148552096   1559788</span>
+<span class="co">#&gt;   TAD-2335 148592096 149929342   1337247</span>
+<span class="co">#&gt;   TAD-2336 149929343 151969344   2040002</span>
+<span class="co">#&gt;   TAD-2337 152089345 152746806    657462</span>
+<span class="co">#&gt;   TAD-2338 152786807 154946806   2160000</span>
+
+<span class="co">## Inspect number of TADs called in each chromosome</span>
+<span class="va">tads_imr90</span><span class="op">@</span><span class="va">seqnames</span>
+<span class="co">#&gt; factor-Rle of length 2338 with 23 runs</span>
+<span class="co">#&gt;   Lengths:   236   186   159   133   145 ...    63    58    34    27    86</span>
+<span class="co">#&gt;   Values : chr1  chr2  chr3  chr4  chr5  ... chr19 chr20 chr21 chr22 chrX </span>
+<span class="co">#&gt; Levels(23): chr1 chr2 chr3 chr4 chr5 chr6 ... chr19 chr20 chr21 chr22 chrX</span></code></pre></div>
+<p>The second approach to calling TADs is <strong>TopDom</strong>. Proposed by <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a>, <strong>TopDom</strong> relies on a bin signal statistic to identify TADs. For each bin <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
+\text{binsignal}(x) = \frac{1}{w^2} \sum_{\ell=1}^w \sum_{m=1}^w \text{cont.freq}(U_x(\ell), U_x(m)),
+\end{equation*}\]</span> where</p>
+<ul>
+<li>
+<span class="math inline">\(w\)</span> is a window size parameter, to be fixed prior to identifying TAD boundaries</li>
+<li>
+<span class="math inline">\(U_x(\ell)\)</span> and <span class="math inline">\(D_x(m)\)</span> are bins located <span class="math inline">\(\ell\)</span> indices upstream and <span class="math inline">\(m\)</span> indices downstream of bin <span class="math inline">\(x\)</span>
+</li>
+<li>
+<span class="math inline">\(\text{cont.freq}\)</span> is the number of reads</li>
+</ul>
+<p>Note <span class="math inline">\(\text{binsignal}\)</span> computes the average contact frequency between upstream and downstream regions. See the Figure below for a visualisation.</p>
+<p align="center">
+<img src="shin_fig1A.png" width="400"></p>
+<p align="center">
+<em>Denoting the bin <span class="math inline">\(x\)</span> by its index <span class="math inline">\(i\)</span>, <span class="math inline">\(\text{binSignal}(i)\)</span> is the average contact frequency between an upstream and a downstream chromatin region (<span class="math inline">\(U_i\)</span> and <span class="math inline">\(D_i\)</span>) in a window of size <span class="math inline">\(2w\)</span> surrounding the bin. Its value is relatively high if bin <span class="math inline">\(i\)</span> is located inside a TAD (red diamond), and reaches a local minimum at a TAD boundary. Figure adapted from <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
+</p>
+<p>After computing bin signals for each bin, there is still a need to distinguish true local minima from false minima. To accomplish this, a sequential polygonal approximation technique is used to fit a smooth curve to the binsignal vs bin index graph. See the Figure below for a visualisation.</p>
+<p align="center">
+<img src="shin_fig1B.png" width="400"></p>
+<p align="center">
+<em>Turning points (blue circles) are identified in the original curve (black), and dominant local minima (red inverted triangles) are detected by fitting a piecewise linear curve (sequential polygonal approximation). Figure adapted from <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
+</p>
+<p>Finally, to assign TAD boundaries, an additional Wilcoxon rank sum test is performed on the local minima selected.</p>
+<p>Below, we demonstrate performing these steps on Chromosome 1 of the IMR90 dataset.</p>
 <p>To be continued.</p>
 </div>
 </div>
