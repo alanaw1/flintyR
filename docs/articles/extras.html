@@ -201,7 +201,7 @@
 <span class="co">## Visualise transformed output of contact map</span>
 <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/mapC.html">mapC</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">)</span>, trim.range<span class="op">=</span><span class="fl">.95</span>,
      col.pos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="extras_files/figure-html/hi_c_2-1.png" width="700"></p>
+<p><img src="extras_files/figure-html/hi_c_2-1.png" width="50%"></p>
 <p>We are now ready to identify TADs on our pre-processed dataset. As mentioned earlier, TADs are distinguished by intra-regional increase in interactions and inter-regional scarcity of interactions. We see this in the heat map above and can heuristically define TADs by inspection. However, to identify TADs in an automated fashion, we need systematic algorithms.</p>
 <p>Here, we introduce two such systematic approaches. The first approach, called <strong>domainCaller</strong>, uses the Directionality Index (DI) to call TADs. Let the set of all <span class="math inline">\(40,000\)</span> bp resolution counts be <span class="math inline">\(\mathscr{X}\)</span>. For each bin of contact frequencies <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
 \text{DI}(x) = \left(\frac{B(x) - A(x)}{|B(x) - A(x)|}\right) \left(\frac{(A(x) - E(x))^2}{E(x)} + \frac{(B(x) - E(x))^2}{E(x)}\right),
@@ -249,7 +249,7 @@
 <span class="co">#&gt;   Values : chr1  chr2  chr3  chr4  chr5  ... chr19 chr20 chr21 chr22 chrX </span>
 <span class="co">#&gt; Levels(23): chr1 chr2 chr3 chr4 chr5 chr6 ... chr19 chr20 chr21 chr22 chrX</span></code></pre></div>
 <p>The second approach to calling TADs is <strong>TopDom</strong>. Proposed by <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a>, <strong>TopDom</strong> relies on a bin signal statistic to identify TADs. For each bin <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
-\text{binsignal}(x) = \frac{1}{w^2} \sum_{\ell=1}^w \sum_{m=1}^w \text{cont.freq}(U_x(\ell), U_x(m)),
+\text{binSignal}(x) = \frac{1}{w^2} \sum_{\ell=1}^w \sum_{m=1}^w \text{cont.freq}(U_x(\ell), U_x(m)),
 \end{equation*}\]</span> where</p>
 <ul>
 <li>
@@ -260,7 +260,7 @@
 <li>
 <span class="math inline">\(\text{cont.freq}\)</span> is the number of reads</li>
 </ul>
-<p>Note <span class="math inline">\(\text{binsignal}\)</span> computes the average contact frequency between upstream and downstream regions. See the Figure below for a visualisation.</p>
+<p>As the formula suggests, <span class="math inline">\(\text{binSignal}\)</span> computes the average contact frequency between upstream and downstream regions. See the Figure below for a visualisation.</p>
 <p align="center">
 <img src="shin_fig1A.png" width="400"></p>
 <p align="center">
