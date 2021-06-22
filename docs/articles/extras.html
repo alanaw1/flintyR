@@ -81,7 +81,7 @@
 
       
 
-      </header><script src="extras_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="extras_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Extras</h1>
@@ -273,8 +273,239 @@
 <em>Turning points (blue circles) are identified in the original curve (black), and dominant local minima (red inverted triangles) are detected by fitting a piecewise linear curve (sequential polygonal approximation). Figure adapted from <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
 </p>
 <p>Finally, to assign TAD boundaries, an additional Wilcoxon rank sum test is performed on the local minima selected.</p>
-<p>Below, we demonstrate performing these steps on Chromosome 1 of the IMR90 dataset.</p>
-<p>To be continued.</p>
+<p>Below, we demonstrate performing these steps on Chromosome 1 of the IMR90 dataset. We use a recent packaged version of <strong>TopDom</strong>, provided by <a href="https://github.com/HenrikBengtsson/TopDom">Bengtsson et al. (2020)</a>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Load package</span>
+<span class="co"># install.packages("TopDom")</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/TopDom">TopDom</a></span><span class="op">)</span>
+
+<span class="co">## Convert to format readable by TopDom::TopDom</span>
+<span class="co"># 1. Make imr90_500_ICE into N x (N + 3) dataframe</span>
+<span class="co"># We use the multiple assignment function, %&lt;-%, provided by zeallot</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nteetor/zeallot">zeallot</a></span><span class="op">)</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>chr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>,
+                 start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>,
+                 end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">chr_</span>, <span class="va">start_</span>, <span class="va">end_</span><span class="op">)</span> <span class="op">%&lt;-%</span> 
+    <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"\\:|\\-"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">df</span>, 
+              <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>chr <span class="op">=</span> <span class="va">chr_</span>,
+                         start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">start_</span><span class="op">)</span>,
+                         end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">end_</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="va">topdom_input_500k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
+<span class="va">topdom_input_500k</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">topdom_input_500k</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span>
+
+<span class="co"># What's the dimension of the newly formatted object?</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="co"># it's N x (N+3)</span>
+<span class="co">#&gt; [1] 499 502</span>
+
+<span class="co"># What does it look like? </span>
+<span class="va">topdom_input_500k</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
+<span class="co">#&gt;                                                                       </span>
+<span class="co">#&gt; 1 chr1       0  500000 0     0.00000     0.00000     0.0000     0.0000</span>
+<span class="co">#&gt; 2 chr1  500000 1000000 0 87119.73960  2201.44935   447.1085   141.7870</span>
+<span class="co">#&gt; 3 chr1 1000000 1500000 0  2201.44935 83144.23061  2036.0001   292.8696</span>
+<span class="co">#&gt; 4 chr1 1500000 2000000 0   447.10847  2036.00013 72933.3532  2894.1141</span>
+<span class="co">#&gt; 5 chr1 2000000 2500000 0   141.78698   292.86960  2894.1141 69802.3718</span>
+<span class="co">#&gt; 6 chr1 2500000 3000000 0    51.78014    89.12919   334.8372  1759.6460</span>
+<span class="co">#&gt;                         </span>
+<span class="co">#&gt; 1     0.00000    0.00000</span>
+<span class="co">#&gt; 2    51.78014   85.59758</span>
+<span class="co">#&gt; 3    89.12919   80.36681</span>
+<span class="co">#&gt; 4   334.83724  511.94974</span>
+<span class="co">#&gt; 5  1759.64596 2209.51332</span>
+<span class="co">#&gt; 6 67023.35607 4972.33528</span>
+
+<span class="co"># 2. Save as tab-delimited file</span>
+<span class="va">rel_dir</span> <span class="op">&lt;-</span> <span class="st">"ex_data/scATAC-seq/"</span>
+<span class="co">#write.table(topdom_input_500k, file = paste0(rel_dir, "500k_topdom_input.tsv"), </span>
+<span class="co">#            row.names = FALSE, </span>
+<span class="co">#            col.names = FALSE,</span>
+<span class="co">#            sep="\t")</span>
+
+<span class="co"># 3. Load the file and find TADs with TopDom</span>
+<span class="co"># TopDom performs the steps described above</span>
+<span class="va">topdom_res</span> <span class="op">&lt;-</span> <span class="fu">TopDom</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TopDom/man/TopDom.html">TopDom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"500k_topdom_input.tsv"</span><span class="op">)</span>, window.size <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>
+
+<span class="co"># 4. View results</span>
+<span class="co"># What are the p-values? </span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">binSignal</span><span class="op">)</span>
+<span class="co">#&gt;   id  chr from.coord to.coord local.ext  mean.cf       pvalue</span>
+<span class="co">#&gt; 1  1 chr1          0   500000      -0.5   0.0000 1.0000000000</span>
+<span class="co">#&gt; 2  2 chr1     500000  1000000       0.0 292.7723 0.1791632334</span>
+<span class="co">#&gt; 3  3 chr1    1000000  1500000      -1.0 225.5417 0.0002454393</span>
+<span class="co">#&gt; 4  4 chr1    1500000  2000000       0.0 256.5692 0.0001367633</span>
+<span class="co">#&gt; 5  5 chr1    2000000  2500000       0.0 311.2212 0.0009546703</span>
+<span class="co">#&gt; 6  6 chr1    2500000  3000000       0.0 662.2543 0.1389660413</span>
+
+<span class="co"># Which blocks are classified as TADs by TopDom?</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span>  <span class="st">"domain"</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span>
+<span class="co">#&gt;    chrom chromStart chromEnd   name</span>
+<span class="co">#&gt; 6   chr1     500000  1500000 domain</span>
+<span class="co">#&gt; 7   chr1    1500000  6500000 domain</span>
+<span class="co">#&gt; 8   chr1    6500000 11000000 domain</span>
+<span class="co">#&gt; 10  chr1   12000000 13000000 domain</span>
+<span class="co">#&gt; 11  chr1   13500000 15500000 domain</span>
+<span class="co">#&gt; 12  chr1   15500000 19500000 domain</span></code></pre></div>
+<p>To conclude this section, we look at the distribution of sizes (block lengths) of TADs.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Look at distribution of size of TADs</span>
+<span class="va">chr1_tads</span> <span class="op">&lt;-</span> <span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">$</span><span class="va">tag</span> <span class="op">==</span><span class="st">"domain"</span><span class="op">)</span>, <span class="op">]</span>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">chr1_tads</span><span class="op">$</span><span class="va">size</span> <span class="op">/</span> <span class="fl">5e5</span><span class="op">)</span>,
+                  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Size (x 5e5 bases)"</span>, <span class="st">"Count"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+Size (x 5e5 bases)
+</th>
+<th style="text-align:right;">
+Count
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+9
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+21
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+24
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+26
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+29
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>Note we use these classified TADs to group our scATAC-seq features.</p>
 </div>
 </div>
 <div id="test-of-exchangeability-using-pairwise-distances" class="section level1">
