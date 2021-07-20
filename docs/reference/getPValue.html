@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="A Non-parametric Test for Exchangeability and Homogeneity — getPValue" />
-<meta property="og:description" content="Computes the p-value of a multivariate dataset X, which
+<meta property="og:description" content="Computes the p-value of a multivariate dataset \(\mathbf{X}\), which
 informs the user if the sample is exchangeable at a given
 significance level, while simultaneously accounting for feature
 dependencies. See Aw, Spence and Song (2021) for details." />
@@ -136,7 +136,7 @@ dependencies. See Aw, Spence and Song (2021) for details." />
     </div>
 
     <div class="ref-description">
-    <p>Computes the p-value of a multivariate dataset X, which
+    <p>Computes the p-value of a multivariate dataset \(\mathbf{X}\), which
 informs the user if the sample is exchangeable at a given
 significance level, while simultaneously accounting for feature
 dependencies. See Aw, Spence and Song (2021) for details.</p>
@@ -166,16 +166,16 @@ block of non-independent features starts. Default is NULL.</p></td>
     </tr>
     <tr>
       <th>block_labels</th>
-      <td><p>Length P vector recording the block label of each feature.
+      <td><p>Length \(P\) vector recording the block label of each feature.
 Default is NULL.</p></td>
     </tr>
     <tr>
       <th>largeP</th>
-      <td><p>Boolean indicating whether to use large P asymptotics. Default is FALSE.</p></td>
+      <td><p>Boolean indicating whether to use large \(P\) asymptotics. Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>largeN</th>
-      <td><p>Boolean indicating whether to use large N asymptotics. Default is FALSE.</p></td>
+      <td><p>Boolean indicating whether to use large \(N\) asymptotics. Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>nruns</th>
@@ -183,7 +183,7 @@ Default is NULL.</p></td>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\). Default is 2.</p></td>
+      <td><p>The power \(p\) of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\). Default is 2.</p></td>
     </tr>
     </table>
 
@@ -195,16 +195,16 @@ Default is NULL.</p></td>
     <p>Automatically detects if dataset is binary, and runs the Hamming
 distance version of test if so. Otherwise, computes the squared
 Euclidean distance between samples and evaluates whether the
-variance of Euclidean distances, V, is atypically large under the
+variance of Euclidean distances, \(V\), is atypically large under the
 null hypothesis of exchangeability. Note the user may tweak the
-choice of power p if they prefer an \(l_p^p\) distance other than Euclidean.</p>
-<p>Under the hood, the variance statistic, V, is computed efficiently.
+choice of power \(p\) if they prefer an \(l_p^p\) distance other than Euclidean.</p>
+<p>Under the hood, the variance statistic, \(V\), is computed efficiently.
 Moreover, the user can specify their choice of block permutations,
-large P asymptotics, or large P and large N asymptotics. The latter two
+large \(P\) asymptotics, or large \(P\) and large \(N\) asymptotics. The latter two
 return reasonably accurate p-values for moderately large dimensionalities.</p>
-<p>User recommendations: When the number of independent blocks B or number of
-independent features P is at least 50, it is safe to use large P asymptotics.
-If P or B is small, however, stick with permutations.</p>
+<p>User recommendations: When the number of independent blocks \(B\) or number of
+independent features \(P\) is at least 50, it is safe to use large \(P\) asymptotics.
+If \(P\) or \(B\) is small, however, stick with permutations.</p>
 <p>Dependencies: All functions in auxiliary.R</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -214,13 +214,13 @@ If P or B is small, however, stick with permutations.</p>
 
 <span class='va'>X1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># binary matrix, small</span>
 <span class='fu'>getPValue</span><span class='op'>(</span><span class='va'>X1</span><span class='op'>)</span> <span class='co'># perform exact test with 5000 permutations</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; [1] 0.261</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; [1] 0.96</div><div class='input'>
 <span class='co'># should be larger than 0.05</span>
 
 <span class='co'># Example 2 (get p-value of high-dim matrix with independent features using asymptotic test)</span>
 <span class='va'>X2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>10</span>, ncol <span class='op'>=</span> <span class='fl'>1000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1e4</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># real matrix, large enough</span>
 <span class='fu'>getPValue</span><span class='op'>(</span><span class='va'>X2</span>, p <span class='op'>=</span> <span class='fl'>2</span>, largeP <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># very fast</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; [1] 0.2318267</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; [1] 0.4845812</div><div class='input'>
 <span class='co'># should be larger than 0.05</span>
 <span class='co'># getPValue(X2, p = 2) # slower, do not run (Output: 0.5764)</span>
 
@@ -230,7 +230,7 @@ If P or B is small, however, stick with permutations.</p>
 
 <span class='va'>X3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>10</span>, ncol <span class='op'>=</span> <span class='fl'>1000</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>1e4</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>getPValue</span><span class='op'>(</span><span class='va'>X3</span>, block_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>5</span><span class='op'>)</span>, <span class='fl'>200</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.1324</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; [1] 0.1192</div><div class='input'>
 <span class='co'># Warning message: # there are features that have zero variation (i.e., all 0s or 1s)</span>
 <span class='co'># In getPValue(X3, block_labels = rep(c(1, 2, 3, 4, 5), 200)) :</span>
 <span class='co'># There exist columns with all ones or all zeros for binary X.</span>
@@ -285,7 +285,7 @@ If P or B is small, however, stick with permutations.</p>
 <span class='co'>##  Generate data and run test</span>
 <span class='va'>X4</span> <span class='op'>&lt;-</span> <span class='fu'>getExHaplotypes</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
 <span class='fu'>getPValue</span><span class='op'>(</span><span class='va'>X4</span>, block_boundaries <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='fl'>1</span>, to <span class='op'>=</span> <span class='fl'>1000</span>, by <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>, largeP <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; [1] 0.9467853</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: There exist columns with all ones or all zeros for binary X.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; [1] 0.9254051</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

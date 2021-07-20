@@ -44,7 +44,7 @@
 and gamma quantities defined in Aw, Spence and Song (2021),
 for partitionable features that are grouped into blocks. Uses
 precomputation to compute the unique entries of the asymptotic
-covariance matrix of the pairwise Hamming distances in O(N^2) time." />
+covariance matrix of the pairwise Hamming distances in \(O(N^2)\) time." />
 
 
 
@@ -141,7 +141,7 @@ covariance matrix of the pairwise Hamming distances in O(N^2) time." />
 and gamma quantities defined in Aw, Spence and Song (2021),
 for partitionable features that are grouped into blocks. Uses
 precomputation to compute the unique entries of the asymptotic
-covariance matrix of the pairwise Hamming distances in O(N^2) time.</p>
+covariance matrix of the pairwise Hamming distances in \(O(N^2)\) time.</p>
     </div>
 
     <pre class="usage"><span class='fu'>getBlockCov</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>block_boundaries</span>, <span class='va'>block_labels</span>, p <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></pre>
@@ -160,20 +160,20 @@ block of non-independent features starts.</p></td>
     </tr>
     <tr>
       <th>block_labels</th>
-      <td><p>Length P vector recording the block label of each feature.</p></td>
+      <td><p>Length \(P\) vector recording the block label of each feature.</p></td>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
+      <td><p>The power \(p\) of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The three distinct entries of cov matrix, (alpha, beta, gamma)</p>
+    <p>The three distinct entries of covariance matrix, \((\alpha, \beta, \gamma)\)</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This is used in the large P asymptotics of the permutation test.</p>
+    <p>This is used in the large \(P\) asymptotics of the permutation test.</p>
 <p>Dependencies: buildReverse, getHammingDistance, getLpDistance</p>
 
   </div>

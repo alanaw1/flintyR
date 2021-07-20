@@ -147,17 +147,17 @@ permute the underlying sample labels!</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dists</th>
-      <td><p>\({N \choose 2}\) by B matrix, with each column
-containing the distances (ex: Hamming, l_p) for the block</p></td>
+      <td><p>\({N \choose 2}\) by \(B\) matrix, with each column
+containing the distances (ex: Hamming, \(l_p^p\)) for the block</p></td>
     </tr>
     <tr>
       <th>forward</th>
-      <td><p>N x N matrix mapping the pairs of sample labels
+      <td><p>\(N \times N\) matrix mapping the pairs of sample labels
 to index of the \({N \choose 2}\)-length vector</p></td>
     </tr>
     <tr>
       <th>reverse</th>
-      <td><p>\({N \choose 2}\) x 2 matrix mapping the index to
+      <td><p>\({N \choose 2}\times 2\) matrix mapping the index to
 pairs of sample labels</p></td>
     </tr>
     </table>

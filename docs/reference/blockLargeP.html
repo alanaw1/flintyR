@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="Approximate p-value for Test of Exchangeability (Assuming Large P with Block Dependencies) — blockLargeP" />
-<meta property="og:description" content="Computes the large P asymptotic p-value for dataset X,
-assuming its P features are independent within specified blocks." />
+<meta property="og:description" content="Computes the large \(P\) asymptotic p-value for dataset \(\mathbf{X}\),
+assuming its \(P\) features are independent within specified blocks." />
 
 
 
@@ -134,8 +134,8 @@ assuming its P features are independent within specified blocks." />
     </div>
 
     <div class="ref-description">
-    <p>Computes the large P asymptotic p-value for dataset X,
-assuming its P features are independent within specified blocks.</p>
+    <p>Computes the large \(P\) asymptotic p-value for dataset \(\mathbf{X}\),
+assuming its \(P\) features are independent within specified blocks.</p>
     </div>
 
     <pre class="usage"><span class='fu'>blockLargeP</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>block_boundaries</span>, <span class='va'>block_labels</span>, p <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></pre>
@@ -154,11 +154,11 @@ block of non-independent features starts.</p></td>
     </tr>
     <tr>
       <th>block_labels</th>
-      <td><p>Length P vector recording the block label of each feature.</p></td>
+      <td><p>Length \(P\) vector recording the block label of each feature.</p></td>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
+      <td><p>The power \(p\) of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
     </tr>
     </table>
 
@@ -167,7 +167,7 @@ block of non-independent features starts.</p></td>
     <p>The asymptotic p-value</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This is the large P asymptotics of the permutation test.</p>
+    <p>This is the large \(P\) asymptotics of the permutation test.</p>
 <p>Dependencies: getBinVStat, getRealVStat, getChi2Weights, weightedChi2P, getBlockCov</p>
 
   </div>

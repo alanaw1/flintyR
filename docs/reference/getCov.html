@@ -42,7 +42,7 @@
 <meta property="og:title" content="Covariance Computations Between Pairs of Distances (Independent Case) — getCov" />
 <meta property="og:description" content="Computes covariance matrix entries and associated alpha, beta
 and gamma quantities defined in Aw, Spence and Song (2021),
-assuming the P features of the dataset X are independent." />
+assuming the \(P\) features of the dataset \(\mathbf{X}\) are independent." />
 
 
 
@@ -137,7 +137,7 @@ assuming the P features of the dataset X are independent." />
     <div class="ref-description">
     <p>Computes covariance matrix entries and associated alpha, beta
 and gamma quantities defined in Aw, Spence and Song (2021),
-assuming the P features of the dataset X are independent.</p>
+assuming the \(P\) features of the dataset \(\mathbf{X}\) are independent.</p>
     </div>
 
     <pre class="usage"><span class='fu'>getCov</span><span class='op'>(</span><span class='va'>X</span>, p <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></pre>
@@ -151,16 +151,16 @@ assuming the P features of the dataset X are independent.</p>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
+      <td><p>The power \(p\) of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The three distinct entries of cov matrix, (alpha, beta, gamma)</p>
+    <p>The three distinct entries of covariance matrix, \((\alpha, \beta, \gamma)\)</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This is used in the large P asymptotics of the permutation test.</p>
+    <p>This is used in the large \(P\) asymptotics of the permutation test.</p>
 <p>Dependencies: buildReverse, getLpDistance</p>
 
   </div>

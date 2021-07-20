@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="A \(l_p^p\) Distance Vector Calculator — getLpDistance" />
-<meta property="og:description" content="Computes all pairwise \(l_p^p\) distances for a real matrix X,
-for a specified choice of Minkowski norm exponent p." />
+<meta property="og:description" content="Computes all pairwise \(l_p^p\) distances for a real matrix \(\mathbf{X}\),
+for a specified choice of Minkowski norm exponent \(p\)." />
 
 
 
@@ -134,8 +134,8 @@ for a specified choice of Minkowski norm exponent p." />
     </div>
 
     <div class="ref-description">
-    <p>Computes all pairwise \(l_p^p\) distances for a real matrix X,
-for a specified choice of Minkowski norm exponent p.</p>
+    <p>Computes all pairwise \(l_p^p\) distances for a real matrix \(\mathbf{X}\),
+for a specified choice of Minkowski norm exponent \(p\).</p>
     </div>
 
     <pre class="usage"><span class='fu'>getLpDistance</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>p</span><span class='op'>)</span></pre>
@@ -145,7 +145,7 @@ for a specified choice of Minkowski norm exponent p.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>The N x P real matrix</p></td>
+      <td><p>The \(N \times P\) real matrix</p></td>
     </tr>
     <tr>
       <th>p</th>
@@ -163,8 +163,8 @@ for a specified choice of Minkowski norm exponent p.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>getLpDistance</span><span class='op'>(</span><span class='va'>X</span>, p <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 38.24331 19.10779 11.13737 26.78110 38.25817 18.26293 24.44336 14.28602
-#&gt;  [9] 18.35231 11.98829</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] 20.066185 18.469435 22.190877 18.471576  7.217272 30.788630 12.124681
+#&gt;  [8] 21.276405 13.781046 36.330826</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

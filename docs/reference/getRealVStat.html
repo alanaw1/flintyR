@@ -40,9 +40,9 @@
 
 
 <meta property="og:title" content="V Statistic for Real Matrices — getRealVStat" />
-<meta property="og:description" content="Computes V statistic for a real matrix X,
-where V(X) = scaled variance of \(l_p^p\) distances between the
-row samples of X." />
+<meta property="og:description" content="Computes \(V\) statistic for a real matrix \(\mathbf{X}\),
+where \(V(\mathbf{X})\) = scaled variance of \(l_p^p\) distances between the
+row samples of \(\mathbf{X}\)." />
 
 
 
@@ -135,9 +135,9 @@ row samples of X." />
     </div>
 
     <div class="ref-description">
-    <p>Computes V statistic for a real matrix X,
-where V(X) = scaled variance of \(l_p^p\) distances between the
-row samples of X.</p>
+    <p>Computes \(V\) statistic for a real matrix \(\mathbf{X}\),
+where \(V(\mathbf{X})\) = scaled variance of \(l_p^p\) distances between the
+row samples of \(\mathbf{X}\).</p>
     </div>
 
     <pre class="usage"><span class='fu'>getRealVStat</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>p</span><span class='op'>)</span></pre>
@@ -147,17 +147,17 @@ row samples of X.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>The N x P real matrix</p></td>
+      <td><p>The \(N \times P\) real matrix</p></td>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)s</p></td>
+      <td><p>The power \(p\) of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)s</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>V(X), the variance of the pairwise \(l_p^p\) distance between samples</p>
+    <p>\(V(\mathbf{X})\), the variance of the pairwise \(l_p^p\) distance between samples</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Dependencies: getLpDistance</p>
@@ -165,7 +165,7 @@ row samples of X.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>getRealVStat</span><span class='op'>(</span><span class='va'>X</span>, p <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2.929347</div><div class='input'>
+</div><div class='output co'>#&gt; [1] 6.04888</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

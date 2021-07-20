@@ -156,16 +156,16 @@ pairwise distances.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The p-value obtained from comparing the empirical tail cdf of the observed 
-V statistic computed from distance data.</p>
+\(V\) statistic computed from distance data.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Generates a block permutation distribution of V statistic by storing
+    <p>Generates a block permutation distribution of \(V\) statistic by storing
 the provided list of distance data as an \({N\choose2} \times B\) array,
 and then permuting the underlying indices of each individual to generate 
-resampled \({N\choose2} \times B\) arrays. The observed V statistic is 
+resampled \({N\choose2} \times B\) arrays. The observed \(V\) statistic is 
 also computed from the distance data.</p>
 <p>Each element of dist_list should be a \(N\times N\) distance matrix.</p>
-<p>Dependencies: buildForward, buildReverse, cachePermute, foreach/<!-- %dopar% (from doParallel) --></p>
+<p>Dependencies: buildForward, buildReverse, cachePermute</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="V Statistic for Binary Matrices — getBinVStat" />
-<meta property="og:description" content="Computes V statistic for a binary matrix X, as defined in
+<meta property="og:description" content="Computes \(V\) statistic for a binary matrix \(\mathbf{X}\), as defined in
 Aw, Spence and Song (2021+)." />
 
 
@@ -134,7 +134,7 @@ Aw, Spence and Song (2021+)." />
     </div>
 
     <div class="ref-description">
-    <p>Computes V statistic for a binary matrix X, as defined in
+    <p>Computes \(V\) statistic for a binary matrix \(\mathbf{X}\), as defined in
 Aw, Spence and Song (2021+).</p>
     </div>
 
@@ -145,13 +145,13 @@ Aw, Spence and Song (2021+).</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>The N x P binary matrix</p></td>
+      <td><p>The \(N \times P\) binary matrix</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>V(X), the variance of the pairwise Hamming distance between samples</p>
+    <p>\(V(\mathbf{X})\), the variance of the pairwise Hamming distance between samples</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Dependencies: getHammingDistance</p>
@@ -159,7 +159,7 @@ Aw, Spence and Song (2021+).</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>getBinVStat</span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.2444444</div><div class='input'>
+</div><div class='output co'>#&gt; [1] 0.3066667</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="Resampling V Statistic (Version 1) — naiveBlockPermute1" />
-<meta property="og:description" content="Generates a new array X' under the permutation null and then
-returns the V statistic computed for X'." />
+<meta property="og:description" content="Generates a new array \(\mathbf{X}'\) under the permutation null and then
+returns the \(V\) statistic computed for \(\mathbf{X}'\)." />
 
 
 
@@ -134,8 +134,8 @@ returns the V statistic computed for X'." />
     </div>
 
     <div class="ref-description">
-    <p>Generates a new array X' under the permutation null and then
-returns the V statistic computed for X'.</p>
+    <p>Generates a new array \(\mathbf{X}'\) under the permutation null and then
+returns the \(V\) statistic computed for \(\mathbf{X}'\).</p>
     </div>
 
     <pre class="usage"><span class='fu'>naiveBlockPermute1</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>block_labels</span>, p <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></pre>
@@ -145,38 +145,38 @@ returns the V statistic computed for X'.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>The N x P binary or real matrix</p></td>
+      <td><p>The \(N \times P\) binary or real matrix</p></td>
     </tr>
     <tr>
       <th>block_labels</th>
-      <td><p>A vector of length P, whose pth component indicates the block membership of feature p</p></td>
+      <td><p>A vector of length \(P\), whose \(p\)th component indicates the block membership of feature \(p\)</p></td>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
+      <td><p>The power \(p\) of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>V(X'), where X' is a resampled by permutation of entries blockwise</p>
+    <p>\(V(\mathbf{X}')\), where \(\mathbf{X}'\) is a resampled by permutation of entries blockwise</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This is Version 1, which takes in the block labels. It is suitable in
 the most general setting, where the features are grouped by labels.
-Given original X and a list denoting labels of each feature,
-independently permutes the rows within each block of X and returns resulting V.
+Given original \(\mathbf{X}\) and a list denoting labels of each feature,
+independently permutes the rows within each block of \(\mathbf{X}\) and returns resulting \(V\).
 If block labels are not specified, then features are assumed independent, which
-is to say that block_labels is set to 1:ncol(X).</p>
+is to say that block_labels is set to 1:ncol(\(\mathbf{X}\)).</p>
 <p>Dependencies: getBinVStat, getRealVStat</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># real matrix example</span>
 <span class='fu'>naiveBlockPermute1</span><span class='op'>(</span><span class='va'>X</span>, block_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>5</span>,<span class='fl'>5</span><span class='op'>)</span>, p <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='co'># use Euclidean distance</span>
-</div><div class='output co'>#&gt; [1] 6.098113</div><div class='input'>
+</div><div class='output co'>#&gt; [1] 2.064122</div><div class='input'>
 <span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>nrow <span class='op'>=</span> <span class='fl'>5</span>, ncol <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># binary matrix example</span>
 <span class='fu'>naiveBlockPermute1</span><span class='op'>(</span><span class='va'>X</span>, block_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>5</span>,<span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.4711111</div><div class='input'>
+</div><div class='output co'>#&gt; [1] 0.2622222</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

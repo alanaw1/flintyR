@@ -153,7 +153,7 @@ dependencies. See Aw, Spence and Song (2021) for details.</p>
     </tr>
     <tr>
       <th>largeP</th>
-      <td><p>Boolean indicating whether to use large P asymptotics. Default is FALSE.</p></td>
+      <td><p>Boolean indicating whether to use large \(P\) asymptotics. Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>nruns</th>
@@ -167,7 +167,7 @@ dependencies. See Aw, Spence and Song (2021) for details.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This version takes in a list of distance matrices recording
-pairwise distances between individuals across B independent features.</p>
+pairwise distances between individuals across \(B\) independent features.</p>
 <p>Dependencies: distDataLargeP and distDataPermute from auxiliary.R</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -191,7 +191,7 @@ pairwise distances between individuals across B independent features.</p>
 <span class='op'>}</span>
 
 <span class='fu'>distDataPValue</span><span class='op'>(</span><span class='va'>dist_list</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.525</div><div class='input'><span class='co'># should be larger than 0.05</span>
+</div><div class='output co'>#&gt; [1] 0.546</div><div class='input'><span class='co'># should be larger than 0.05</span>
 
 </div></pre>
   </div>
