@@ -36,7 +36,7 @@ The p-value to be used to test the null hypothesis of exchangeability
 }
 \description{
 Computes the p-value of a multivariate dataset X, which
-informs the user if the samples are exchangeable at a given
+informs the user if the sample is exchangeable at a given
 significance level, while simultaneously accounting for feature
 dependencies. See Aw, Spence and Song (2021) for details.
 }

@@ -1,7 +1,7 @@
 #' A Non-parametric Test for Exchangeability and Homogeneity
 #'
 #' Computes the p-value of a multivariate dataset X, which
-#' informs the user if the samples are exchangeable at a given
+#' informs the user if the sample is exchangeable at a given
 #' significance level, while simultaneously accounting for feature
 #' dependencies. See Aw, Spence and Song (2021) for details.
 #'
@@ -205,5 +205,79 @@ getPValue <- function(X,
   }
   if (!largeP & !largeN) {
     return(blockPermute(X, block_boundaries, block_labels, nruns, p))
+  }
+}
+
+
+#' A Non-parametric Test for Exchangeability and Homogeneity (Distance List Version)
+#'
+#' Computes the p-value of a multivariate dataset, which
+#' informs the user if the sample is exchangeable at a given
+#' significance level, while simultaneously accounting for feature
+#' dependencies. See Aw, Spence and Song (2021) for details.
+#'
+#' This version takes in a list of distance matrices recording
+#' pairwise distances between individuals across B independent features.
+#'
+#' Dependencies: distDataLargeP and distDataPermute from auxiliary.R
+#' @param dist_list The list of distances
+#' @param largeP Boolean indicating whether to use large P asymptotics. Default is FALSE.
+#' @param nruns Resampling number for exact test. Default is 1000.
+#' @return The p-value to be used to test the null hypothesis of exchangeability
+#' @export
+#' @importFrom doParallel %dopar%
+#' @examples
+#' # Example
+#' suppressWarnings(require(doParallel))
+#' registerDoParallel()
+#'
+#' N <- 100
+#' num_rows <- choose(N,2)
+#' B <- 20
+#' dist_list <- list()
+#' for (b in 1:B) {
+#'   # generate fake data 
+#'   fake_samples <- replicate(10, rbinom(N,1,0.5))
+#'  
+#'   # compute pairwise distance 
+#'   fake_dist <- as.matrix(dist(fake_samples, method = "manhattan"))
+#'  
+#'   # add to list
+#'   dist_list[[b]] <- fake_dist
+#' }
+#' 
+#' distDataPValue(dist_list)
+#' # should be larger than 0.05
+#'
+distDataPValue <- function(dist_list,
+                           largeP = FALSE,
+                           nruns = 1000) {
+  
+  # [!] Check that dist_list is a list 
+  assertthat::assert_that(is.list(dist_list),
+                          msg = "Input is not a valid list of distance matrices.")
+  
+  # [!] Check that each element of dist_list is a distance matrix
+  assertthat::assert_that(all(sapply(dist_list, function(x) is.matrix(x))),
+                          msg = "Not all elements of dist_list is a distance matrix. Check list provided.")
+  
+  # [!] Check all distance matrices have the same dimension 
+  assertthat::assert_that(var(sapply(dist_list, function(x) dim(x)[1])) == 0,
+                          msg = "Not all matrices have the same dimension. Check distance matrices provided.")
+  
+  # [!] Check all distance matrices are square
+  assertthat::assert_that(all(sapply(dist_list, function(x) {dim(x)[1] == dim(x)[2]})),
+                          msg = "Not all matrices are square. Check distance matrices provided.")
+  
+  # [!] Check that largeP and no. independent features are consistent
+  if (length(dist_list) < 50 & largeP) {
+    stop("Too few independent distance matrices for chi-square approximation to be valid, please set largeP = FALSE.")
+  }
+  
+  # Get p-value
+  if (largeP) {
+    return(distDataLargeP(dist_list))
+  } else {
+    return(distDataPermute(dist_list, nruns))
   }
 }

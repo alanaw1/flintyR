@@ -413,13 +413,13 @@ cacheBlockPermute2 <- function(X,
   reverse <- buildReverse(dim(X)[1])
 
   # Write a local function for computing V_vec from permuting
-  newVLocal <- function(dists, forward, reverse, p) {
+  newVLocal <- function(dists, forward, reverse) {
     partials <- cachePermute(dists, forward, reverse)
     return(var(rowSums(partials)) / dim(X)[2])
   }
 
   # Compute vector of V statistics
-  to_return <- foreach(i=1:nruns, .combine = c) %dopar% newVLocal(dists, forward, reverse, p = 2)
+  to_return <- foreach(i=1:nruns, .combine = c) %dopar% newVLocal(dists, forward, reverse)
   # to_return <- c()
   # for (r in 1:nruns) {
   #     partials <- cachePermuteHamming(ham_dists, forward, reverse)
@@ -427,6 +427,68 @@ cacheBlockPermute2 <- function(X,
   #         var(rowSums(partials)) / dim(X)[2])
   # }
   return(to_return)
+}
+
+#' p-value Computation for Test of Exchangeability Using Distance Data
+#' 
+#' Generates a block permutation p-value.
+#' 
+#' Generates a block permutation distribution of V statistic by storing
+#' the provided list of distance data as an \eqn{{N\choose2} \times B} array,
+#' and then permuting the underlying indices of each individual to generate 
+#' resampled \eqn{{N\choose2} \times B} arrays. The observed V statistic is 
+#' also computed from the distance data.   
+#'
+#' Each element of dist_list should be a \eqn{N\times N} distance matrix.
+#' 
+#' Dependencies: buildForward, buildReverse, cachePermute, foreach/%dopar% (from doParallel)
+#' @param dist_list The list (length \eqn{B}) of pairwise distance data. 
+#' Each element in list should be either a distance matrix or a table recording
+#' pairwise distances. 
+#' @param nruns The resampling number (use at least 1000)
+#' @return The p-value obtained from comparing the empirical tail cdf of the observed 
+#' V statistic computed from distance data. 
+#' 
+distDataPermute <- function(dist_list,
+                            nruns) {
+  # Get number of samples
+  N <- unique(sapply(dist_list, function(x) dim(x)[1]))
+  
+  # Get length of distance list
+  B <- length(dist_list)
+  
+  # Construct a (N choose 2) x B array of independent distances
+  all_dist_matrix <- matrix(0, nrow = choose(N,2), ncol = B)
+  # Obtain all pairwise distances for each feature
+  for (b in 1:B) { # fill entries of all_dist_matrix
+    all_dist_matrix[,b] <- dist_list[[b]][t(combn(colnames(dist_list[[b]]), 2))] # combing trick
+  }
+  
+  # Compute observed V statistic from distance data
+  V_obs <- var(rowSums(all_dist_matrix)) / B
+  
+  ##if (B < 50 & largeP) {
+  #  message(date(), ": No. independent features whose distances are provided is too few for asymptotic test to be reliable.")
+  #} 
+  
+  ## In all other cases, largeP is false, so permutation test is performed.
+  #message(date(), ": Performing approximately exact resampling test with ", nruns, "permutations.")
+  
+  # Cache indexing arrays
+  forward <- buildForward(N)
+  reverse <- buildReverse(N)
+  
+  # Write a local function for computing V_vec from permuting
+  newVLocal <- function(dists, forward, reverse) {
+    partials <- cachePermute(dists, forward, reverse)
+    return(var(rowSums(partials)) / B)
+  }
+  
+  # Compute vector of V statistics
+  V_vec <- foreach(i=1:nruns, .combine = c) %dopar% newVLocal(all_dist_matrix, forward, reverse)
+  
+  # Return
+  return(mean(V_vec > V_obs)) # strictly greater than for conservativeness
 }
 
 #' p-value Computation for Test of Exchangeability with Block Dependencies
@@ -862,5 +924,101 @@ blockGaussian <- function(X,
   to_return <- 1 - pnorm(V_obs,
                          mean = weights[1]*d1 + weights[2]*d2,
                          sd = sqrt(weights[1]^2 * 2 * d1 + weights[2]^2 * 2 * d2))
+  return(to_return)
+}
+
+#' Asymptotic p-value of Exchangeability Using Distance Data
+#' 
+#' Generates an asymptotic p-value.
+#' 
+#' Generates a weighted convolution of chi-squares distribution of V statistic 
+#' by storing the provided list of distance data as an \eqn{{N\choose2} \times B} array,
+#' and then using large-P theory to generate the asymptotic null distribution 
+#' against which the p-value of observed V statistic is computed. 
+#' 
+#' Each element of dist_list should be a \eqn{N\times N} distance matrix.
+#' 
+#' Dependencies: buildReverse, getChi2Weights, weightedChi2P
+#' @param dist_list The list (length \eqn{B}) of pairwise distance data. 
+#' Each element in list should be either a distance matrix or a table recording
+#' pairwise distances. 
+#' @return The asymptotic p-value obtained from the weighted convolution of chi-squares
+#' distribution.
+#' 
+distDataLargeP <- function(dist_list) {
+  # Check that all matrices have the same dimension 
+  assertthat::assert_that(var(sapply(dist_list, function(x) dim(x)[1])) == 0,
+                          msg = "Not all matrices have the same dimension. Check distance matrices provided.")
+  
+  # Get number of samples
+  N <- unique(sapply(dist_list, function(x) dim(x)[1]))
+  
+  # Get length of distance list
+  B <- length(dist_list)
+  
+  # Construct a (N choose 2) x B array of independent distances
+  all_dist_matrix <- matrix(0, nrow = choose(N,2), ncol = B)
+  
+  # Obtain all pairwise distances for each feature
+  for (b in 1:B) { # fill entries of all_dist_matrix
+    all_dist_matrix[,b] <- dist_list[[b]][t(combn(colnames(dist_list[[b]]), 2))] # combing trick
+  }
+  
+  # Compute observed V statistic from distance data
+  V_obs <- var(rowSums(all_dist_matrix)) / B
+  
+  # Compute average distance per block
+  dist_ave <- colSums(all_dist_matrix) / choose(N,2)
+  
+  # Compute variance of d(X_1,X_2)
+  alpha_vec <- colSums(all_dist_matrix^2) / choose(N,2) - dist_ave^2 # get alpha for each block
+  alpha <- mean(alpha_vec) # average across all B blocks
+  
+  # Create a tensor for easy computation of other covariances
+  dist_tensor <- array(0, dim = c(N,N,B))
+  reverse <- buildReverse(N) # build reverse map
+  for (b in 1:B) {
+    for (i in 1:choose(N,2)) {
+      idx_pair <- reverse[i,]
+      dist_tensor[idx_pair[1], idx_pair[2],b] <- all_dist_matrix[i,b]
+      dist_tensor[idx_pair[2], idx_pair[1],b] <- all_dist_matrix[i,b]
+    }
+  }
+  
+  # Compute E[d(X_1,X_2) * d(X_1,X_3)]
+  beta_vec <- c()
+  for (b in 1:B) {
+    beta_vec <- c(beta_vec, sum((rowSums(dist_tensor[,,b]) - dist_tensor[,,b]) * dist_tensor[,,b]) / N / (N-1) / (N-2))
+  }
+  
+  # Compute covariance of d(X_1,X_2) and d(X_1,X_3)
+  beta_vec <- beta_vec - dist_ave^2
+  beta <- mean(beta_vec)
+  
+  # Compute E[d(X_1,X_2) * d(X_3,X_4)]
+  gamma_vec <- c()
+  for (b in 1:B) {
+    # Some arithmetic reasoning needed here: note R uses column-major filling in of entries
+    nu <- matrix(dist_ave[b] * N * (N-1), nrow = N, ncol = N) # compute sum_i sum_j d(X_i,X_j)
+    nu_row <- matrix(2 * rowSums(dist_tensor[,,b]), nrow = N, ncol = N)
+    nu_col <- t(matrix(2 * colSums(dist_tensor[,,b]), nrow = N, ncol = N))
+    gamma <- sum((nu - nu_row - nu_col + 2 * dist_tensor[,,b]) * dist_tensor[,,b]) / (N * (N-1) * (N-2) * (N-3))
+    gamma_vec <- c(gamma_vec, gamma)
+  }
+  
+  # Compute covariance of d(X_1,X_2) and d(X_3,X_4)
+  gamma_vec <- gamma_vec -  dist_ave^2
+  gamma <- mean(gamma_vec)
+  
+  # Get weights for chi-square distribution
+  weights <- getChi2Weights(alpha, beta, gamma, N)
+  
+  # Compute degrees of freedom
+  d1 <- N - 1
+  d2 <- choose(N-1,2) - 1
+  
+  to_return <- as.numeric(weightedChi2P(V_obs, weights[1], weights[2], d1, d2))
+  
+  # Return
   return(to_return)
 }
