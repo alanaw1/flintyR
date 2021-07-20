@@ -9,18 +9,18 @@ getCov(X, p = 2)
 \arguments{
 \item{X}{The binary or real matrix}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
+\item{p}{The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
-The three distinct entries of cov matrix, (alpha, beta, gamma)
+The three distinct entries of covariance matrix, \eqn{(\alpha, \beta, \gamma)}
 }
 \description{
 Computes covariance matrix entries and associated alpha, beta
 and gamma quantities defined in Aw, Spence and Song (2021),
-assuming the P features of the dataset X are independent.
+assuming the \eqn{P} features of the dataset \eqn{\mathbf{X}} are independent.
 }
 \details{
-This is used in the large P asymptotics of the permutation test.
+This is used in the large \eqn{P} asymptotics of the permutation test.
 
 Dependencies: buildReverse, getLpDistance
 }

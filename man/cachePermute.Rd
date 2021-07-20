@@ -7,13 +7,13 @@
 cachePermute(dists, forward, reverse)
 }
 \arguments{
-\item{dists}{\eqn{{N \choose 2}} by B matrix, with each column
-containing the distances (ex: Hamming, l_p) for the block}
+\item{dists}{\eqn{{N \choose 2}} by \eqn{B} matrix, with each column
+containing the distances (ex: Hamming, \eqn{l_p^p}) for the block}
 
-\item{forward}{N x N matrix mapping the pairs of sample labels
+\item{forward}{\eqn{N \times N} matrix mapping the pairs of sample labels
 to index of the \eqn{{N \choose 2}}-length vector}
 
-\item{reverse}{\eqn{{N \choose 2}} x 2 matrix mapping the index to
+\item{reverse}{\eqn{{N \choose 2}\times 2} matrix mapping the index to
 pairs of sample labels}
 }
 \value{

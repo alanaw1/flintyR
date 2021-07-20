@@ -13,7 +13,7 @@ permutation resampling}
 \item{block_boundaries}{Vector denoting the positions where a new
 block of non-independent features starts. Default is NULL.}
 
-\item{block_labels}{Length P vector recording the block label of each feature.
+\item{block_labels}{Length \eqn{P} vector recording the block label of each feature.
 Default is NULL.}
 
 \item{nruns}{The resampling number (use at least 1000)}

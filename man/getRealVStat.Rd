@@ -7,17 +7,17 @@
 getRealVStat(X, p)
 }
 \arguments{
-\item{X}{The N x P real matrix}
+\item{X}{The \eqn{N \times P} real matrix}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}s}
+\item{p}{The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}s}
 }
 \value{
-V(X), the variance of the pairwise \eqn{l_p^p} distance between samples
+\eqn{V(\mathbf{X})}, the variance of the pairwise \eqn{l_p^p} distance between samples
 }
 \description{
-Computes V statistic for a real matrix X,
-where V(X) = scaled variance of \eqn{l_p^p} distances between the
-row samples of X.
+Computes \eqn{V} statistic for a real matrix \eqn{\mathbf{X}},
+where \eqn{V(\mathbf{X})} = scaled variance of \eqn{l_p^p} distances between the
+row samples of \eqn{\mathbf{X}}.
 }
 \details{
 Dependencies: getLpDistance

@@ -7,13 +7,13 @@
 getHammingDistance(X)
 }
 \arguments{
-\item{X}{The N x P binary matrix}
+\item{X}{The \eqn{N \times P} binary matrix}
 }
 \value{
 A length \eqn{{N \choose 2}} vector of pairwise Hamming distances
 }
 \description{
-Computes all pairwise Hamming distances for a binary matrix X.
+Computes all pairwise Hamming distances for a binary matrix \eqn{\mathbf{X}}.
 }
 \details{
 Dependencies: hamming_bitwise from fast_dist_calc.cpp

@@ -9,7 +9,7 @@ distDataPValue(dist_list, largeP = FALSE, nruns = 1000)
 \arguments{
 \item{dist_list}{The list of distances}
 
-\item{largeP}{Boolean indicating whether to use large P asymptotics. Default is FALSE.}
+\item{largeP}{Boolean indicating whether to use large \eqn{P} asymptotics. Default is FALSE.}
 
 \item{nruns}{Resampling number for exact test. Default is 1000.}
 }
@@ -24,7 +24,7 @@ dependencies. See Aw, Spence and Song (2021) for details.
 }
 \details{
 This version takes in a list of distance matrices recording
-pairwise distances between individuals across B independent features.
+pairwise distances between individuals across \eqn{B} independent features.
 
 Dependencies: distDataLargeP and distDataPermute from auxiliary.R
 }

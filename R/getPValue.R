@@ -1,6 +1,6 @@
 #' A Non-parametric Test for Exchangeability and Homogeneity
 #'
-#' Computes the p-value of a multivariate dataset X, which
+#' Computes the p-value of a multivariate dataset \eqn{\mathbf{X}}, which
 #' informs the user if the sample is exchangeable at a given
 #' significance level, while simultaneously accounting for feature
 #' dependencies. See Aw, Spence and Song (2021) for details.
@@ -8,29 +8,29 @@
 #' Automatically detects if dataset is binary, and runs the Hamming
 #' distance version of test if so. Otherwise, computes the squared
 #' Euclidean distance between samples and evaluates whether the
-#' variance of Euclidean distances, V, is atypically large under the
+#' variance of Euclidean distances, \eqn{V}, is atypically large under the
 #' null hypothesis of exchangeability. Note the user may tweak the
-#' choice of power p if they prefer an \eqn{l_p^p} distance other than Euclidean.
+#' choice of power \eqn{p} if they prefer an \eqn{l_p^p} distance other than Euclidean.
 #'
-#' Under the hood, the variance statistic, V, is computed efficiently.
+#' Under the hood, the variance statistic, \eqn{V}, is computed efficiently.
 #' Moreover, the user can specify their choice of block permutations,
-#' large P asymptotics, or large P and large N asymptotics. The latter two
+#' large \eqn{P} asymptotics, or large \eqn{P} and large \eqn{N} asymptotics. The latter two
 #' return reasonably accurate p-values for moderately large dimensionalities.
 #'
-#' User recommendations: When the number of independent blocks B or number of
-#' independent features P is at least 50, it is safe to use large P asymptotics.
-#' If P or B is small, however, stick with permutations.
+#' User recommendations: When the number of independent blocks \eqn{B} or number of
+#' independent features \eqn{P} is at least 50, it is safe to use large \eqn{P} asymptotics.
+#' If \eqn{P} or \eqn{B} is small, however, stick with permutations.
 #'
 #' Dependencies: All functions in auxiliary.R
 #' @param X The binary or real matrix on which to perform test of exchangeability
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts. Default is NULL.
-#' @param block_labels Length P vector recording the block label of each feature.
+#' @param block_labels Length \eqn{P} vector recording the block label of each feature.
 #' Default is NULL.
-#' @param largeP Boolean indicating whether to use large P asymptotics. Default is FALSE.
-#' @param largeN Boolean indicating whether to use large N asymptotics. Default is FALSE.
+#' @param largeP Boolean indicating whether to use large \eqn{P} asymptotics. Default is FALSE.
+#' @param largeN Boolean indicating whether to use large \eqn{N} asymptotics. Default is FALSE.
 #' @param nruns Resampling number for exact test. Default is 5000.
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}. Default is 2.
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}. Default is 2.
 #' @return The p-value to be used to test the null hypothesis of exchangeability
 #' @export
 #' @importFrom doParallel %dopar%
@@ -217,11 +217,11 @@ getPValue <- function(X,
 #' dependencies. See Aw, Spence and Song (2021) for details.
 #'
 #' This version takes in a list of distance matrices recording
-#' pairwise distances between individuals across B independent features.
+#' pairwise distances between individuals across \eqn{B} independent features.
 #'
 #' Dependencies: distDataLargeP and distDataPermute from auxiliary.R
 #' @param dist_list The list of distances
-#' @param largeP Boolean indicating whether to use large P asymptotics. Default is FALSE.
+#' @param largeP Boolean indicating whether to use large \eqn{P} asymptotics. Default is FALSE.
 #' @param nruns Resampling number for exact test. Default is 1000.
 #' @return The p-value to be used to test the null hypothesis of exchangeability
 #' @export

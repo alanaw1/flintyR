@@ -29,7 +29,7 @@ The probability is computed using numerical integration of the
 densities of the two chi square distributions. (Method: trapezoidal rule)
 }
 \details{
-This is used in the large P asymptotics of the permutation test.
+This is used in the large \eqn{P} asymptotics of the permutation test.
 
 Dependencies: None
 }

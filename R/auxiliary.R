@@ -7,10 +7,10 @@
 
 #' A Hamming Distance Vector Calculator
 #'
-#' Computes all pairwise Hamming distances for a binary matrix X.
+#' Computes all pairwise Hamming distances for a binary matrix \eqn{\mathbf{X}}.
 #'
 #' Dependencies: hamming_bitwise from fast_dist_calc.cpp
-#' @param X The N x P binary matrix
+#' @param X The \eqn{N \times P} binary matrix
 #' @return A length \eqn{{N \choose 2}} vector of pairwise Hamming distances
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
@@ -36,11 +36,11 @@ getHammingDistance <- function(X) {
 
 #' A \eqn{l_p^p} Distance Vector Calculator
 #'
-#' Computes all pairwise \eqn{l_p^p} distances for a real matrix X,
-#' for a specified choice of Minkowski norm exponent p.
+#' Computes all pairwise \eqn{l_p^p} distances for a real matrix \eqn{\mathbf{X}},
+#' for a specified choice of Minkowski norm exponent \eqn{p}.
 #'
 #' Dependencies: lp_distance from fast_dist_calc.cpp
-#' @param X The N x P real matrix
+#' @param X The \eqn{N \times P} real matrix
 #' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return A length \eqn{{N \choose 2}} vector of pairwise \eqn{l_p^p} distances
 #' @examples
@@ -65,12 +65,12 @@ getLpDistance <- function(X, p) {
 
 #' V Statistic for Binary Matrices
 #'
-#' Computes V statistic for a binary matrix X, as defined in
+#' Computes \eqn{V} statistic for a binary matrix \eqn{\mathbf{X}}, as defined in
 #' Aw, Spence and Song (2021+).
 #'
 #' Dependencies: getHammingDistance
-#' @param X The N x P binary matrix
-#' @return V(X), the variance of the pairwise Hamming distance between samples
+#' @param X The \eqn{N \times P} binary matrix
+#' @return \eqn{V(\mathbf{X})}, the variance of the pairwise Hamming distance between samples
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
 #' getBinVStat(X)
@@ -90,14 +90,14 @@ getBinVStat <- function(X) {
 
 #' V Statistic for Real Matrices
 #'
-#' Computes V statistic for a real matrix X,
-#' where V(X) = scaled variance of \eqn{l_p^p} distances between the
-#' row samples of X.
+#' Computes \eqn{V} statistic for a real matrix \eqn{\mathbf{X}},
+#' where \eqn{V(\mathbf{X})} = scaled variance of \eqn{l_p^p} distances between the
+#' row samples of \eqn{\mathbf{X}}.
 #'
 #' Dependencies: getLpDistance
-#' @param X The N x P real matrix
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}s
-#' @return V(X), the variance of the pairwise \eqn{l_p^p} distance between samples
+#' @param X The \eqn{N \times P} real matrix
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}s
+#' @return \eqn{V(\mathbf{X})}, the variance of the pairwise \eqn{l_p^p} distance between samples
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rnorm(50))
 #' getRealVStat(X, p = 2)
@@ -117,21 +117,21 @@ getRealVStat <- function(X, p) {
 
 #' Resampling V Statistic (Version 1)
 #'
-#' Generates a new array X' under the permutation null and then
-#' returns the V statistic computed for X'.
+#' Generates a new array \eqn{\mathbf{X}'} under the permutation null and then
+#' returns the \eqn{V} statistic computed for \eqn{\mathbf{X}'}.
 #'
 #' This is Version 1, which takes in the block labels. It is suitable in
 #' the most general setting, where the features are grouped by labels.
-#' Given original X and a list denoting labels of each feature,
-#' independently permutes the rows within each block of X and returns resulting V.
+#' Given original \eqn{\mathbf{X}} and a list denoting labels of each feature,
+#' independently permutes the rows within each block of \eqn{\mathbf{X}} and returns resulting \eqn{V}.
 #' If block labels are not specified, then features are assumed independent, which
-#' is to say that block_labels is set to 1:ncol(X).
+#' is to say that block_labels is set to 1:ncol(\eqn{\mathbf{X}}).
 #'
 #' Dependencies: getBinVStat, getRealVStat
-#' @param X The N x P binary or real matrix
-#' @param block_labels A vector of length P, whose pth component indicates the block membership of feature p
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
-#' @return V(X'), where X' is a resampled by permutation of entries blockwise
+#' @param X The \eqn{N \times P} binary or real matrix
+#' @param block_labels A vector of length \eqn{P}, whose \eqn{p}th component indicates the block membership of feature \eqn{p}
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
+#' @return \eqn{V(\mathbf{X}')}, where \eqn{\mathbf{X}'} is a resampled by permutation of entries blockwise
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rnorm(50)) # real matrix example
 #' naiveBlockPermute1(X, block_labels = c(1,1,2,2,3,3,4,4,5,5), p = 2) # use Euclidean distance
@@ -165,21 +165,21 @@ naiveBlockPermute1 <- function(X,
 
 #' Resampling V Statistic (Version 2)
 #'
-#' Generates a new array X' under the permutation null and then
-#' returns the V statistic computed for X'.
+#' Generates a new array \eqn{\mathbf{X}'} under the permutation null and then
+#' returns the \eqn{V} statistic computed for \eqn{\mathbf{X}'}.
 #'
 #' This is Version 2, which takes in the block boundaries. It is suitable
 #' for use when the features are already arranged such that the block
-#' memberships are determined by index delimiters. Given original X and
+#' memberships are determined by index delimiters. Given original \eqn{\mathbf{X}} and
 #' a list denoting labels of each feature, independently permutes the rows
-#' within each block of X and returns resulting V. If block labels are not specified,
-#' then features are assumed independent, which is to say that block_labels is set to 1:ncol(X).
+#' within each block of \eqn{\mathbf{X}} and returns resulting \eqn{V}. If block labels are not specified,
+#' then features are assumed independent, which is to say that block_labels is set to 1:ncol(\eqn{\mathbf{X}}).
 #'
 #' Dependencies: getBinVStat, getRealVStat
-#' @param X The N x P binary or real matrix
+#' @param X The \eqn{N \times P} binary or real matrix
 #' @param block_boundaries A vector of length at most P, whose entries indicate positions at which to demarcate blocks
 #' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
-#' @return V(X'), where X' is a resampled by permutation of entries blockwise
+#' @return \eqn{V(\mathbf{X}')}, where \eqn{\mathbf{X}'} is a resampled by permutation of entries blockwise
 #' @examples
 #' X <- matrix(nrow = 5, ncol = 10, rnorm(50)) # real matrix example
 #' naiveBlockPermute2(X, block_boundaries = c(4,7,9), p = 2) # use Euclidean distance
@@ -219,11 +219,11 @@ naiveBlockPermute2 <- function(X,
 #'
 #' Builds a map from indexes to pairs of labels. This is
 #' for caching distances, to avoid recomputing Hamming distances
-#' especially when dealing with high-dimensional (large P) matrices.
+#' especially when dealing with high-dimensional (large \eqn{P}) matrices.
 #'
 #' Dependencies: None
-#' @param N Sample size, i.e., nrow(X)
-#' @return N x N matrix whose entries record the index
+#' @param N Sample size, i.e., nrow(\eqn{\mathbf{X}})
+#' @return \eqn{N \times N} matrix whose entries record the index
 #' corresponding  to the pair of labels (indexed by the matrix dims)
 #' @noRd
 #'
@@ -244,11 +244,11 @@ buildForward <- function(N) {
 #'
 #' Builds a map from pairs of labels to indexes. This is
 #' for caching distances, to avoid recomputing Hamming distances
-#' especially when dealing with high-dimensional (large P) matrices.
+#' especially when dealing with high-dimensional (large \eqn{P}) matrices.
 #'
 #' Dependencies: None
-#' @param N Sample size, i.e., nrow(X)
-#' @return N x N matrix whose entries record the index
+#' @param N Sample size, i.e., nrow(\eqn{\mathbf{X}})
+#' @return \eqn{N \times N} matrix whose entries record the index
 #' corresponding  to the pair of labels (indexed by the matrix dims)
 #' @noRd
 #'
@@ -277,11 +277,11 @@ buildReverse <- function(N) {
 #' precomputed using buildForward and buildReverse.
 #'
 #' Dependencies: buildForward, buildReverse
-#' @param dists \eqn{{N \choose 2}} by B matrix, with each column
-#' containing the distances (ex: Hamming, l_p) for the block
-#' @param forward N x N matrix mapping the pairs of sample labels
+#' @param dists \eqn{{N \choose 2}} by \eqn{B} matrix, with each column
+#' containing the distances (ex: Hamming, \eqn{l_p^p}) for the block
+#' @param forward \eqn{N \times N} matrix mapping the pairs of sample labels
 #' to index of the \eqn{{N \choose 2}}-length vector
-#' @param reverse \eqn{{N \choose 2}} x 2 matrix mapping the index to
+#' @param reverse \eqn{{N \choose 2}\times 2} matrix mapping the index to
 #' pairs of sample labels
 #' @return A matrix with same dimensions as dists containing
 #' the block-permuted pairwise distances
@@ -309,20 +309,20 @@ cachePermute <- function(dists, forward, reverse) {
 
 #' Resampling Many V Statistics (Version 1)
 #'
-#' Generates a block permutation distribution of V statistic.
+#' Generates a block permutation distribution of \eqn{V} statistic.
 #' Precomputes distances and some indexing arrays to quickly
-#' generate samples from the block permutation distribution of the V
-#' statistic of X.
+#' generate samples from the block permutation distribution of the \eqn{V}
+#' statistic of \eqn{\mathbf{X}}.
 #'
 #' This version is with block labels specified.
 #'
 #' Dependencies: buildForward, buildReverse, cachePermute, getHammingDistance, getLpDistance
 #' @param X The binary or real matrix on which to perform
 #' permutation resampling
-#' @param block_labels Length P vector recording the block label of each feature
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
+#' @param block_labels Length \eqn{P} vector recording the block label of each feature
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @param nruns The resampling number (use at least 1000)
-#' @return A vector of resampled values of the V statistic
+#' @return A vector of resampled values of the \eqn{V} statistic
 #'
 cacheBlockPermute1 <- function(X,
                                block_labels,
@@ -368,10 +368,10 @@ cacheBlockPermute1 <- function(X,
 
 #' Resampling Many V Statistics (Version 2)
 #'
-#' Generates a block permutation distribution of V statistic.
+#' Generates a block permutation distribution of \eqn{V} statistic.
 #' Precomputes distances and some indexing arrays to quickly
-#' generate samples from the block permutation distribution of the V
-#' statistic of X.
+#' generate samples from the block permutation distribution of the \eqn{V}
+#' statistic of \eqn{\mathbf{X}}.
 #'
 #' This version is with block boundaries specified.
 #'
@@ -382,7 +382,7 @@ cacheBlockPermute1 <- function(X,
 #' block of non-independent features starts
 #' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @param nruns The resampling number (use at least 1000)
-#' @return A vector of resampled values of the V statistic
+#' @return A vector of resampled values of the \eqn{V} statistic
 #'
 cacheBlockPermute2 <- function(X,
                                block_boundaries,
@@ -433,21 +433,21 @@ cacheBlockPermute2 <- function(X,
 #' 
 #' Generates a block permutation p-value.
 #' 
-#' Generates a block permutation distribution of V statistic by storing
+#' Generates a block permutation distribution of \eqn{V} statistic by storing
 #' the provided list of distance data as an \eqn{{N\choose2} \times B} array,
 #' and then permuting the underlying indices of each individual to generate 
-#' resampled \eqn{{N\choose2} \times B} arrays. The observed V statistic is 
+#' resampled \eqn{{N\choose2} \times B} arrays. The observed \eqn{V} statistic is 
 #' also computed from the distance data.   
 #'
 #' Each element of dist_list should be a \eqn{N\times N} distance matrix.
 #' 
-#' Dependencies: buildForward, buildReverse, cachePermute, foreach/%dopar% (from doParallel)
+#' Dependencies: buildForward, buildReverse, cachePermute
 #' @param dist_list The list (length \eqn{B}) of pairwise distance data. 
 #' Each element in list should be either a distance matrix or a table recording
 #' pairwise distances. 
 #' @param nruns The resampling number (use at least 1000)
 #' @return The p-value obtained from comparing the empirical tail cdf of the observed 
-#' V statistic computed from distance data. 
+#' \eqn{V} statistic computed from distance data. 
 #' 
 distDataPermute <- function(dist_list,
                             nruns) {
@@ -503,7 +503,7 @@ distDataPermute <- function(dist_list,
 #' permutation resampling
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts. Default is NULL.
-#' @param block_labels Length P vector recording the block label of each feature.
+#' @param block_labels Length \eqn{P} vector recording the block label of each feature.
 #' Default is NULL.
 #' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @param nruns The resampling number (use at least 1000)
@@ -565,7 +565,7 @@ blockPermute <- function(X,
 #' The probability is computed using numerical integration of the
 #' densities of the two chi square distributions. (Method: trapezoidal rule)
 #'
-#' This is used in the large P asymptotics of the permutation test.
+#' This is used in the large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: None
 #' @param val observed statistic
@@ -589,14 +589,14 @@ weightedChi2P <- function(val, w1, w2, d1, d2){
 #'
 #' Computes covariance matrix entries and associated alpha, beta
 #' and gamma quantities defined in Aw, Spence and Song (2021),
-#' assuming the P features of the dataset X are independent.
+#' assuming the \eqn{P} features of the dataset \eqn{\mathbf{X}} are independent.
 #'
-#' This is used in the large P asymptotics of the permutation test.
+#' This is used in the large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: buildReverse, getLpDistance
 #' @param X The binary or real matrix
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
-#' @return The three distinct entries of cov matrix, (alpha, beta, gamma)
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
+#' @return The three distinct entries of covariance matrix, \eqn{(\alpha, \beta, \gamma)}
 #'
 getCov <- function(X,
                    p = 2) {
@@ -671,16 +671,16 @@ getCov <- function(X,
 #' Get Chi Square Weights
 #'
 #' Computes weights for the asymptotic random variable
-#' from the alpha, beta and gamma computed of data array X.
+#' from the \eqn{\alpha, \beta} and \eqn{\gamma} computed of data array \eqn{\mathbf{X}}.
 #'
-#' This is used in the large P asymptotics of the permutation test.
+#' This is used in the large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: None
 #' @param alpha covariance matrix entry computed from getCov
 #' @param beta covariance matrix entry computed from getCov
 #' @param gamma covariance matrix entry computed from getCov
 #' @param N The sample size, i.e., nrow(X) where X is the original dataset
-#' @return The weights (w1, w2)
+#' @return The weights \eqn{(w_1, w_2)}
 #'
 getChi2Weights <- function(alpha, beta, gamma, N) {
   # Compute the weights
@@ -694,10 +694,10 @@ getChi2Weights <- function(alpha, beta, gamma, N) {
 
 #' Approximate p-value for Test of Exchangeability (Assuming Large P)
 #'
-#' Computes the large P asymptotic p-value for dataset X,
-#' assuming its P features are independent.
+#' Computes the large \eqn{P} asymptotic p-value for dataset \eqn{\mathbf{X}},
+#' assuming its \eqn{P} features are independent.
 #'
-#' This is the large P asymptotics of the permutation test.
+#' This is the large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: getBinVStat, getRealVStat, getChi2Weights, weightedChi2P, getCov
 #' @param X The binary or real matrix on which to perform test of exchangeability
@@ -722,10 +722,10 @@ indLargeP <- function(X,
 
 #' Approximate p-value for Test of Exchangeability (Assuming Large N and P)
 #'
-#' Computes the large (N,P) asymptotic p-value for dataset X,
-#' assuming its P features are independent
+#' Computes the large \eqn{(N,P)} asymptotic p-value for dataset \eqn{\mathbf{X}},
+#' assuming its \eqn{P} features are independent
 #'
-#' This is the large N and large P asymptotics of the permutation test.
+#' This is the large \eqn{N} and large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: getBinVStat, getRealVStat, getCov, getChi2Weights
 #' @param X The binary or real matrix on which to perform test of exchangeability
@@ -756,17 +756,17 @@ indGaussian <- function(X,
 #' and gamma quantities defined in Aw, Spence and Song (2021),
 #' for partitionable features that are grouped into blocks. Uses
 #' precomputation to compute the unique entries of the asymptotic
-#' covariance matrix of the pairwise Hamming distances in O(N^2) time.
+#' covariance matrix of the pairwise Hamming distances in \eqn{O(N^2)} time.
 #'
-#' This is used in the large P asymptotics of the permutation test.
+#' This is used in the large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: buildReverse, getHammingDistance, getLpDistance
 #' @param X The binary or real matrix
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts.
-#' @param block_labels Length P vector recording the block label of each feature.
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
-#' @return The three distinct entries of cov matrix, (alpha, beta, gamma)
+#' @param block_labels Length \eqn{P} vector recording the block label of each feature.
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
+#' @return The three distinct entries of covariance matrix, \eqn{(\alpha, \beta, \gamma)}
 #'
 getBlockCov <- function(X,
                         block_boundaries,
@@ -858,17 +858,17 @@ getBlockCov <- function(X,
 
 #' Approximate p-value for Test of Exchangeability (Assuming Large P with Block Dependencies)
 #'
-#' Computes the large P asymptotic p-value for dataset X,
-#' assuming its P features are independent within specified blocks.
+#' Computes the large \eqn{P} asymptotic p-value for dataset \eqn{\mathbf{X}},
+#' assuming its \eqn{P} features are independent within specified blocks.
 #'
-#' This is the large P asymptotics of the permutation test.
+#' This is the large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: getBinVStat, getRealVStat, getChi2Weights, weightedChi2P, getBlockCov
 #' @param X The binary or real matrix on which to perform test of exchangeability
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts.
-#' @param block_labels Length P vector recording the block label of each feature.
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
+#' @param block_labels Length \eqn{P} vector recording the block label of each feature.
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The asymptotic p-value
 #'
 blockLargeP <- function(X,
@@ -894,17 +894,17 @@ blockLargeP <- function(X,
 
 #' Approximate p-value for Test of Exchangeability (Assuming Large N and P with Block Dependencies)
 #'
-#' Computes the large (N,P) asymptotic p-value for dataset X,
-#' assuming its P features are independent within specified blocks.
+#' Computes the large \eqn{(N,P)} asymptotic p-value for dataset \eqn{\mathbf{X}},
+#' assuming its \eqn{P} features are independent within specified blocks.
 #'
-#' This is the large N and large P asymptotics of the permutation test.
+#' This is the large \eqn{N} and large \eqn{P} asymptotics of the permutation test.
 #'
 #' Dependencies: getBinVStat, getRealVStat, getBlockCov, getChi2Weights
 #' @param X The binary or real matrix on which to perform test of exchangeability
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts.
-#' @param block_labels Length P vector recording the block label of each feature.
-#' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
+#' @param block_labels Length \eqn{P} vector recording the block label of each feature.
+#' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @return The asymptotic p-value
 #'
 blockGaussian <- function(X,
@@ -931,10 +931,10 @@ blockGaussian <- function(X,
 #' 
 #' Generates an asymptotic p-value.
 #' 
-#' Generates a weighted convolution of chi-squares distribution of V statistic 
+#' Generates a weighted convolution of chi-squares distribution of \eqn{V} statistic 
 #' by storing the provided list of distance data as an \eqn{{N\choose2} \times B} array,
-#' and then using large-P theory to generate the asymptotic null distribution 
-#' against which the p-value of observed V statistic is computed. 
+#' and then using large-\eqn{P} theory to generate the asymptotic null distribution 
+#' against which the p-value of observed \eqn{V} statistic is computed. 
 #' 
 #' Each element of dist_list should be a \eqn{N\times N} distance matrix.
 #' 

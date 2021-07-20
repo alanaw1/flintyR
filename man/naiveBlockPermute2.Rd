@@ -7,26 +7,26 @@
 naiveBlockPermute2(X, block_boundaries, p = 2)
 }
 \arguments{
-\item{X}{The N x P binary or real matrix}
+\item{X}{The \eqn{N \times P} binary or real matrix}
 
 \item{block_boundaries}{A vector of length at most P, whose entries indicate positions at which to demarcate blocks}
 
 \item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
-V(X'), where X' is a resampled by permutation of entries blockwise
+\eqn{V(\mathbf{X}')}, where \eqn{\mathbf{X}'} is a resampled by permutation of entries blockwise
 }
 \description{
-Generates a new array X' under the permutation null and then
-returns the V statistic computed for X'.
+Generates a new array \eqn{\mathbf{X}'} under the permutation null and then
+returns the \eqn{V} statistic computed for \eqn{\mathbf{X}'}.
 }
 \details{
 This is Version 2, which takes in the block boundaries. It is suitable
 for use when the features are already arranged such that the block
-memberships are determined by index delimiters. Given original X and
+memberships are determined by index delimiters. Given original \eqn{\mathbf{X}} and
 a list denoting labels of each feature, independently permutes the rows
-within each block of X and returns resulting V. If block labels are not specified,
-then features are assumed independent, which is to say that block_labels is set to 1:ncol(X).
+within each block of \eqn{\mathbf{X}} and returns resulting \eqn{V}. If block labels are not specified,
+then features are assumed independent, which is to say that block_labels is set to 1:ncol(\eqn{\mathbf{X}}).
 
 Dependencies: getBinVStat, getRealVStat
 }

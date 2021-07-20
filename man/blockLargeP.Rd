@@ -12,19 +12,19 @@ blockLargeP(X, block_boundaries, block_labels, p = 2)
 \item{block_boundaries}{Vector denoting the positions where a new
 block of non-independent features starts.}
 
-\item{block_labels}{Length P vector recording the block label of each feature.}
+\item{block_labels}{Length \eqn{P} vector recording the block label of each feature.}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
+\item{p}{The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
 The asymptotic p-value
 }
 \description{
-Computes the large P asymptotic p-value for dataset X,
-assuming its P features are independent within specified blocks.
+Computes the large \eqn{P} asymptotic p-value for dataset \eqn{\mathbf{X}},
+assuming its \eqn{P} features are independent within specified blocks.
 }
 \details{
-This is the large P asymptotics of the permutation test.
+This is the large \eqn{P} asymptotics of the permutation test.
 
 Dependencies: getBinVStat, getRealVStat, getChi2Weights, weightedChi2P, getBlockCov
 }

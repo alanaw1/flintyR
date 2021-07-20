@@ -7,7 +7,7 @@
 getLpDistance(X, p)
 }
 \arguments{
-\item{X}{The N x P real matrix}
+\item{X}{The \eqn{N \times P} real matrix}
 
 \item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
@@ -15,8 +15,8 @@ getLpDistance(X, p)
 A length \eqn{{N \choose 2}} vector of pairwise \eqn{l_p^p} distances
 }
 \description{
-Computes all pairwise \eqn{l_p^p} distances for a real matrix X,
-for a specified choice of Minkowski norm exponent p.
+Computes all pairwise \eqn{l_p^p} distances for a real matrix \eqn{\mathbf{X}},
+for a specified choice of Minkowski norm exponent \eqn{p}.
 }
 \details{
 Dependencies: lp_distance from fast_dist_calc.cpp

@@ -19,10 +19,10 @@ distribution.
 Generates an asymptotic p-value.
 }
 \details{
-Generates a weighted convolution of chi-squares distribution of V statistic 
+Generates a weighted convolution of chi-squares distribution of \eqn{V} statistic 
 by storing the provided list of distance data as an \eqn{{N\choose2} \times B} array,
-and then using large-P theory to generate the asymptotic null distribution 
-against which the p-value of observed V statistic is computed. 
+and then using large-\eqn{P} theory to generate the asymptotic null distribution 
+against which the p-value of observed \eqn{V} statistic is computed. 
 
 Each element of dist_list should be a \eqn{N\times N} distance matrix.
 

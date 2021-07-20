@@ -7,13 +7,13 @@
 getBinVStat(X)
 }
 \arguments{
-\item{X}{The N x P binary matrix}
+\item{X}{The \eqn{N \times P} binary matrix}
 }
 \value{
-V(X), the variance of the pairwise Hamming distance between samples
+\eqn{V(\mathbf{X})}, the variance of the pairwise Hamming distance between samples
 }
 \description{
-Computes V statistic for a binary matrix X, as defined in
+Computes \eqn{V} statistic for a binary matrix \eqn{\mathbf{X}}, as defined in
 Aw, Spence and Song (2021+).
 }
 \details{

@@ -15,19 +15,19 @@ pairwise distances.}
 }
 \value{
 The p-value obtained from comparing the empirical tail cdf of the observed 
-V statistic computed from distance data.
+\eqn{V} statistic computed from distance data.
 }
 \description{
 Generates a block permutation p-value.
 }
 \details{
-Generates a block permutation distribution of V statistic by storing
+Generates a block permutation distribution of \eqn{V} statistic by storing
 the provided list of distance data as an \eqn{{N\choose2} \times B} array,
 and then permuting the underlying indices of each individual to generate 
-resampled \eqn{{N\choose2} \times B} arrays. The observed V statistic is 
+resampled \eqn{{N\choose2} \times B} arrays. The observed \eqn{V} statistic is 
 also computed from the distance data.   
 
 Each element of dist_list should be a \eqn{N\times N} distance matrix.
 
-Dependencies: buildForward, buildReverse, cachePermute, foreach/%dopar% (from doParallel)
+Dependencies: buildForward, buildReverse, cachePermute
 }

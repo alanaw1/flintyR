@@ -18,13 +18,13 @@ block of non-independent features starts}
 \item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
-A vector of resampled values of the V statistic
+A vector of resampled values of the \eqn{V} statistic
 }
 \description{
-Generates a block permutation distribution of V statistic.
+Generates a block permutation distribution of \eqn{V} statistic.
 Precomputes distances and some indexing arrays to quickly
-generate samples from the block permutation distribution of the V
-statistic of X.
+generate samples from the block permutation distribution of the \eqn{V}
+statistic of \eqn{\mathbf{X}}.
 }
 \details{
 This version is with block boundaries specified.

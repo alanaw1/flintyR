@@ -15,11 +15,11 @@ indGaussian(X, p = 2)
 The asymptotic p-value
 }
 \description{
-Computes the large (N,P) asymptotic p-value for dataset X,
-assuming its P features are independent
+Computes the large \eqn{(N,P)} asymptotic p-value for dataset \eqn{\mathbf{X}},
+assuming its \eqn{P} features are independent
 }
 \details{
-This is the large N and large P asymptotics of the permutation test.
+This is the large \eqn{N} and large \eqn{P} asymptotics of the permutation test.
 
 Dependencies: getBinVStat, getRealVStat, getCov, getChi2Weights
 }

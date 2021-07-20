@@ -16,14 +16,14 @@ getChi2Weights(alpha, beta, gamma, N)
 \item{N}{The sample size, i.e., nrow(X) where X is the original dataset}
 }
 \value{
-The weights (w1, w2)
+The weights \eqn{(w_1, w_2)}
 }
 \description{
 Computes weights for the asymptotic random variable
-from the alpha, beta and gamma computed of data array X.
+from the \eqn{\alpha, \beta} and \eqn{\gamma} computed of data array \eqn{\mathbf{X}}.
 }
 \details{
-This is used in the large P asymptotics of the permutation test.
+This is used in the large \eqn{P} asymptotics of the permutation test.
 
 Dependencies: None
 }

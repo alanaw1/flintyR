@@ -12,22 +12,22 @@ getBlockCov(X, block_boundaries, block_labels, p = 2)
 \item{block_boundaries}{Vector denoting the positions where a new
 block of non-independent features starts.}
 
-\item{block_labels}{Length P vector recording the block label of each feature.}
+\item{block_labels}{Length \eqn{P} vector recording the block label of each feature.}
 
-\item{p}{The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
+\item{p}{The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}}
 }
 \value{
-The three distinct entries of cov matrix, (alpha, beta, gamma)
+The three distinct entries of covariance matrix, \eqn{(\alpha, \beta, \gamma)}
 }
 \description{
 Computes covariance matrix entries and associated alpha, beta
 and gamma quantities defined in Aw, Spence and Song (2021),
 for partitionable features that are grouped into blocks. Uses
 precomputation to compute the unique entries of the asymptotic
-covariance matrix of the pairwise Hamming distances in O(N^2) time.
+covariance matrix of the pairwise Hamming distances in \eqn{O(N^2)} time.
 }
 \details{
-This is used in the large P asymptotics of the permutation test.
+This is used in the large \eqn{P} asymptotics of the permutation test.
 
 Dependencies: buildReverse, getHammingDistance, getLpDistance
 }
