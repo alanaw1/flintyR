@@ -247,6 +247,10 @@ Below, we show how our method can be called on a list of distances, provided the
 
 ```{r dist_list_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
 ## Simulation of list of distances
+# Set seed for reproducibility
+set.seed(2021)
+
+# Generate data
 N <- 100
 num_rows <- choose(N,2)
 B <- 50
@@ -284,6 +288,8 @@ distDataPValue(dist_list) # should be >= 0.05
 
 # Running Our Test from Terminal
 
-For users who prefer to run jobs from the terminal, we explain how our test can be embedded within a script that can be executed immediately on the terminal. To facilitate this explanation, we use data from the 1000 Genomes project. 
+For users who prefer to run jobs from the terminal, we explain how our test can be embedded within a script that can be executed immediately on the terminal. To facilitate this explanation, we use data from the 1000 Genomes (1KG) project ([The 1000 Genomes Project Consortium, 2015](https://www.nature.com/articles/nature15393)). The 1KG data consists of individual genotypes spanning 26 populations and 5 superpopulations. You may learn more about (and see some preliminary analyses of) the data [here](https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/), even though you probably already know more interesting analyses of this data if you are a geneticist.     
+
+Suppose our task at hand is to run a test of exchangeability on each population of the data.    
 
 To be updated.

@@ -563,6 +563,10 @@ Count
 <p>Below, we show how our method can be called on a list of distances, provided the features from which the pairwise distances are derived are mutually independent. Briefly, we have <span class="math inline">\(N=100\)</span> individuals from whom we obtain <span class="math inline">\(50\)</span> pairwise distance data, <span class="math inline">\(\{D_1,\ldots,D_{50}\}\)</span>. Each pairwise distance matrix <span class="math inline">\(D_b\)</span> is computed from a block of <span class="math inline">\(10\)</span> features, and we assume each block is independent of any other block.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Simulation of list of distances</span>
+<span class="co"># Set seed for reproducibility</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
+
+<span class="co"># Generate data</span>
 <span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">100</span>
 <span class="va">num_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Special.html">choose</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">2</span><span class="op">)</span>
 <span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">50</span>
@@ -584,8 +588,8 @@ Count
 <span class="co"># Clear garbage</span>
 <span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;             used  (Mb) gc trigger   (Mb) limit (Mb)  max used   (Mb)</span>
-<span class="co">#&gt; Ncells   7828207 418.1   12448397  664.9         NA  12448397  664.9</span>
-<span class="co">#&gt; Vcells 124044017 946.4  212660432 1622.5      16384 212651056 1622.4</span></code></pre></div>
+<span class="co">#&gt; Ncells   7754668 414.2   12448172  664.9         NA  12448172  664.9</span>
+<span class="co">#&gt; Vcells 123280729 940.6  177150693 1351.6      16384 141631072 1080.6</span></code></pre></div>
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
@@ -596,11 +600,13 @@ Count
 
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
-<span class="co">#&gt; [1] 0.351</span></code></pre></div>
+<span class="co">#&gt; [1] 0.356</span></code></pre></div>
 </div>
 <div id="running-our-test-from-terminal" class="section level1">
 <h1 class="hasAnchor">
 <a href="#running-our-test-from-terminal" class="anchor"></a>Running Our Test from Terminal</h1>
+<p>For users who prefer to run jobs from the terminal, we explain how our test can be embedded within a script that can be executed immediately on the terminal. To facilitate this explanation, we use data from the 1000 Genomes (1KG) project (<a href="https://www.nature.com/articles/nature15393">The 1000 Genomes Project Consortium, 2015</a>). The 1KG data consists of individual genotypes spanning 26 populations and 5 superpopulations. You may learn more about (and see some preliminary analyses of) the data <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a>, even though you probably already know more interesting analyses of this data if you are a geneticist.</p>
+<p>Suppose our task at hand is to run a test of exchangeability on each population of the data.</p>
 <p>To be updated.</p>
 </div>
   </div>
