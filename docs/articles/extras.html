@@ -552,7 +552,51 @@ Count
 <div id="test-of-exchangeability-using-pairwise-distances" class="section level1">
 <h1 class="hasAnchor">
 <a href="#test-of-exchangeability-using-pairwise-distances" class="anchor"></a>Test of Exchangeability Using Pairwise Distances</h1>
-<p>To be updated.</p>
+<p>Our test of exchangeability works for settings where only pairwise distance data is available. Given a list of pairwise distances between <span class="math inline">\(N\)</span> individuals, <span class="math inline">\(\{D_1,\ldots,D_B\}\)</span>, and assuming these distances are independent of one another, our test can determine whether the individuals making up the <span class="math inline">\(N\)</span>-sample are exchangeable at a user-specified significance threshold (e.g., <span class="math inline">\(\alpha=0.05\)</span>). (See Section of our paper.)</p>
+<p>There are multiple practical scenarios well suited for such an approach.</p>
+<ul>
+<li>Loading the sample-by-feature matrix <span class="math inline">\(\mathbf{X}\)</span> into memory is computationally unfeasible</li>
+<li>Only distance data is available owing to privacy issues</li>
+<li>Independent, large sets of features exist on different computers but need to be combined to form the sample-by-feature matrix <span class="math inline">\(\mathbf{X}\)</span>
+</li>
+</ul>
+<p>Below, we show how our method can be called on a list of distances, provided the features from which the pairwise distances are derived are mutually independent. Briefly, we have <span class="math inline">\(N=100\)</span> individuals from whom we obtain <span class="math inline">\(50\)</span> pairwise distance data, <span class="math inline">\(\{D_1,\ldots,D_{50}\}\)</span>. Each pairwise distance matrix <span class="math inline">\(D_b\)</span> is computed from a block of <span class="math inline">\(10\)</span> features, and we assume each block is independent of any other block.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Simulation of list of distances</span>
+<span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">100</span>
+<span class="va">num_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Special.html">choose</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">2</span><span class="op">)</span>
+<span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">50</span>
+<span class="va">dist_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">B</span><span class="op">)</span> <span class="op">{</span>
+  <span class="co"># Generate fake data </span>
+  <span class="kw">if</span> <span class="op">(</span><span class="va">b</span> <span class="op">&lt;=</span> <span class="va">B</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">fake_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">1</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">fake_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">fake_samples</span>, method <span class="op">=</span> <span class="st">"manhattan"</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+    <span class="va">fake_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">fake_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">fake_samples</span>, method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">}</span>
+  
+  <span class="co"># Add to list</span>
+  <span class="va">dist_list</span><span class="op">[[</span><span class="va">b</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">fake_dist</span>
+<span class="op">}</span>
+
+<span class="co"># Clear garbage</span>
+<span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt;             used  (Mb) gc trigger   (Mb) limit (Mb)  max used   (Mb)</span>
+<span class="co">#&gt; Ncells   7828207 418.1   12448397  664.9         NA  12448397  664.9</span>
+<span class="co">#&gt; Vcells 124044017 946.4  212660432 1622.5      16384 212651056 1622.4</span></code></pre></div>
+<p>We now run our test of exchangeability on the list of distances.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">flintyR</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
+<span class="co"># Register parallel computation</span>
+<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="co"># Compute p-value</span>
+<span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
+<span class="co">#&gt; [1] 0.351</span></code></pre></div>
 </div>
 <div id="running-our-test-from-terminal" class="section level1">
 <h1 class="hasAnchor">

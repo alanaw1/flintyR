@@ -235,8 +235,55 @@ Note we use these classified TADs to group our scATAC-seq features.
 
 # Test of Exchangeability Using Pairwise Distances
 
-To be updated. 
+Our test of exchangeability works for settings where only pairwise distance data is available. Given a list of pairwise distances between $N$ individuals, $\{D_1,\ldots,D_B\}$, and assuming these distances are independent of one another, our test can determine whether the individuals making up the $N$-sample are exchangeable at a user-specified significance threshold (e.g., $\alpha=0.05$). (See Section of our paper.)
+
+There are multiple practical scenarios well suited for such an approach.
+
+- Loading the sample-by-feature matrix $\mathbf{X}$ into memory is computationally unfeasible
+- Only distance data is available owing to privacy issues 
+- Independent, large sets of features exist on different computers but need to be combined to form the sample-by-feature matrix $\mathbf{X}$       
+
+Below, we show how our method can be called on a list of distances, provided the features from which the pairwise distances are derived are mutually independent. Briefly, we have $N=100$ individuals from whom we obtain $50$ pairwise distance data, $\{D_1,\ldots,D_{50}\}$. Each pairwise distance matrix $D_b$ is computed from a block of $10$ features, and we assume each block is independent of any other block.  
+
+```{r dist_list_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Simulation of list of distances
+N <- 100
+num_rows <- choose(N,2)
+B <- 50
+dist_list <- list()
+for (b in 1:B) {
+  # Generate fake data 
+  if (b <= B/2) {
+    fake_samples <- replicate(10, rbinom(N,1,0.5))
+    fake_dist <- as.matrix(dist(fake_samples, method = "manhattan"))
+  } else {
+    fake_samples <- replicate(10, rnorm(N, sd = 10))
+    fake_dist <- as.matrix(dist(fake_samples, method = "euclidean"))
+  }
+  
+  # Add to list
+  dist_list[[b]] <- fake_dist
+}
+
+# Clear garbage
+gc()
+```
+
+We now run our test of exchangeability on the list of distances. 
+
+```{r dist_list_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Apply test of exchangeability to simulated distance list
+library(flintyR)
+library(doParallel)
+# Register parallel computation
+registerDoParallel()
+
+# Compute p-value
+distDataPValue(dist_list) # should be >= 0.05
+```
 
 # Running Our Test from Terminal
+
+For users who prefer to run jobs from the terminal, we explain how our test can be embedded within a script that can be executed immediately on the terminal. To facilitate this explanation, we use data from the 1000 Genomes project. 
 
 To be updated.
