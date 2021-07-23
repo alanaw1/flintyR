@@ -588,8 +588,8 @@ Count
 <span class="co"># Clear garbage</span>
 <span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;             used  (Mb) gc trigger   (Mb) limit (Mb)  max used   (Mb)</span>
-<span class="co">#&gt; Ncells   7754668 414.2   12448172  664.9         NA  12448172  664.9</span>
-<span class="co">#&gt; Vcells 123280729 940.6  177150693 1351.6      16384 141631072 1080.6</span></code></pre></div>
+<span class="co">#&gt; Ncells   7754664 414.2   12451158  665.0         NA  12451158  665.0</span>
+<span class="co">#&gt; Vcells 123281123 940.6  177151316 1351.6      16384 141636044 1080.6</span></code></pre></div>
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
@@ -600,14 +600,29 @@ Count
 
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
-<span class="co">#&gt; [1] 0.356</span></code></pre></div>
+<span class="co">#&gt; [1] 0.371</span></code></pre></div>
 </div>
 <div id="running-our-test-from-terminal" class="section level1">
 <h1 class="hasAnchor">
 <a href="#running-our-test-from-terminal" class="anchor"></a>Running Our Test from Terminal</h1>
-<p>For users who prefer to run jobs from the terminal, we explain how our test can be embedded within a script that can be executed immediately on the terminal. To facilitate this explanation, we use data from the 1000 Genomes (1KG) project (<a href="https://www.nature.com/articles/nature15393">The 1000 Genomes Project Consortium, 2015</a>). The 1KG data consists of individual genotypes spanning 26 populations and 5 superpopulations. You may learn more about (and see some preliminary analyses of) the data <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a>, even though you probably already know more interesting analyses of this data if you are a geneticist.</p>
-<p>Suppose our task at hand is to run a test of exchangeability on each population of the data.</p>
-<p>To be updated.</p>
+<p>For users who prefer to run jobs from the terminal, we describe how to embed our test within a script that can be executed immediately on the terminal. To facilitate our exposition, we use data from the 1000 Genomes (1KG) project (<a href="https://www.nature.com/articles/nature15393">The 1000 Genomes Project Consortium, 2015</a>). The 1KG data consists of individual genotypes spanning 26 populations and 5 superpopulations. You may learn more about, and see some preliminary analyses of, the data <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a>. If you are a geneticist, you probably already know more interesting analyses of this data.</p>
+<p>The challenge here is that genomes are typically provided in VCF or BIM/BED/FAM or PGEN/PVAR/PSAM format. Moreover, they can be very large and thus unreadable.</p>
+<p>Suppose our task at hand is to run a test of exchangeability on each 1KG population. There are millions of polymorphic variants, and we assume variants lying in different chromosomes are independent of one another. Since there are 22 autosomal chromosomes, this means that our features are grouped into 22 large blocks.</p>
+<p>To accomplish our task, we perform the following steps.</p>
+<ol style="list-style-type: decimal">
+<li>For each population, split the genome into the 22 autosomes.</li>
+<li>Per autosome:
+<ul>
+<li>load it into R and construct its distance matrix</li>
+<li>remove the loaded autosome object from memory</li>
+</ul>
+</li>
+<li>Run test of exchangeability on list of distance matrices. (See previous Section on this.)</li>
+</ol>
+<details><summary><b>Preparing the population-level files</b>
+</summary>
+To obtain population-level files (BIM/BED/FAM) that can be fed into Step 1 above, we perform the following steps: (1) Download 1KG Phase 3 data (PGEN and PVAR) from <a href="https://www.cog-genomics.org/plink/2.0/resources">here</a>, see <strong>Merged dataset</strong>; (2) Filter to keep only variants that are in HapMap3 and UK Biobank; (3) Remove related individuals; (4) Filter to keep only biallelic SNPs with minor allele count at least <span class="math inline">\(1\)</span> (<em>this differs from usual filtering of alleles that satisfy MAF at least <span class="math inline">\(0.01\)</span></em>); (5) Generate BED/BIM/FAM files for each population using population ID files. All of these steps are accomplished using PLINK2.
+</details><p>To be updated.</p>
 </div>
   </div>
 
