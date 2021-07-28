@@ -588,8 +588,8 @@ Count
 <span class="co"># Clear garbage</span>
 <span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;             used  (Mb) gc trigger   (Mb) limit (Mb)  max used   (Mb)</span>
-<span class="co">#&gt; Ncells   7754664 414.2   12451158  665.0         NA  12451158  665.0</span>
-<span class="co">#&gt; Vcells 123281123 940.6  177151316 1351.6      16384 141636044 1080.6</span></code></pre></div>
+<span class="co">#&gt; Ncells   7755760 414.3   12454557  665.2         NA  12454557  665.2</span>
+<span class="co">#&gt; Vcells 123283369 940.6  177154494 1351.6      16384 141641273 1080.7</span></code></pre></div>
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
@@ -600,13 +600,13 @@ Count
 
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
-<span class="co">#&gt; [1] 0.371</span></code></pre></div>
+<span class="co">#&gt; [1] 0.363</span></code></pre></div>
 </div>
 <div id="running-our-test-from-terminal" class="section level1">
 <h1 class="hasAnchor">
 <a href="#running-our-test-from-terminal" class="anchor"></a>Running Our Test from Terminal</h1>
-<p>For users who prefer to run jobs from the terminal, we describe how to embed our test within a script that can be executed immediately on the terminal. To facilitate our exposition, we use data from the 1000 Genomes (1KG) project (<a href="https://www.nature.com/articles/nature15393">The 1000 Genomes Project Consortium, 2015</a>). The 1KG data consists of individual genotypes spanning 26 populations and 5 superpopulations. You may learn more about, and see some preliminary analyses of, the data <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a>. If you are a geneticist, you probably already know more interesting analyses of this data.</p>
-<p>The challenge here is that genomes are typically provided in VCF or BIM/BED/FAM or PGEN/PVAR/PSAM format. Moreover, they can be very large and thus unreadable.</p>
+<p>For users who prefer to run jobs from the terminal, we describe how to embed our test within “terminal-friendly” scripts. To facilitate our exposition, we use data from the 1000 Genomes (1KG) project (<a href="https://www.nature.com/articles/nature15393">The 1000 Genomes Project Consortium, 2015</a>). The 1KG data consists of individual genomes spanning 26 populations and 5 superpopulations. You may learn more about, and see some preliminary analyses of, the data <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a>. If you are a geneticist, you probably already know more interesting analyses of this data.</p>
+<p>The challenge here is that genomes are typically provided in VCF or BIM/BED/FAM or PGEN/PVAR/PSAM format. Moreover, they can be very large and thus cannot be loaded in memory.</p>
 <p>Suppose our task at hand is to run a test of exchangeability on each 1KG population. There are millions of polymorphic variants, and we assume variants lying in different chromosomes are independent of one another. Since there are 22 autosomal chromosomes, this means that our features are grouped into 22 large blocks.</p>
 <p>To accomplish our task, we perform the following steps.</p>
 <ol style="list-style-type: decimal">
@@ -619,10 +619,408 @@ Count
 </li>
 <li>Run test of exchangeability on list of distance matrices. (See previous Section on this.)</li>
 </ol>
+<p>Scripts that perform the steps above can be found in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG">Github repo</a>, along with guidance on reproducing our results.</p>
 <details><summary><b>Preparing the population-level files</b>
 </summary>
 To obtain population-level files (BIM/BED/FAM) that can be fed into Step 1 above, we perform the following steps: (1) Download 1KG Phase 3 data (PGEN and PVAR) from <a href="https://www.cog-genomics.org/plink/2.0/resources">here</a>, see <strong>Merged dataset</strong>; (2) Filter to keep only variants that are in HapMap3 and UK Biobank; (3) Remove related individuals; (4) Filter to keep only biallelic SNPs with minor allele count at least <span class="math inline">\(1\)</span> (<em>this differs from usual filtering of alleles that satisfy MAF at least <span class="math inline">\(0.01\)</span></em>); (5) Generate BED/BIM/FAM files for each population using population ID files. All of these steps are accomplished using PLINK2.
-</details><p>To be updated.</p>
+</details><p><br></p>
+<div id="does-variant-filtering-affect-exchangeability" class="section level2">
+<h2 class="hasAnchor">
+<a href="#does-variant-filtering-affect-exchangeability" class="anchor"></a>Does Variant Filtering Affect Exchangeability?</h2>
+<p>Just to demonstrate a concrete implementation of the embedding approach and the scripts prepared above, we report <span class="math inline">\(p\)</span>-values obtained by running our test on two versions of the 1KG data differing in the variants included.</p>
+<ul>
+<li>(Rare variants included, as described in <strong>Preparing the population-level files</strong> above) All biallelic variants that have minor allele count (MAC) at least <span class="math inline">\(1\)</span> in the 1KG dataset are included.</li>
+<li>(Common variants only, as seen <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a> and provided by the <code>read_1000G</code> function of the <strong>bigsnpr</strong> package) Only biallelic variants that have minor allele frequency at least <span class="math inline">\(0.01\)</span> in the 1KG dataset are included.</li>
+</ul>
+<p>Note that the analysis for the first scenario is as described in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG">Github repo</a>.</p>
+<p>We find that when using only common variants, all populations, except for the Yoruban population in Nigeria, are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span> level. However, when additional rare variants are included, all populations are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Print table summarising results</span>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="st">"/Users/alanaw/Documents/GitProjects/flintyR/docs/articles/ex_data/1KG/exchangeability_results.txt"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+POP
+</th>
+<th style="text-align:left;">
+DESC
+</th>
+<th style="text-align:right;">
+MAF1e-2
+</th>
+<th style="text-align:right;">
+MAC1
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+GBR
+</td>
+<td style="text-align:left;">
+British in England and Scotland
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FIN
+</td>
+<td style="text-align:left;">
+Finnish in Finland
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHS
+</td>
+<td style="text-align:left;">
+Southern Han Chinese, China
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PUR
+</td>
+<td style="text-align:left;">
+Puerto Rican in Puerto Rico
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CDX
+</td>
+<td style="text-align:left;">
+Chinese Dai in Xishuangbanna, China
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CLM
+</td>
+<td style="text-align:left;">
+Colombian in Medellin, Colombia
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IBS
+</td>
+<td style="text-align:left;">
+Iberian populations in Spain
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PEL
+</td>
+<td style="text-align:left;">
+Peruvian in Lima, Peru
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PJL
+</td>
+<td style="text-align:left;">
+Punjabi in Lahore,Pakistan
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+KHV
+</td>
+<td style="text-align:left;">
+Kinh in Ho Chi Minh City, Vietnam
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ACB
+</td>
+<td style="text-align:left;">
+African Caribbean in Barbados
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GWD
+</td>
+<td style="text-align:left;">
+Gambian in Western Division, The Gambia
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESN
+</td>
+<td style="text-align:left;">
+Esan in Nigeria
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BEB
+</td>
+<td style="text-align:left;">
+Bengali in Bangladesh
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MSL
+</td>
+<td style="text-align:left;">
+Mende in Sierra Leone
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STU
+</td>
+<td style="text-align:left;">
+Sri Lankan Tamil in the UK
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ITU
+</td>
+<td style="text-align:left;">
+Indian Telugu in the UK
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CEU
+</td>
+<td style="text-align:left;">
+Utah residents with Northern and Western European ancestry
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+YRI
+</td>
+<td style="text-align:left;">
+Yoruba in Ibadan, Nigeria
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHB
+</td>
+<td style="text-align:left;">
+Han Chinese in Bejing, China
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+JPT
+</td>
+<td style="text-align:left;">
+Japanese in Tokyo, Japan
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LWK
+</td>
+<td style="text-align:left;">
+Luhya in Webuye, Kenya
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ASW
+</td>
+<td style="text-align:left;">
+African Ancestry in Southwest US
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MXL
+</td>
+<td style="text-align:left;">
+Mexican Ancestry in Los Angeles, California
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TSI
+</td>
+<td style="text-align:left;">
+Toscani in Italy
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GIH
+</td>
+<td style="text-align:left;">
+Gujarati Indian in Houston,TX
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+</tbody>
+</table>
+<p>Thus, our test shows that most populations in the 1KG dataset are non-exchangeable, assuming variants lying in different chromosomes are independent of one another. In the only exception of the Yoruban population (YRI), we find that if only common variants are considered, then the individuals are exchangeable. However, once rare variants are included the individuals lose exchangeability. This observation is consistent with the importance of rare variants capturing recent demographic history, a point acknowledged by population geneticists (<a href="%5Bhttps://elifesciences.org/articles/61548">Zaidi and Mathieson, 2021</a>).</p>
+</div>
 </div>
   </div>
 

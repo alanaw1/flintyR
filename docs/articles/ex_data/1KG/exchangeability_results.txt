@@ -1,0 +1,27 @@
+POP,DESC,MAF1e-2,MAC1
+GBR,British in England and Scotland,0,0
+FIN,Finnish in Finland,0,0
+CHS,"Southern Han Chinese, China",0,0
+PUR,Puerto Rican in Puerto Rico,0,0
+CDX,"Chinese Dai in Xishuangbanna, China",0,0
+CLM,"Colombian in Medellin, Colombia",0,0
+IBS,Iberian populations in Spain,0,0
+PEL,"Peruvian in Lima, Peru",0,0
+PJL,"Punjabi in Lahore,Pakistan",0,0
+KHV,"Kinh in Ho Chi Minh City, Vietnam",0,0
+ACB,African Caribbean in Barbados,0,0
+GWD,"Gambian in Western Division, The Gambia",0,0
+ESN,Esan in Nigeria,0,0
+BEB,Bengali in Bangladesh,0,0
+MSL,Mende in Sierra Leone,0,0
+STU,Sri Lankan Tamil in the UK,0,0
+ITU,Indian Telugu in the UK,0,0
+CEU,Utah residents with Northern and Western European ancestry,0,0
+YRI,"Yoruba in Ibadan, Nigeria",0.07,0.022
+CHB,"Han Chinese in Bejing, China",0,0
+JPT,"Japanese in Tokyo, Japan",0,0
+LWK,"Luhya in Webuye, Kenya",0,0
+ASW,African Ancestry in Southwest US,0,0
+MXL,"Mexican Ancestry in Los Angeles, California",0,0
+TSI,Toscani in Italy,0,0
+GIH,"Gujarati Indian in Houston,TX",0,0
