@@ -588,8 +588,8 @@ Count
 <span class="co"># Clear garbage</span>
 <span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;             used  (Mb) gc trigger   (Mb) limit (Mb)  max used   (Mb)</span>
-<span class="co">#&gt; Ncells   7755760 414.3   12454557  665.2         NA  12454557  665.2</span>
-<span class="co">#&gt; Vcells 123283369 940.6  177154494 1351.6      16384 141641273 1080.7</span></code></pre></div>
+<span class="co">#&gt; Ncells   7755761 414.3   12391695  661.8         NA  12391695  661.8</span>
+<span class="co">#&gt; Vcells 123283408 940.6  177154551 1351.6      16384 141555809 1080.0</span></code></pre></div>
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
@@ -600,7 +600,7 @@ Count
 
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
-<span class="co">#&gt; [1] 0.363</span></code></pre></div>
+<span class="co">#&gt; [1] 0.374</span></code></pre></div>
 </div>
 <div id="running-our-test-from-terminal" class="section level1">
 <h1 class="hasAnchor">

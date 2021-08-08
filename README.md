@@ -1,6 +1,6 @@
 # flintyR 
 
-This is the homepage of **flintyR**, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is under development. 
+This is the homepage of **flintyR**, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is available [here](https://alanaw1.github.io/flintypy). 
 
 
 ![Bruno appears](bruno_intro.png)
@@ -10,7 +10,7 @@ This is the homepage of **flintyR**, the R version of the software **flinty** (*
 
 ## What does this package offer?
 
-**flinty** provides exact tests of exchangeability in multivariate datasets. 
+**flintyR** provides exact tests of exchangeability in multivariate datasets. 
 
 - It is *non-parametric* (i.e., makes no distributional assumptions of the features), which makes it suitable for settings where the user might prefer not to make distributional assumptions about their data.   
 - It is *flexible*, meaning that the practitioner can specify feature dependencies based on their knowledge of the problem. Our tests handle dependent features, should the dependencies satisfy partitionability. See tutorials for details.   

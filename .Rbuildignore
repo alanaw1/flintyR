@@ -5,3 +5,8 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^\.Rds$
+^\.csv$
+^\.gz$
+^\.gz.tbi$
+^\.RData$
