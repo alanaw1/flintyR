@@ -62,7 +62,7 @@ Dependencies: All functions in auxiliary.R
 \examples{
 # Example 1 (get p-value of small matrix with independent features using exact test)
 suppressWarnings(require(doParallel))
-registerDoParallel(cores = 2)
+# registerDoParallel(cores = 2)
 
 X1 <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix, small
 getPValue(X1) # perform exact test with 5000 permutations
@@ -136,6 +136,6 @@ getExHaplotypes <- function(N) {
 X4 <- getExHaplotypes(10)
 getPValue(X4, block_boundaries = seq(from = 1, to = 1000, by = 25), largeP = TRUE)
 
-stopImplicitCluster()
+# stopImplicitCluster()
 
 }
