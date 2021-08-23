@@ -26,7 +26,7 @@ To be updated.
 
 **Using Tarball**
 
-1. Download the tar ball for **flintyR** from [here]().
+1. Download the tar ball for **flintyR** from [here](https://github.com/songlab-cal/flinty/tree/main/software/R).
 2. Run the following line, changing `FILE_PATH_TO_TAR_BALL`. 
 
 ```
