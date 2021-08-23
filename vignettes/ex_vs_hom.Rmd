@@ -180,9 +180,9 @@ So how can exchangeability help us avoid parametric modelling while detecting th
 1. Mixture Distributions and Independent Features
     - We saw this in the example above. 
 2. Mixture Distributions and Conditionally Independent Features (I)
-    - Let each $\mathbf{x}_n\overset{\text{iid}}{\sim} \frac{1}{2}F_1 + \frac{1}{2}F_2$, where the two source distributions contributing to the mixture are given by $F_1 = \bigotimes_{i=1}^4 N(i^2, 1)$ and $F_2 =\bigotimes_{i=1}^4 N(1/i^2, 1)$. The $\otimes$ notation here means that the $P=4$ features are generated independently according to unit variance Gaussian distributions.     
+    - Let each $\mathbf{x}_n\overset{\text{iid}}{\sim} \frac{1}{2}F_1 + \frac{1}{2}F_2$, where the two source distributions contributing to the mixture are given by $F_1 = \prod_{i=1}^4 N(i^2, 1)$ and $F_2 =\prod_{i=1}^4 N(1/i^2, 1)$. The $\Pi$ notation here means that the $P=4$ features are generated independently according to unit variance Gaussian distributions.     
 3. Mixture Distributions and Conditionally Independent Features (II)
-    - Let $\mathbf{x}_n\overset{\text{iid}}{\sim} \frac{1}{2}F_1 + \frac{1}{2}F_2$, but now $F_1 = N(1,1) \otimes N(4,1) \otimes N(-4,1) \otimes N(-1,1)$ and $F_2 = N(-1,1) \otimes N(-4,1) \otimes N(4,1)\otimes N(1,1)$. 
+    - Let $\mathbf{x}_n\overset{\text{iid}}{\sim} \frac{1}{2}F_1 + \frac{1}{2}F_2$, but now $F_1 = N(1,1) \times N(4,1) \times N(-4,1) \times N(-1,1)$ and $F_2 = N(-1,1) \times N(-4,1) \times N(4,1)\times N(1,1)$. 
 
 Each of these examples generates heterogeneous finite samples, and their finite samples are exchangeable by definition. However, hopefully most readers will agree that only the last two examples represent the existence of subpopulations for which the joint distribution of their features cannot be modeled in a straightforward manner. Indeed, even though the first example generates samples containing $2^P$ clusters, we are able to mathematically describe its features as independent distributions. Additionally, comparing the last two examples reveals that distinct subpopulations can generate a variety of heterogeneities: Example 2 generates samples whose row sums differ by subpopulation, whereas Example 3 generates samples whose row sums look more homogeneous. We provide numerical examples below. 
 

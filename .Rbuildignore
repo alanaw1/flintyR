@@ -3,7 +3,11 @@
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
 ^docs$
+^vignettes$
 ^pkgdown$
+^README\.md$
+^Rprof\.out$
+^bruno_intro\.png$
 ^\.github$
 ^\.Rds$
 ^\.csv$

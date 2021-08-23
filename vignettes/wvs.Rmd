@@ -147,12 +147,16 @@ for (p in 1:47) {
 Before we run any tests of exchangeability, let us visualize, using a heatmap and a dendrogram, how responses to the different survey questions correlate with one another. To generate our dendrogram, we perform hierarchical clustering with Ward linkage and distance matrix constructed from sample-sample correlations. (See p. 21 of [Charrad et al., 2014](https://www.jstatsoft.org/article/view/v061i06) for an explanation of the Ward linkage.) Note that we do not need the one-hot encoded version of $\mathbf{X}$ to accomplish this step.
 
 ```{r wvs_5, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
-## Generate a dendrogram + heat map to visualize correlations
+## Generate a dendrogram
 library(dendextend) # for ladderize to work
 features_hclust_Euclidean_ward <- hclust(as.dist(1-cor(t(apply(wv_filtered_sg[,-(1:4)], 1, as.numeric)))), 
                                            method = "ward.D")
 features_dend <- as.dendrogram(features_hclust_Euclidean_ward) # generate dendrogram for plotting heat map with
+```
 
+```{r wvs_5-1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+# Generate heat map to visualize correlations
 library(RColorBrewer) # for brewer.pal to work
 color.scheme <- rev(brewer.pal(10,"RdBu")) # generate the color scheme to use
 
@@ -163,6 +167,7 @@ heatmap(cor(t(apply(wv_filtered_sg[,-(1:4)], 1, as.numeric))),
         cexCol = 0.3,
         margins = c(2,2))
 ```
+
 
 Even though we have to zoom into the figure for details, we already see that there are groups of features that are more correlated with one another. Here are three examples:
 
@@ -229,7 +234,7 @@ This suggests the correlation structure between the features is complex, and it 
 
 Motivated by evidence of heterogeneity, we try to find distinct communities of Singaporeans within our sample. Similar to how we grouped our features, we cluster the samples using hierarchical clustering with Ward linkage and distance matrix constructed from Euclidean distances computed between samples. We assume that such a clustering is efficacious at recovering demographically meaningful communities. We obtain $K=10$ as the optimal number of clusters using the Dindex metric. (See p. 14 of [Charrad et al., 2014](https://www.jstatsoft.org/article/view/v061i06) for an explanation of how the Dindex works.)
 
-```{r wvs_9, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+```{r wvs_9, echo = TRUE, eval = TRUE, cache=TRUE, warning = FALSE, message = FALSE}
 ## Perform tuning to decide the optimal number of clusters 
 ## K to group samples into
 library(NbClust) # for NbClust to work
@@ -302,7 +307,7 @@ getPValue(as.matrix(sg_c8_bin),
 
 Now that we have found an exchangeable cluster of Singaporeans, we characterize the feature dependencies for this community of individuals. 
 
-```{r wvs_12, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+```{r wvs_12, echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
 ## Generate heatmap with dendrogram capturing feature-feature correlations
 c8features_dend <- as.dendrogram(c8features_hclust_Euclidean_ward)
 heatmap(cor(t(apply(data.matrix(sg_c8), 1, as.numeric))),
@@ -312,6 +317,10 @@ heatmap(cor(t(apply(data.matrix(sg_c8), 1, as.numeric))),
         cexCol = 0.3,
         margins = c(2,2))
 ```
+
+<p style="text-align:center;">
+<img src="ex_data/WVS/c8_heatmap.jpg" alt="" width="500"/>
+</p>
 
 Here, we see that there are groups of features that are more correlated with one another. Here are three examples:
 

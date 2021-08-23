@@ -1,20 +1,15 @@
 Package: flintyR
-Title: Flexible and Interpretable Non-parametric Tests of Exchangeability
-Version: 1.0
-Date: 2021-04-12
+Title: Flexible and Interpretable Non-Parametric Tests of Exchangeability
+Version: 0.0.1
+Date: 2021-08-22
 Authors@R: c(person("Alan", "Aw", email = "alanaw1@berkeley.edu", role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9455-7878")), person("Jeffrey", "Spence", email = "jspence@stanford.edu", role = "ctb"))
 Author: Alan Aw <alanaw1@berkeley.edu>
 Maintainer: Alan Aw <alanaw1@berkeley.edu>
-Description: Given a multivariate dataset and some knowledge about 
-              the dependencies between its features, it is important to 
-              test if the samples are exchangeable especially before trying
-              to fit a model on the dataset and to make inferences from it. 
-              This package provides a flexible non-parametric test of 
-              exchangeability, allowing the user to specify the feature dependencies
-              by hand. See Aw, Spence and Song (2021) for the accompanying paper.
-License: GPL (>= 2)
+Description: Given a multivariate dataset and some knowledge about the dependencies between its features, it is important to ensure the observations or individuals are exchangeable before fitting a model to the data in order to make inference from it, or assigning randomized treatments in order to estimate treatment effects. This package provides a flexible non-parametric test of exchangeability, allowing the user to specify the feature dependencies by hand. See Aw, Spence and Song (2021) for the accompanying paper.
+License: GPL (>= 3)
 Imports: Rcpp (>= 1.0.6), doParallel, foreach, assertthat, testthat, stats
 Suggests: rmarkdown, knitr, devtools
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
+Config/testthat/edition: 3

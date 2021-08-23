@@ -5,20 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flexible and Interpretable Non-parametric Tests of Exchangeability • flintyR</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<title>Flexible and Interpretable Non-Parametric Tests of Exchangeability • flintyR</title>
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Flexible and Interpretable Non-parametric Tests of Exchangeability">
-<meta property="og:description" content="Given a multivariate dataset and some knowledge about 
-              the dependencies between its features, it is important to 
-              test if the samples are exchangeable especially before trying
-              to fit a model on the dataset and to make inferences from it. 
-              This package provides a flexible non-parametric test of 
-              exchangeability, allowing the user to specify the feature dependencies
-              by hand. See Aw, Spence and Song (2021) for the accompanying paper.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Flexible and Interpretable Non-Parametric Tests of Exchangeability">
+<meta property="og:description" content="Given a multivariate dataset and some knowledge about the dependencies between its features, it is important to ensure the observations or individuals are exchangeable before fitting a model to the data in order to make inference from it, or assigning randomized treatments in order to estimate treatment effects. This package provides a flexible non-parametric test of exchangeability, allowing the user to specify the feature dependencies by hand. See Aw, Spence and Song (2021) for the accompanying paper.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -37,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -91,14 +85,16 @@
   <div class="contents col-md-9">
 <div id="flintyr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#flintyr" class="anchor"></a>flintyR</h1></div>
-<p>This is the homepage of <strong>flintyR</strong>, the R version of the software <strong>flinty</strong> (<em>Fl</em>exible and <em>I</em>nterpretable <em>N</em>on-parametric <em>T</em>ests of Exchangeabilit<em>y</em>). The Python version is available <a href="https://alanaw1.github.io/flintypy">here</a>.</p>
+<a href="#flintyr" class="anchor"></a><strong>flintyR</strong>
+</h1></div>
+<p>This is the homepage of <strong>flintyR</strong>, the R version of the software <strong>flinty</strong> (<em>Fl</em>exible and <em>I</em>nterpretable <em>N</em>on-parametric <em>T</em>ests of Exchangeabilit<em>y</em>). The Python version is available <a href="https://songlab-cal.github.io/flinty">here</a>.</p>
 <img src="bruno_intro.png" alt="Bruno appears"><p align="center">
 <em>Bruno is named after a famous statistican who studied exchangeability. Who might that <a href="http://www.brunodefinetti.it/">be</a>?</em>
 </p>
 <div id="what-does-this-package-offer" class="section level2">
 <h2 class="hasAnchor">
-<a href="#what-does-this-package-offer" class="anchor"></a>What does this package offer?</h2>
+<a href="#what-does-this-package-offer" class="anchor"></a><strong>What does this package offer?</strong>
+</h2>
 <p><strong>flintyR</strong> provides exact tests of exchangeability in multivariate datasets.</p>
 <ul>
 <li>It is <em>non-parametric</em> (i.e., makes no distributional assumptions of the features), which makes it suitable for settings where the user might prefer not to make distributional assumptions about their data.<br>
@@ -111,13 +107,23 @@
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>To install our package, run</p>
-<pre><code>devtools::install.packages("flintyR")</code></pre>
+<a href="#installation" class="anchor"></a><strong>Installation</strong>
+</h2>
+<p><strong>Using CRAN</strong></p>
+<p>To be updated.</p>
+<p><strong>Using Tarball</strong></p>
+<ol>
+<li>Download the tar ball for <strong>flintyR</strong> from <a href="">here</a>.</li>
+<li>Run the following line, changing <code>FILE_PATH_TO_TAR_BALL</code>.</li>
+</ol>
+<pre><code>devtools::install.packages("FILE_PATH_TO_TAR_BALL",
+                 repos = NULL, type = "source")
+# Example: devtools::install.packages("/Users/alanaw/Documents/flintyR_0.0.1.tar.gz", repos = NULL, type = "source")</code></pre>
 </div>
 <div id="example-usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example-usage" class="anchor"></a>Example Usage</h2>
+<a href="#example-usage" class="anchor"></a><strong>Example Usage</strong>
+</h2>
 <p>The code below demonstrates running our test on a binary matrix.</p>
 <pre><code># library(flintyR)
 X &lt;- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
@@ -127,7 +133,8 @@ getPValue(X) # perform exact test with 5000 permutations
 </div>
 <div id="tutorials" class="section level2">
 <h2 class="hasAnchor">
-<a href="#tutorials" class="anchor"></a>Tutorials</h2>
+<a href="#tutorials" class="anchor"></a><strong>Tutorials</strong>
+</h2>
 <p>We offer several tutorials on using our software.</p>
 <ul>
 <li>Conceptual explorations of exchangeability (see Exchangeability and Homogeneity)</li>
@@ -144,7 +151,7 @@ getPValue(X) # perform exact test with 5000 permutations
     <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li>GPL (&gt;= 2)</li>
+<li>GPL (&gt;= 3)</li>
 </ul>
 </div>
 <div class="developers">

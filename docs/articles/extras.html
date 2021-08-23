@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Extras • flintyR</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -588,8 +588,8 @@ Count
 <span class="co"># Clear garbage</span>
 <span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;             used  (Mb) gc trigger   (Mb) limit (Mb)  max used   (Mb)</span>
-<span class="co">#&gt; Ncells   7755761 414.3   12391695  661.8         NA  12391695  661.8</span>
-<span class="co">#&gt; Vcells 123283408 940.6  177154551 1351.6      16384 141555809 1080.0</span></code></pre></div>
+<span class="co">#&gt; Ncells   7756826 414.3   12453854  665.2         NA  12453854  665.2</span>
+<span class="co">#&gt; Vcells 123284418 940.6  177156004 1351.6      16384 141640162 1080.7</span></code></pre></div>
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
@@ -600,7 +600,7 @@ Count
 
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
-<span class="co">#&gt; [1] 0.374</span></code></pre></div>
+<span class="co">#&gt; [1] 0.385</span></code></pre></div>
 </div>
 <div id="running-our-test-from-terminal" class="section level1">
 <h1 class="hasAnchor">

@@ -39,6 +39,9 @@ We obtain publicly available human peripheral blood mononuclear cell (PBMC) scAT
 The code below loads and describes the PBMC data *before* running data processing steps.
 
 ```{r pbmc_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Install older version of Signac
+# devtools::install_version("Signac", version = "0.2.5")
+
 ## Load packages
 library(Seurat)
 library(Signac)

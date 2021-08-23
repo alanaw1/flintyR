@@ -62,7 +62,7 @@ Dependencies: All functions in auxiliary.R
 \examples{
 # Example 1 (get p-value of small matrix with independent features using exact test)
 suppressWarnings(require(doParallel))
-registerDoParallel()
+registerDoParallel(cores = 2)
 
 X1 <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix, small
 getPValue(X1) # perform exact test with 5000 permutations
@@ -78,7 +78,7 @@ getPValue(X2, p = 2, largeP = TRUE) # very fast
 
 # Example 3 (get p-value of high-dim matrix with partitionable features using exact test)
 suppressWarnings(require(doParallel))
-registerDoParallel()
+registerDoParallel(cores = 2)
 
 X3 <- matrix(nrow = 10, ncol = 1000, rbinom(1e4, 1, 0.5))
 getPValue(X3, block_labels = rep(c(1,2,3,4,5), 200))
@@ -137,5 +137,7 @@ getExHaplotypes <- function(N) {
 ##  Generate data and run test
 X4 <- getExHaplotypes(10)
 getPValue(X4, block_boundaries = seq(from = 1, to = 1000, by = 25), largeP = TRUE)
+
+stopImplicitCluster()
 
 }

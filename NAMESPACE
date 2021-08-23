@@ -1,6 +1,7 @@
 useDynLib(flintyR, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 importFrom(doParallel, registerDoParallel)
+importFrom(utils, combn)
 import(foreach)
 import(assertthat)
 import(testthat)

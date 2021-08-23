@@ -37,7 +37,7 @@
 #' @examples
 #' # Example 1 (get p-value of small matrix with independent features using exact test)
 #' suppressWarnings(require(doParallel))
-#' registerDoParallel()
+#' registerDoParallel(cores = 2)
 #'
 #' X1 <- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5)) # binary matrix, small
 #' getPValue(X1) # perform exact test with 5000 permutations
@@ -53,7 +53,7 @@
 #'
 #' # Example 3 (get p-value of high-dim matrix with partitionable features using exact test)
 #' suppressWarnings(require(doParallel))
-#' registerDoParallel()
+#' registerDoParallel(cores = 2)
 #'
 #' X3 <- matrix(nrow = 10, ncol = 1000, rbinom(1e4, 1, 0.5))
 #' getPValue(X3, block_labels = rep(c(1,2,3,4,5), 200))
@@ -112,6 +112,8 @@
 #' ##  Generate data and run test
 #' X4 <- getExHaplotypes(10)
 #' getPValue(X4, block_boundaries = seq(from = 1, to = 1000, by = 25), largeP = TRUE)
+#'
+#'stopImplicitCluster()
 #'
 getPValue <- function(X,
                       block_boundaries = NULL,
@@ -185,7 +187,7 @@ getPValue <- function(X,
   }
   
   # EDGE CASES: a single block is specified -- sample should automatically be exchangeable  
-  if (max(block_labels) == 1) {
+  if (!is.null(block_labels) & max(block_labels) == 1) {
     cat("All blocks are labeled 1, i.e., no independent sets of features detected, so samples are assumed exchangeable.\n")
     return(1)
   }
@@ -229,7 +231,7 @@ getPValue <- function(X,
 #' @examples
 #' # Example
 #' suppressWarnings(require(doParallel))
-#' registerDoParallel()
+#' registerDoParallel(cores = 2)
 #'
 #' N <- 100
 #' num_rows <- choose(N,2)
@@ -249,6 +251,8 @@ getPValue <- function(X,
 #' distDataPValue(dist_list)
 #' # should be larger than 0.05
 #'
+#' stopImplicitCluster()
+#' 
 distDataPValue <- function(dist_list,
                            largeP = FALSE,
                            nruns = 1000) {

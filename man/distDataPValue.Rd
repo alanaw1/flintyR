@@ -31,7 +31,7 @@ Dependencies: distDataLargeP and distDataPermute from auxiliary.R
 \examples{
 # Example
 suppressWarnings(require(doParallel))
-registerDoParallel()
+registerDoParallel(cores = 2)
 
 N <- 100
 num_rows <- choose(N,2)
@@ -50,5 +50,7 @@ for (b in 1:B) {
 
 distDataPValue(dist_list)
 # should be larger than 0.05
+
+stopImplicitCluster()
 
 }

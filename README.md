@@ -1,14 +1,13 @@
-# flintyR 
+# **flintyR** 
 
-This is the homepage of **flintyR**, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is available [here](https://alanaw1.github.io/flintypy). 
-
+This is the homepage of **flintyR**, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is available [here](https://songlab-cal.github.io/flinty). 
 
 ![Bruno appears](bruno_intro.png)
 <p align="center">
 *Bruno is named after a famous statistican who studied exchangeability. Who might that [be](http://www.brunodefinetti.it/)?*
 </p>
 
-## What does this package offer?
+## **What does this package offer?**
 
 **flintyR** provides exact tests of exchangeability in multivariate datasets. 
 
@@ -17,15 +16,24 @@ This is the homepage of **flintyR**, the R version of the software **flinty** (*
 - It is *scalable*, so the user does not have to worry about the sample size $N$ or the number of features $P$ of the data. 
 - It is *robust*, meaning that it controls for false positive rate (FPR) and remains powerful in realistic settings including uneven representation of subpopulations, sparsity of discriminative features, and small sample sizes.   
 
-## Installation
+## **Installation**
 
-To install our package, run
+**Using CRAN**
+
+To be updated.
+
+**Using Tarball**
+
+1. Download the tar ball for **flintyR** from [here]().
+2. Run the following line, changing `FILE_PATH_TO_TAR_BALL`. 
 
 ```
-devtools::install.packages("flintyR")
+devtools::install.packages("FILE_PATH_TO_TAR_BALL",
+                 repos = NULL, type = "source")
+# Example: devtools::install.packages("/Users/alanaw/Documents/flintyR_0.0.1.tar.gz", repos = NULL, type = "source")
 ```
 
-## Example Usage
+## **Example Usage**
 
 The code below demonstrates running our test on a binary matrix. 
 
@@ -38,7 +46,7 @@ getPValue(X) # perform exact test with 5000 permutations
 
 Examples involving real datasets can be found in the tutorials.
 
-## Tutorials
+## **Tutorials**
 
 We offer several tutorials on using our software.
 

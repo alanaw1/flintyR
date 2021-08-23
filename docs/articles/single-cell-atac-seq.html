@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analysis of scATAC-seq Data • flintyR</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
 
       
 
-      </header><script src="single-cell-atac-seq_files/header-attrs-2.7/header-attrs.js"></script><script src="single-cell-atac-seq_files/kePrint-0.0.1/kePrint.js"></script><link href="single-cell-atac-seq_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="single-cell-atac-seq_files/header-attrs-2.9/header-attrs.js"></script><script src="single-cell-atac-seq_files/kePrint-0.0.1/kePrint.js"></script><link href="single-cell-atac-seq_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -114,7 +114,10 @@
 <p>We obtain publicly available human peripheral blood mononuclear cell (PBMC) scATAC-seq data from <a href="https://www.10xgenomics.com/">10X Genomics</a>. Data processing requires <strong>Seurat</strong> and its extension, <strong>Signac (v0.2.5)</strong>; both can be installed with Bioconductor.</p>
 <p>The code below loads and describes the PBMC data <em>before</em> running data processing steps.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Load packages</span>
+<code class="sourceCode R"><span class="co">## Install older version of Signac</span>
+<span class="co"># devtools::install_version("Signac", version = "0.2.5")</span>
+
+<span class="co">## Load packages</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/timoast/signac">Signac</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomeInfoDb">GenomeInfoDb</a></span><span class="op">)</span>
@@ -470,7 +473,7 @@ Because the single cell data provided by 10X Genomics is not accompanied by Hi-C
 <span class="co"># Compute p-value using same block delimiters as earlier</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">clust0_dendr_autosom</span><span class="op">)</span>, 
           block_boundaries <span class="op">=</span> <span class="va">start_points</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.204</span></code></pre></div>
+<span class="co">#&gt; [1] 0.2072</span></code></pre></div>
 <p>Note that we did not perform this subcluster analysis using TAD callers to partition features in Chromosome 1, owing to there being too little variability in Chromosome 1 within any subcluster for our analysis to be meaningful.</p>
 <p>Thus, our test shows evidence of heterogeneity in the clusters and cell type subclusters, after accounting for either (1) correlations induced on peak read counts by the 3D structure (TADs) of the genome, or (2) dependencies between peaks lying in the same chromosome. However, as noted in our paper, an equally valid interpretation is that our accounting for chromatin-induced or “same chromosome”-induced statistical dependencies between peaks is insufficient.</p>
 </div>
@@ -516,7 +519,7 @@ Because the single cell data provided by 10X Genomics is not accompanied by Hi-C
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">clust13_chr1_restr</span><span class="op">)</span>,
           block_boundaries <span class="op">=</span> <span class="va">topdom_boundaries_chr1_rm0</span><span class="op">$</span><span class="va">blockBounds</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.1942</span></code></pre></div>
+<span class="co">#&gt; [1] 0.1948</span></code></pre></div>
 <p>As seen above, the <span class="math inline">\(p\)</span>-value is insignificant at <span class="math inline">\(\alpha=0.05\)</span>.</p>
 <p>We run a similar analysis for Cluster 14 by including samples whose row sums are between <span class="math inline">\(300\)</span> and <span class="math inline">\(400\)</span> (<span class="math inline">\(8\)</span> such samples). We arrive at a similar conclusion.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -542,7 +545,7 @@ Because the single cell data provided by 10X Genomics is not accompanied by Hi-C
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">clust14_chr1_restr</span><span class="op">)</span>,
           block_boundaries <span class="op">=</span> <span class="va">topdom_boundaries_chr1_rm0</span><span class="op">$</span><span class="va">blockBounds</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.0726</span></code></pre></div>
+<span class="co">#&gt; [1] 0.0742</span></code></pre></div>
 <p>Given that these cells make up smaller than <span class="math inline">\(50\%\)</span> of the total number of cells of their respective cluster, and the row sums for samples from either cluster have high variation, our analysis suggests that the heterogeneities of these two clusters are predominantly driven by the first type of heterogeneity.</p>
 </div>
 </div>
