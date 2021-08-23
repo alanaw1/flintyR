@@ -4,7 +4,9 @@ This is the homepage of **flintyR**, the R version of the software **flinty** (*
 
 ![Bruno appears](bruno_intro.png)
 <p align="center">
-*Bruno is named after a famous statistican who studied exchangeability. Who might that [be](http://www.brunodefinetti.it/)?*
+<i>
+Bruno is named after a famous statistican who studied exchangeability. Who might that <a href="http://www.brunodefinetti.it/">be</a>?
+</i>
 </p>
 
 ## **What does this package offer?**

@@ -288,9 +288,9 @@ distDataPValue(dist_list) # should be >= 0.05
 
 # Running Our Test from Terminal
 
-For users who prefer to run jobs from the terminal, we describe how to embed our test within a script that can be executed immediately on the terminal. To facilitate our exposition, we use data from the 1000 Genomes (1KG) project ([The 1000 Genomes Project Consortium, 2015](https://www.nature.com/articles/nature15393)). The 1KG data consists of individual genotypes spanning 26 populations and 5 superpopulations. You may learn more about, and see some preliminary analyses of, the data [here](https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/). If you are a geneticist, you probably already know more interesting analyses of this data.     
+For users who prefer to run jobs from the terminal, we describe how to embed our test within "terminal-friendly" scripts. To facilitate our exposition, we use data from the 1000 Genomes (1KG) project ([The 1000 Genomes Project Consortium, 2015](https://www.nature.com/articles/nature15393)). The 1KG data consists of individual genomes spanning 26 populations and 5 superpopulations. You may learn more about, and see some preliminary analyses of, the data [here](https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/). If you are a geneticist, you probably already know more interesting analyses of this data.     
 
-The challenge here is that genomes are typically provided in VCF or BIM/BED/FAM or PGEN/PVAR/PSAM format. Moreover, they can be very large and thus unreadable.    
+The challenge here is that genomes are typically provided in VCF or BIM/BED/FAM or PGEN/PVAR/PSAM format. Moreover, they can be very large and thus cannot be loaded in memory.    
 
 Suppose our task at hand is to run a test of exchangeability on each 1KG population. There are millions of polymorphic variants, and we assume variants lying in different chromosomes are independent of one another. Since there are 22 autosomal chromosomes, this means that our features are grouped into 22 large blocks.         
 
@@ -302,9 +302,28 @@ To accomplish our task, we perform the following steps.
     - remove the loaded autosome object from memory
 3. Run test of exchangeability on list of distance matrices. (See previous Section on this.)  
 
+Scripts that perform the steps above can be found in our [Github repo](https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG), along with guidance on reproducing our results.
+
 <details>
   <summary><b>Preparing the population-level files</b></summary>
     To obtain population-level files (BIM/BED/FAM) that can be fed into Step 1 above, we perform the following steps: (1) Download 1KG Phase 3 data (PGEN and PVAR) from [here](https://www.cog-genomics.org/plink/2.0/resources), see **Merged dataset**; (2) Filter to keep only variants that are in HapMap3 and UK Biobank; (3) Remove related individuals; (4) Filter to keep only biallelic SNPs with minor allele count at least $1$ (*this differs from usual filtering of alleles that satisfy MAF at least $0.01$*); (5) Generate BED/BIM/FAM files for each population using population ID files. All of these steps are accomplished using PLINK2.    
 </details> 
+<br/> 
 
-To be updated.
+## Does Variant Filtering Affect Exchangeability?
+
+Just to demonstrate a concrete implementation of the embedding approach and the scripts prepared above, we report $p$-values obtained by running our test on two versions of the 1KG data differing in the variants included. 
+
+- (Rare variants included, as described in **Preparing the population-level files** above) All biallelic variants that have minor allele count (MAC) at least $1$ in the 1KG dataset are included. 
+- (Common variants only, as seen [here](https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/) and provided by the `read_1000G` function of the **bigsnpr** package) Only biallelic variants that have minor allele frequency at least $0.01$ in the 1KG dataset are included.
+
+Note that the analysis for the first scenario is as described in our [Github repo](https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG).
+
+We find that when using only common variants, all populations, except for the Yoruban population in Nigeria, are non-exchangeable at $\alpha=0.05$ level. However, when additional rare variants are included, all populations are non-exchangeable at $\alpha=0.05$.
+
+```{r terminal_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+## Print table summarising results
+kableExtra::kable(data.table::fread("/Users/alanaw/Documents/GitProjects/flintyR/docs/articles/ex_data/1KG/exchangeability_results.txt"))
+```
+
+Thus, our test shows that most populations in the 1KG dataset are non-exchangeable, assuming variants lying in different chromosomes are independent of one another. In the only exception of the Yoruban population (YRI), we find that if only common variants are considered, then the individuals are exchangeable. However, once rare variants are included the individuals lose exchangeability. This observation is consistent with the importance of rare variants capturing recent demographic history, a point acknowledged by population geneticists ([Zaidi and Mathieson, 2021]([https://elifesciences.org/articles/61548)).      
