@@ -28,29 +28,3 @@ pairwise distances between individuals across \eqn{B} independent features.
 
 Dependencies: distDataLargeP and distDataPermute from auxiliary.R
 }
-\examples{
-# Example
-suppressWarnings(require(doParallel))
-registerDoParallel(cores = 2)
-
-N <- 100
-num_rows <- choose(N,2)
-B <- 20
-dist_list <- list()
-for (b in 1:B) {
-  # generate fake data 
-  fake_samples <- replicate(10, rbinom(N,1,0.5))
- 
-  # compute pairwise distance 
-  fake_dist <- as.matrix(dist(fake_samples, method = "manhattan"))
- 
-  # add to list
-  dist_list[[b]] <- fake_dist
-}
-
-distDataPValue(dist_list)
-# should be larger than 0.05
-
-stopImplicitCluster()
-
-}

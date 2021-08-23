@@ -52,8 +52,6 @@
 #' # getPValue(X2, p = 2) # slower, do not run (Output: 0.5764)
 #'
 #' # Example 3 (get p-value of high-dim matrix with partitionable features using exact test)
-#' suppressWarnings(require(doParallel))
-#' registerDoParallel(cores = 2)
 #'
 #' X3 <- matrix(nrow = 10, ncol = 1000, rbinom(1e4, 1, 0.5))
 #' getPValue(X3, block_labels = rep(c(1,2,3,4,5), 200))
@@ -113,7 +111,7 @@
 #' X4 <- getExHaplotypes(10)
 #' getPValue(X4, block_boundaries = seq(from = 1, to = 1000, by = 25), largeP = TRUE)
 #'
-#'stopImplicitCluster()
+#' stopImplicitCluster()
 #'
 getPValue <- function(X,
                       block_boundaries = NULL,
@@ -228,30 +226,6 @@ getPValue <- function(X,
 #' @return The p-value to be used to test the null hypothesis of exchangeability
 #' @export
 #' @importFrom doParallel %dopar%
-#' @examples
-#' # Example
-#' suppressWarnings(require(doParallel))
-#' registerDoParallel(cores = 2)
-#'
-#' N <- 100
-#' num_rows <- choose(N,2)
-#' B <- 20
-#' dist_list <- list()
-#' for (b in 1:B) {
-#'   # generate fake data 
-#'   fake_samples <- replicate(10, rbinom(N,1,0.5))
-#'  
-#'   # compute pairwise distance 
-#'   fake_dist <- as.matrix(dist(fake_samples, method = "manhattan"))
-#'  
-#'   # add to list
-#'   dist_list[[b]] <- fake_dist
-#' }
-#' 
-#' distDataPValue(dist_list)
-#' # should be larger than 0.05
-#'
-#' stopImplicitCluster()
 #' 
 distDataPValue <- function(dist_list,
                            largeP = FALSE,

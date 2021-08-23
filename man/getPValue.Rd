@@ -77,8 +77,6 @@ getPValue(X2, p = 2, largeP = TRUE) # very fast
 # getPValue(X2, p = 2) # slower, do not run (Output: 0.5764)
 
 # Example 3 (get p-value of high-dim matrix with partitionable features using exact test)
-suppressWarnings(require(doParallel))
-registerDoParallel(cores = 2)
 
 X3 <- matrix(nrow = 10, ncol = 1000, rbinom(1e4, 1, 0.5))
 getPValue(X3, block_labels = rep(c(1,2,3,4,5), 200))
