@@ -35,3 +35,7 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 inst/doc
+
+# SO and O files
+*.o
+*.so

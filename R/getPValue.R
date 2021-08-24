@@ -134,7 +134,7 @@ getPValue <- function(X,
 
   # [!] Check classes of largeP, largeN and nruns
   assertthat::assert_that(is.logical(largeP),
-                          msg = "largeP must be either TRUE or FALSE.")
+                          msg = "largeP must be either TRUE or FALSE.") 
   assertthat::assert_that(is.logical(largeN),
                           msg = "largeN must be either TRUE or FALSE.")
   assertthat::assert_that(isTRUE(all.equal(nruns, as.integer(nruns))) & is.numeric(nruns) & nruns >= 1,
