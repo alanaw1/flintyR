@@ -1,6 +1,10 @@
 ---
 title: "Exchangeability and Homogeneity"
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exchangeable_Homogeneous}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

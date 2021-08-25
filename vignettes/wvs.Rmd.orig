@@ -1,6 +1,10 @@
 ---
 title: "Analysis of World Values Survey Data"
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{World_Values_Survey}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

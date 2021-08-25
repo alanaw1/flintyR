@@ -9,7 +9,7 @@ Description: Given a multivariate dataset and some knowledge about the dependenc
 License: GPL (>= 3)
 biocViews:
 Imports: Rcpp (>= 1.0.6), doParallel, foreach, assertthat, testthat, stats
-Suggests: rmarkdown, knitr, devtools, tidyverse, HiTC, HiCDataHumanIMR90, TopDom, zeallot, kableExtra, ade4, adegenet, poppr, reticulate
+Suggests: rmarkdown, knitr, devtools, tidyverse, HiTC, HiCDataHumanIMR90, TopDom, zeallot, kableExtra, ade4, adegenet, poppr, reticulate, tseries
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr

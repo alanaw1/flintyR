@@ -1,6 +1,10 @@
 ---
 title: "Analysis of scATAC-seq Data"
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Analysis_scATACseq_Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
