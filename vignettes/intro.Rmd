@@ -3,12 +3,7 @@ title: "Introduction"
 output: rmarkdown::html_vignette
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+
 
 **flinty** provides scientists a way to test if their datasets contain multiple subpopulations. This is an important question if the scientist wishes to infer quantities of interest from the dataset, for instance population-level parameters, without overlooking any latent heterogeneities. 
 <p align="center">
@@ -34,7 +29,8 @@ Instead, in this vignette we shall describe our general method of exchangeabilit
 
 We start by loading **flintyR** alongside other useful packages.
 
-```{r setup, warning = FALSE, message = FALSE}
+
+```r
 library(flintyR)
 library(tidyverse)
 library(doParallel)
@@ -47,7 +43,8 @@ We start simple. This example is motivated by recent work of Lucy Gao and Daniel
 
 We simulate $\mathbf{X}$, a dataset consisting of $N=100$ samples, where each sample consists of $P=50$ independent features, each feature a realization of a standard Gaussian random variable. Mathematically, the entries $x_{np}\overset{\text{iid}}{\sim} N(0,1)$. 
 
-```{r 2_1, echo = TRUE}
+
+```r
 ## Generate some data
 # Set seed for reproducibility
 set.seed(420)
@@ -58,7 +55,8 @@ X <- matrix(rnorm(5000),
 
 Under such settings $\mathbf{X}$ is homogeneous and the samples $\mathbf{x}_1,\ldots,\mathbf{x}_N$ are exchangeable, but if we were handed $\mathbf{X}$ without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis. 
 
-```{r 2_2, echo = TRUE}
+
+```r
 ## Cluster data
 X_df <- as.data.frame(scale(X))
 X_cluster <- kmeans(X_df, centers = 2, nstart = 25)
@@ -74,7 +72,8 @@ PC1and2$cluster <- X_cluster$cluster
 
 By performing $k$-means clustering with $k=2$ as shown above, we obtain a cluster assignment. We can visualize this clustering by performing PCA on the samples and plotting the projection of each sample onto its first two principal components. 
 
-```{r 2_3, echo = TRUE}
+
+```r
 ## Visualize clustering
 ggplot(PC1and2, aes(x = Comp.1, y = Comp.2)) +
   geom_point(aes(colour = factor(cluster)),
@@ -87,13 +86,18 @@ ggplot(PC1and2, aes(x = Comp.1, y = Comp.2)) +
   theme(plot.title = element_text(face = "bold"))
 ```
 
+![plot of chunk 2_3](figure/2_3-1.png)
+
 Next, we perform [Wilcoxon rank sum tests](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test) between the two populations for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at $\alpha=0.05$. Recall that the Wilcoxon rank sum (aka, Mann-Whitney) test is a non-parametric two-sample test for difference in sample distributions. 
 
-```{r 2_4, echo = TRUE}
+
+```r
 ## Differential analysis
 # Split into two clusters 
 X_df_1 <- X_df %>% filter(cluster == 1) 
+#> Error in filter(., cluster == 1): object 'cluster' not found
 X_df_2 <- X_df %>% filter(cluster == 2) 
+#> Error in filter(., cluster == 2): object 'cluster' not found
 
 # Compute p-values
 p_val_vector <- c()
@@ -109,11 +113,13 @@ for (j in 1:50) {
     cat("This is significant at FWER = 0.05 after Bonferroni correction.\n")
   }
 }
+#> Error in wilcox.test(x = X_df_1[, j], y = X_df_2[, j]): object 'X_df_1' not found
 ```
 
 We find six features that are statistically significant, which the user might erroneously report as discriminative features. We can visualize these six features by generating a Manhattan plot below.
 
-```{r 2_5, echo = TRUE}
+
+```r
 ## Visualize differential analysis
 # Mutate the p-value vector for easier plotting
 p_val_vector <- cbind(p_val_vector, 1:50) %>% 
@@ -122,6 +128,7 @@ p_val_vector <- cbind(p_val_vector, 1:50) %>%
   select(feature, p_value) %>%
   mutate(log_p_value = -log10(p_value),
          is_sig = (-log10(p_value) > 3)) 
+#> Error in names(x) <- value: 'names' attribute [2] must be the same length as the vector [1]
 
 # Generate plot
 ggplot(p_val_vector, aes(x = feature, y = log_p_value)) +
@@ -133,7 +140,10 @@ ggplot(p_val_vector, aes(x = feature, y = log_p_value)) +
   ggtitle("B") +
   theme(plot.title = element_text(face = "bold"),
         legend.position = "none")
+#> Error in FUN(X[[i]], ...): object 'feature' not found
 ```
+
+![plot of chunk 2_5](figure/2_5-1.png)
 
 ## Fixing the Problem
 
@@ -146,14 +156,17 @@ The process above, in which we first cluster the data and then perform different
 
 Fortunately, we can avoid risking double dipping by performing our exchangeability test on the dataset $\mathbf{X}$ as a first step. 
 
-```{r 2_6, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+
+```r
 ## How to avoid risking double dipping
 # Compute p-value for test of homogeneity
 the_p_value <- getPValue(X)
 cat("The p-value for the exchangeability test is ", the_p_value, ".\n", sep = "")
+#> The p-value for the exchangeability test is 0.4782.
 if (the_p_value > 0.05) {
   cat("No evidence of heterogeneity at alpha = 0.05!\n")
 }
+#> No evidence of heterogeneity at alpha = 0.05!
 ```
 
 Note that alternative approaches, which we will not explore here, include selective inference ([Gao et al., 2021+](https://arxiv.org/abs/2012.02936)). For this alternative approach, in the differential analysis step one computes a $p$-value *conditioned on the cluster membership* obtained from the previous clustering step. 
@@ -173,10 +186,17 @@ To simulate $\mathbf{X}$, we use `msprime`. The simulation script is saved as `m
 
 Note that because of the way in which mutations are generated (they are assigned on top of a generated tree topology), the number of binary features contributed by each chromosome differs. We will treat each chromosome as an independent block later, so this remark is to remind us that our blocks will not typically be of the same size.   
 
-```{r 3_1, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+
+```r
 ## Generate some data
 # Source function to generate arrays with msprime
 reticulate::source_python('msprime_model.py')
+#> Error in py_run_file_impl(file, local, convert): ModuleNotFoundError: No module named 'msprime'
+#> 
+#> Detailed traceback:
+#>   File "<string>", line 13, in <module>
+#>   File "/Library/Frameworks/R.framework/Versions/4.0/Resources/library/reticulate/python/rpytools/loader.py", line 44, in _import_hook
+#>     level=level
 
 # Helper function to generate a haplotype array with names
 getExHaplotypes <- function(N, num_blocks) {
@@ -212,39 +232,48 @@ getExHaplotypes <- function(N, num_blocks) {
 # Generate 
 set.seed(2021)
 X_data <- getExHaplotypes(N = 100, num_blocks = 10)
+#> Error in getHaplotypes(N, 1e+05): could not find function "getHaplotypes"
 
 # View
 X_data$data[1:6,1:6]
+#> Error in eval(expr, envir, enclos): object 'X_data' not found
 ```
 
 As in the basic example, we cluster the samples into two clusters. Here, we use Prevosti's distance ([Prevosti et al., 1975](https://link.springer.com/content/pdf/10.1007/BF00831894.pdf)), a popular measure of genetic distance, and perform hierarchical clustering with Ward linkage.
 
-```{r 3_2, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+
+```r
 ## Perform clustering
 # Load library
 library(poppr)
 
 # Compute Prevosti's distance matrix
 sample_dist <- provesti.dist(X_data$data)
+#> Error in is(x, "gen"): object 'X_data' not found
 
 # Perform hierarchical clustering
 samples_hclust <- hclust(sample_dist, method = "ward.D")
+#> Error in hclust(sample_dist, method = "ward.D"): object 'sample_dist' not found
 
 # Obtain cluster labels
 k = 2
 samples_clusters <- cutree(samples_hclust, k) %>%
   as.data.frame()
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': object 'samples_hclust' not found
 samples_clusters$x <- seq(from = 1, to = dim(X_data$data)[1], by = 1)
+#> Error in seq.default(from = 1, to = dim(X_data$data)[1], by = 1): object 'X_data' not found
 
 # Attach cluster labels
 X_df <- X_data$data %>% 
   as.data.frame() %>% 
   mutate(cluster = samples_clusters$.)
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': object 'X_data' not found
 ```
 
 Similar to Section 2, we can visualize our clusters by plotting the projection of the samples of $\mathbf{X}$ onto their first two PCs. Here, because the number of features is larger than the number of samples, we use Q-PCA instead of R-PCA, and we subsequently obtain the projection scores by right-multiplying $\mathbf{X}$ with the rotation matrix.  
 
-```{r 3_3, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+
+```r
 ## Visualize clustering
 # Perform PCA
 X_pca <- prcomp(X_df[,1:(dim(X_df)[2]-1)], scale = TRUE)
@@ -265,6 +294,8 @@ ggplot(PC1and2, aes(x = PC1, y = PC2)) +
   theme(plot.title = element_text(face = "bold"))
 ```
 
+![plot of chunk 3_3](figure/3_3-1.png)
+
 Next, we perform the Wald-Wolfowitz runs test for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at $\alpha=0.05$. 
 
 <details>
@@ -274,13 +305,17 @@ Next, we perform the Wald-Wolfowitz runs test for each feature, applying Bonferr
 
 Controlling FWER with the Bonferroni method amounts to a null rejection at threshold $0.05/P$, where $P$ is the number of polymorphic sites / features in $\mathbf{X}$. 
 
-```{r 3_4, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+
+```r
 ## Perform differential analysis
 # Split into two clusters 
 X_df_1 <- X_df %>% filter(cluster == 1) 
+#> Error in filter(., cluster == 1): object 'cluster' not found
 X_df_2 <- X_df %>% filter(cluster == 2) 
+#> Error in filter(., cluster == 2): object 'cluster' not found
 
 num_feat <- dim(X_df_1)[2] - 1
+#> Error in eval(expr, envir, enclos): object 'X_df_1' not found
 
 # Compute p-values
 p_val_vector <- c()
@@ -290,13 +325,17 @@ for (j in 1:num_feat) {
   # Print result if significant
   p_val_vector <- c(p_val_vector, da_result$p.value)
 }
+#> Error in eval(expr, envir, enclos): object 'num_feat' not found
 n_sig_vars <- sum(p_val_vector < 0.05 / num_feat)
+#> Error in eval(expr, envir, enclos): object 'num_feat' not found
 cat("The number of significant variants at FWER = 0.05 is ", n_sig_vars, ".", sep = "")
+#> Error in cat("The number of significant variants at FWER = 0.05 is ", : object 'n_sig_vars' not found
 ```
 
 We find many features that are statistically significant. We can visualize them using a Manhattan plot, as usual.
 
-```{r 3_5, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+
+```r
 ## Visualize differential analysis
 # Mutate the p-value vector for easier plotting
 p_val_vector <- cbind(as.data.frame(p_val_vector), colnames(X_df[,1:num_feat])) %>% 
@@ -304,6 +343,7 @@ p_val_vector <- cbind(as.data.frame(p_val_vector), colnames(X_df[,1:num_feat])) 
   select(feature, p_value) %>%
   mutate(log_p_value = -log10(p_value),
          is_sig = (-log10(p_value) > -log10(1.2e-05))) 
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'colnames<-': error in evaluating the argument 'x' in selecting a method for function 'colnames': object 'num_feat' not found
 
 # Generate plot
 ggplot(p_val_vector, aes(x = feature, y = log_p_value)) +
@@ -316,6 +356,7 @@ ggplot(p_val_vector, aes(x = feature, y = log_p_value)) +
         legend.position = "none",
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
+#> Error in new_data_frame(list(yintercept = yintercept)): object 'num_feat' not found
 ```
 
 In a population-genetic setting, these "significant features" would be candidate SNPs for ancestrally informative markers, which we know to be false given that the samples were really drawn from a single, panmictic population.
@@ -324,9 +365,11 @@ In a population-genetic setting, these "significant features" would be candidate
 
 Like in the basic example, we apply our exchangeability test before performing clustering to avoid double dipping. However, for population-genetic datasets, we expect correlation between SNPs lying in the same chromosome (owing to genetic recombination). This feature-feature correlation induces correlational patterns between samples, which could falsely suggest the presence of heterogeneous communities. We can see this by running the independent features version of the test.      
 
-```{r 3_6, echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE}
+
+```r
 ## Compute p-value under independent features null
 getPValue(as.matrix(X_df[,1:(dim(X_df)[2]-1)]), largeP = TRUE)
+#> [1] 0.4220238
 ```
 
 If we were naïve, we'd reject the null hypothesis and conclude incorrectly the presence of distinct subpopulations.
@@ -335,11 +378,13 @@ If we were naïve, we'd reject the null hypothesis and conclude incorrectly the 
 
 To apply our test correctly, we must account for feature-feature dependencies. In our case, our features are grouped into chromosome blocks, where within each chromosome the SNPs are correlated owing to genetic recombination.
 
-```{r 3_7, echo = TRUE, warning = FALSE, message = FALSE, cache = FALSE}
+
+```r
 ## Compute p-value under independent blocks null
 # Note: this takes about 2-3 minutes to run
 getPValue(X_data$data, 
           block_boundaries = X_data$bounds)
+#> Error in eval(assertion, env): object 'X_data' not found
 ```
 
 Now, we obtain a $p$-value that is well above a typical cut-off threshold. Hence, we conclude correctly that at $\alpha=0.05$ there is insufficient evidence that $\mathbf{X}$ is heterogeneous.

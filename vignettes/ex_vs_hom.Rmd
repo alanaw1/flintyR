@@ -3,12 +3,7 @@ title: "Exchangeability and Homogeneity"
 output: rmarkdown::html_vignette
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+
 
 How many ways can a multivariate dataset be heterogeneous? What has exchangeability got to do with it? 
 
@@ -45,7 +40,8 @@ Let us define a population, for which there are $P$ observable features. These f
 
 For illustrative purposes, let's assume that $P=2$ and draw $N=40$ samples from this distribution. 
 
-```{r example, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Helper function to draw samples
 drawSamples <- function(N)  {
   # create sequence to return
@@ -83,10 +79,52 @@ ex_array <- ex_array[order(ex_array$POSLAB),]
 
 ## Print
 print(ex_array)
+#>             V1         V2 POSLAB
+#> 6  -1.98622806 -2.2519641     -1
+#> 11 -0.42206811 -3.7976124     -1
+#> 15 -0.27976384 -1.8282297     -1
+#> 17 -1.07187288 -2.1035184     -1
+#> 19 -2.88744463 -2.8259549     -1
+#> 20 -0.89933137 -1.5167392     -1
+#> 24 -3.58347390 -2.1220018     -1
+#> 25 -0.46670339 -1.7728245     -1
+#> 28 -0.23978627 -1.5496600     -1
+#> 29 -2.78119689 -2.6229225     -1
+#> 35 -0.80789690 -1.2874858     -1
+#> 36 -2.36881809 -1.7987080     -1
+#> 37 -1.66402782 -1.8842061     -1
+#> 38 -1.57271087 -1.5292104     -1
+#> 1  -1.21497757  1.3543091      0
+#> 2  -1.65135050  2.3919333      0
+#> 3   1.37711402 -0.7146051      0
+#> 4   0.07743048 -2.9836134      0
+#> 7   2.11479879 -2.2323998      0
+#> 9   3.35407495 -2.1500867      0
+#> 14 -2.94244327  1.6624908      0
+#> 21 -1.94058234  1.2836487      0
+#> 22 -0.98055658  1.9465417      0
+#> 23 -1.53559759  2.5631673      0
+#> 26 -2.08707112  1.4912997      0
+#> 27  4.59310821 -2.0767792      0
+#> 30  1.96562251 -3.1957732      0
+#> 31 -1.53005963  1.4059371      0
+#> 32  1.27444279 -4.7007150      0
+#> 33  2.60824840 -3.4950350      0
+#> 39 -2.07556434  1.5973352      0
+#> 40 -3.50559994  0.1976965      0
+#> 5   2.16989432  2.1221998      1
+#> 8   1.72717482  1.9570100      1
+#> 10  3.60447011  0.9606129      1
+#> 12  2.13138902  0.6074574      1
+#> 13  1.29390807  1.2390690      1
+#> 16  3.20811525  2.6332890      1
+#> 18  0.54455665  2.5339593      1
+#> 34  1.49970920  2.4869767      1
 ```
 Notice we have added positive labels in the third column to annotate whether both features are positive or negative. The example shows that this sample forms two clusters of negative and positive observation pairs, $\mathcal{S}_-$ and $\mathcal{S}_+$. Clearly these disjoint subsamples are far apart, thus rendering the dataset itself not statistically homogeneous under the working definition. See the 2D plot below for a visualization.
 
-```{r example_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Plot 2D 
 ratio <- with(ex_array, diff(range(V1))/diff(range(V2))) # compute ratio to fix make plot square
 
@@ -96,6 +134,8 @@ ggplot(data = ex_array, aes(x = V1, y = V2)) +
   theme_bw() +
   labs(colour = "POSLAB")
 ```
+
+![plot of chunk example_2](figure/example_2-1.png)
 
 This observation is true in a more general setting. For $P$ features independently distributed according to the mixture distribution described above, it is always possible to draw a finite sample consisting of $N$ observations, which contains two disjoint subsamples that are far apart. Here is some mathematical intuition. For each observation $\mathbf{x}_n$, let $\mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $\mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$ denote, respectively, the event that it is positive and the event that it is negative. A positive observation $\mathbf{x}_n=(x_{n1},\ldots,x_{nP})$ means that each element $x_{nj}$ is positive; likewise for a negative observation. Each component of $\mathbf{x}_n$ is IID according to the mixture distribution that is symmetric about $0$. This implies that each element $x_{nj}$ satisfies $\mathbb{P}(x_{nj}>0) =\mathbb{P}(x_{nj}<0) = 0.5$. Multiplying these probabilities, we see that $\mathbb{P}(\mathbf{x}_n > \mathbf{0})=\mathbb{P}(\mathbf{x}_n < \mathbf{0})=0.5^P$. The indicators are thus Bernoulli distributed with success probability $0.5^P$. Let $K_+$ and $K_-$ denote the number of positive and negative observations contained in a random draw. Since our observations are independently drawn, we see that for any pair of natural numbers $(k_+,k_-)$,
 \begin{equation*}
@@ -182,7 +222,8 @@ So how can exchangeability help us avoid parametric modelling while detecting th
 
 Each of these examples generates heterogeneous finite samples, and their finite samples are exchangeable by definition. However, hopefully most readers will agree that only the last two examples represent the existence of subpopulations for which the joint distribution of their features cannot be modeled in a straightforward manner. Indeed, even though the first example generates samples containing $2^P$ clusters, we are able to mathematically describe its features as independent distributions. Additionally, comparing the last two examples reveals that distinct subpopulations can generate a variety of heterogeneities: Example 2 generates samples whose row sums differ by subpopulation, whereas Example 3 generates samples whose row sums look more homogeneous. We provide numerical examples below. 
 
-```{r example_3, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Helper functions to generate samples
 drawSamplesEx2 <- function(N) {
   to_return <- replicate(N, {p <- rbinom(1,1,0.5)
@@ -208,9 +249,93 @@ ex_3$ROWSUM <- rowSums(ex_3)
 
 ## Print
 print(ex_2)
+#>             V1           V2          V3          V4      ROWSUM
+#> 1   1.10068411  2.594680913  9.38260127 16.33230452 29.41027081
+#> 2   1.48475660  1.343237643  0.41401952  1.07779944  4.31981320
+#> 3   0.81377545  3.031421463  9.50078156 15.38272781 28.72870628
+#> 4   1.51258354 -0.155761879  0.46730912 -0.26907087  1.55505991
+#> 5  -0.98087962  4.027230179  9.71851167 15.46387139 28.22873362
+#> 6   0.05052152  4.446261997  7.71117054 15.84219454 28.05014860
+#> 7   0.59358747  5.008695586  9.48745936 15.05228171 30.14202412
+#> 8  -0.25403793  1.021043169 -0.80024083 -0.63080537 -0.66404096
+#> 9   0.53279877  0.319720620 -0.69743732 -0.03525892  0.11982315
+#> 10  1.35541968  4.159138785  9.95539519 15.66035771 31.13031136
+#> 11 -0.66652119  1.262734520 -1.50460850  1.85268546  0.94429029
+#> 12  1.81878338  0.170349891 -0.37833832  0.91021875  2.52101369
+#> 13  0.58194833  1.446715184 -0.14369037  0.45294984  2.33792298
+#> 14  1.26115729 -0.742608643 -0.95226989  0.33678466 -0.09693658
+#> 15  1.37110398  5.004709994  9.65418086 16.39887569 32.42887052
+#> 16  1.27800265  4.147040753  7.80371062 16.09013627 29.31889029
+#> 17  1.68299909  4.226607611  8.05642898 15.97404659 29.94008227
+#> 18  1.51486548  0.011144777  0.69292968  0.33269527  2.55163521
+#> 19 -0.19992547  0.067671152  0.03535128 -0.08128418 -0.17818723
+#> 20  0.07594888  0.688599459  0.09901110 -0.58341074  0.28014870
+#> 21  0.20860783  3.769535335 11.02650847 17.09418625 32.09883789
+#> 22  1.10078634 -0.141752488 -0.29995823 -0.85108128 -0.19200566
+#> 23  2.47470011  0.808318503 -0.92924023  0.08050841  2.43428679
+#> 24  2.91735175  0.013429884  1.68273446  0.54335007  5.15686617
+#> 25  0.42174710  3.981750716  9.23159574 16.86499219 30.50008575
+#> 26  0.96871265  4.999043959  9.30031928 15.99480639 31.26288228
+#> 27  1.39871518 -0.067974504 -0.30272071 -1.21942516 -0.19140520
+#> 28 -0.98570884  1.064365867  1.20936250 -1.37819404 -0.09017451
+#> 29  0.90460605  3.690439522 10.88048376 15.95194941 31.42747873
+#> 30  0.56565786 -1.623007540 -0.69193341  0.39482209 -1.35446100
+#> 31 -0.60581924  5.239595843  9.48406942 17.39158160 31.50942762
+#> 32  0.07296961  1.255608690  0.02515366  1.00052486  2.35425682
+#> 33  1.42840801  0.246676870 -1.77404647  2.89560466  2.79664307
+#> 34  2.43082511  2.858982545  9.89600666 16.08283791 31.26865222
+#> 35  0.02845901  3.917522671  6.34691454 17.65469664 27.94759286
+#> 36  0.51629898  6.210854157  9.08082445 16.71610646 32.52408405
+#> 37  2.63280169  3.370155625  9.60974536 15.34170932 30.95441200
+#> 38 -0.56224282  2.012216050  7.50794616 16.25524142 25.21316081
+#> 39 -0.41975773  0.005161406 -0.10744747 -1.31323943 -1.83528322
+#> 40  1.18694529 -0.444774213 -0.34833190 -0.41250551 -0.01866634
 cat("Variance of row sums for ex_2 is ", var(ex_2$ROWSUM), ".", sep = "")
+#> Variance of row sums for ex_2 is 218.8347.
 print(ex_3)
+#>             V1        V2        V3          V4     ROWSUM
+#> 1   3.04503083  3.934625 -4.513511  0.99013427  3.4562793
+#> 2  -1.54091497 -4.673914  4.680151  1.18671480 -0.3479628
+#> 3   0.94311489 -4.390760  4.471871  1.14283428  2.1670596
+#> 4   0.99425697  2.958406 -4.325231 -1.60856295 -1.9811318
+#> 5   0.12998607  2.537576 -4.338526 -3.04256186 -4.7135258
+#> 6  -0.08558911  3.914713 -3.534498 -1.00002890 -0.7054034
+#> 7   0.15327102  2.807977 -4.642664 -1.15934744 -2.8407635
+#> 8  -2.80955074 -4.779455  2.011673  1.99723557 -3.5800973
+#> 9  -1.13217201 -2.582155  2.875181 -0.29546824 -1.1346136
+#> 10 -0.45467373 -5.366537  2.883952  1.16247234 -1.7747861
+#> 11  0.94723075  1.910360 -5.568118 -0.24966052 -2.9601885
+#> 12  0.08967148 -5.402433  4.935231  0.98800737  0.6104769
+#> 13  0.10519644  3.679681 -2.082365 -4.04499331 -2.3424809
+#> 14  2.13430170  4.510970 -5.497154 -2.11755526 -0.9694374
+#> 15  1.47702783 -3.237024  4.787055  1.42857850  4.4556369
+#> 16  1.34528408  3.085598 -3.618305 -1.55191817 -0.7393413
+#> 17  0.69867536  2.571083 -4.509221 -0.90957855 -2.1490415
+#> 18  2.32299459  3.652571 -4.530834 -0.26597688  1.1787542
+#> 19  0.52138234  4.126736 -4.692299 -1.82869119 -1.8728723
+#> 20  0.55470170  5.177442 -4.077158 -0.44885387  1.2061316
+#> 21 -1.07783604 -4.738856  3.350785  0.43886354 -2.0270438
+#> 22  1.56085040  4.311423 -2.607969  1.43984314  4.7041474
+#> 23 -0.03108365 -4.440290  2.259249  1.63794946 -0.5741759
+#> 24 -0.02875327 -5.547164  4.196997  1.83873855  0.4598187
+#> 25  0.94184423  3.569038 -2.918003 -0.30211736  1.2907615
+#> 26  1.62559235  3.422939 -2.279709  0.63659882  3.4054208
+#> 27 -2.02812928 -4.033964  3.881897  1.19822699 -0.9819695
+#> 28 -0.79208281 -5.581341  4.862226  2.30930244  0.7981047
+#> 29 -0.39321914  4.333431 -4.981819  0.01214888 -1.0294588
+#> 30 -0.04508029 -5.063118  5.824255  0.62219514  1.3382521
+#> 31 -0.14193175  4.193722 -6.048656 -1.17981779 -3.1766837
+#> 32 -0.84622041 -2.928197  2.890542  1.07135746  0.1874821
+#> 33  0.76854650  5.138432 -5.152594 -0.13255323  0.6218314
+#> 34  2.97458058  5.192781 -4.889379 -1.40013593  1.8778464
+#> 35 -1.36202755 -4.522044  2.435318  1.56489719 -1.8838564
+#> 36 -0.12343193 -1.768180  5.588877  1.58243381  5.2796990
+#> 37 -1.23448220 -5.659886  2.223537  1.50447115 -3.1663604
+#> 38  1.77231012  4.726546 -2.452772 -0.87475608  3.1713284
+#> 39  1.36924806  4.116374 -5.812461 -0.40007091 -0.7269096
+#> 40 -0.59555521 -4.775511  3.764182  2.90738062  1.3004964
 cat("Variance of row sums for ex_3 is ", var(ex_3$ROWSUM), ".", sep = "")
+#> Variance of row sums for ex_3 is 5.83295.
 ```
 
 Recall that we want to exploit exchangeability to detect the existence of statistically meaningful populations. The examples above show that exchangeability alone is insufficient for detecting hidden subpopulations from a finite sample. However, observe that a key difference between Examples 2 and 3 and Example 1 lies in feature dependencies. In Examples 2 and 3, the features are *not independent but conditionally independent*, where conditioning is done on the latent distribution membership. This suggests that feature dependency plays a role in *aligning* non-exchangeability with the existence of hidden subpopulations.          
@@ -219,7 +344,8 @@ Recall that we want to exploit exchangeability to detect the existence of statis
 
 Consider Examples 1 and 2. To set the stage, suppose we have samples drawn from these two examples. Assume we have neither information about the generative model nor information about the observation labels (i.e., the subpopulation labels are latent). However, we know the samples were drawn from some population at random. With this information let us use **flinty** to detect exchangeability. We consider what happens when additional information is provided successively.  
 
-```{r load_flinty, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Load packages and set directories
 library(flintyR)
 library(doParallel)
@@ -229,19 +355,25 @@ registerDoParallel()
 
 **Scenario 1: We do not have information about feature dependencies.** We might assume that the features are independent. This is correct for the array generated by Example 1, but not for Example 2. 
 
-```{r scenario_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Compute p-values 
 getPValue(as.matrix(ex_array[,1:2])) # Example 1 array
+#> [1] 0.7928
 getPValue(as.matrix(ex_2[,1:4])) # Example 2 array
+#> [1] 0
 ```
 
 We see that at $\alpha=0.05$ we would consider Example 1's array exchangeable, but not Example 2's array. In other words, the array from Example 2 is not consistent with simultaneously being exchangeable and having independent columns. This demonstrates that treating features as independent when they are in fact not can lead to the appearance of sample non-exchangeability. Thus, sample exchangeability is *contingent on* accounting for feature dependencies.    
 
 **Scenario 2: We have information about feature dependencies.** We know that the features in Example 1 are independent, so nothing changes from the previous scenario when running our test of exchangeability. However, for Example 2 we no longer run the independent features test, but run the dependent features test with all $P=4$ features grouped together as a block. This is because the features cannot be split into two or more independent sets of features.   
 
-```{r scenario_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Compute p-value for Example 2 array again
 getPValue(as.matrix(ex_2[,1:4]), block_labels = c(1,1,1,1))
+#> All blocks are labeled 1, i.e., no independent sets of features detected, so samples are assumed exchangeable.
+#> [1] 1
 ```
 Now we see that Example 2's array is considered exchangeable.
 

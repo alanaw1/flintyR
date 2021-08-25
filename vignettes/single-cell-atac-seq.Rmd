@@ -3,12 +3,7 @@ title: "Analysis of scATAC-seq Data"
 output: rmarkdown::html_vignette
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+
 
 In cellular biology, the study of single cells allows biologists to discover mechanisms not detectable by studying only bulk populations of cells. In recent years, advances in sequencing technologies have enabled the quantification of many single cell features (e.g., transcriptome, proteome, metabolome, 3D contact maps), and such datasets have in turn provided new statistical challenges and spurred the development of new probabilistic models ([Lähnemann et al., 2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1926-6)). 
 
@@ -34,7 +29,8 @@ We obtain publicly available human peripheral blood mononuclear cell (PBMC) scAT
 
 The code below loads and describes the PBMC data *before* running data processing steps.
 
-```{r pbmc_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Install older version of Signac
 # devtools::install_version("Signac", version = "0.2.5")
 
@@ -70,6 +66,9 @@ pbmc <- Signac::SetFragments(
 
 ## Show the PBMC object before data processing
 pbmc
+#> An object of class Seurat 
+#> 79921 features across 9277 samples within 1 assay 
+#> Active assay: peaks (79921 features, 0 variable features)
 ```
 
 ## Data Processing
@@ -84,13 +83,85 @@ To summarize the essential steps, we
 
 We obtain $6954$ cells after Step 1, and Step 3 yielded $15$ clusters altogether, whose sizes are reported below. Note Step 2 is performed to facilitate Step 3, and we still keep the un-normalized data from Step 1 to run our statistical tests. 
 
-```{r pbmc_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Load summary of clustering, show cluster sizes
 load("ex_data/scATAC-seq/scATAC-seq_annotation_cluster.RData")
 kableExtra::kable(table(satija.cell.annot.cluster$cluster),
                   col.names = c("Cluster", "Count")) %>%
   kableExtra::kable_styling(position = "center")
 ```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Cluster </th>
+   <th style="text-align:right;"> Count </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 2494 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 732 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:right;"> 627 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 569 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:right;"> 563 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 5 </td>
+   <td style="text-align:right;"> 432 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 6 </td>
+   <td style="text-align:right;"> 348 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 7 </td>
+   <td style="text-align:right;"> 277 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 8 </td>
+   <td style="text-align:right;"> 245 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 9 </td>
+   <td style="text-align:right;"> 216 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 10 </td>
+   <td style="text-align:right;"> 199 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 11 </td>
+   <td style="text-align:right;"> 122 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 12 </td>
+   <td style="text-align:right;"> 62 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 13 </td>
+   <td style="text-align:right;"> 50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 14 </td>
+   <td style="text-align:right;"> 18 </td>
+  </tr>
+</tbody>
+</table>
 
 These clusters can be visualized in 2D space using UMAP. The code to reproduce this plot is provided in the Satija lab vignettes linked above.
 
@@ -114,22 +185,41 @@ We binarize $\mathbf{X}=(x_{ij})$ by setting each entry $x_{ij}=1$ if it is posi
 
 Here is a snapshot of the binarized version of samples from the smallest cluster (Cluster 14).
 
-```{r pbmc_3, echo = TRUE}
+
+```r
 ## Show Cluster 14 (first six cells and first six features) after binarization
 load("ex_data/scATAC-seq/bin_satija_keepzeros_15.RData")
 subsetted_data[1:6,1:6]
+#> 6 x 6 sparse Matrix of class "dgCMatrix"
+#>                    chr1:565113-565543 chr1:569179-569635 chr1:713534-714806
+#> AAACTGCGTGCTGAAG-1                  .                  .                  .
+#> AATGGAATCCCACGGA-1                  .                  .                  1
+#> ACAGCGCAGCCCATTA-1                  .                  .                  .
+#> ACCATCCCACGCGACT-1                  .                  .                  1
+#> ACGGATTTCTTCCGTG-1                  .                  .                  .
+#> ACTCGGGTCCCGCAAG-1                  .                  .                  1
+#>                    chr1:752436-753020 chr1:762144-763353 chr1:779610-780252
+#> AAACTGCGTGCTGAAG-1                  .                  1                  .
+#> AATGGAATCCCACGGA-1                  .                  .                  .
+#> ACAGCGCAGCCCATTA-1                  .                  .                  .
+#> ACCATCCCACGCGACT-1                  .                  .                  .
+#> ACGGATTTCTTCCGTG-1                  .                  .                  .
+#> ACTCGGGTCCCGCAAG-1                  .                  .                  .
 ```
 
 Next, owing to the large number of peak regions ($P=79921$) in our scATAC-seq data, for our analysis below we restrict our features to only those peak regions that lie in Chromosome 1. This restriction reduced the number of features to $P=7824$. Again, we show an example for cells in Cluster 14.
 
-```{r restrict_chr1, echo = TRUE}
+
+```r
 ## Restricting to Chromosome 1 only
 # Get dimension of the array before restriction to peak regions lying in chr1
 dim(subsetted_data)
+#> [1]    18 79921
 # Restrict peak regions to lie in chr1
 subsubsetted_data <- subsetted_data[,grepl("chr1:",colnames(subsetted_data))]
 # Get dimension of subarray containing only selected features
 dim(subsubsetted_data)
+#> [1]   18 7824
 ```
 
 ## Contingency of Test
@@ -162,7 +252,8 @@ We provide a guide to generating TAD boundaries in a separate vignette.
 
 # Results
 
-```{r load_packages, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Load packages and set directories
 library(flintyR)
 library(Matrix)
@@ -177,7 +268,8 @@ rel_dir <- "ex_data/scATAC-seq"
 
 Our first goal is to check whether each cluster of cells is homogeneous. We run our test on Cluster 14 (which was loaded above), using features grouped into sets based on TAD membership identified by **DomainCaller**.
 
-```{r domain_caller, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Run test
 # Load the set membership of features obtained from calling TADs on Chr1 using DomainCaller
 load(paste0(rel_dir, "/domainCaller_boundaries_chr1.RData"))
@@ -189,11 +281,13 @@ subsubsubsetted_data <- subsubsetted_data[,-boundaries_chr1$discardIndices]
 getPValue(as.matrix(subsubsubsetted_data), 
           block_boundaries = boundaries_chr1$blockBounds,
           largeP = TRUE)
+#> [1] 1.235778e-107
 ```
 
 We obtain a $p$-value of $0$. We can run the test on another cluster of cells, say Cluster 12. 
 
-```{r domain_caller_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Run test on Cluster 12
 # Choose cluster
 cl <- 13
@@ -210,23 +304,26 @@ data_chr1_only_tads <- data_chr1_only[,-boundaries_chr1$discardIndices]
 
 # How many blocks are there? 
 cat(length(boundaries_chr1$blockBounds), " independent blocks in Chr1.", sep = "")
+#> 576 independent blocks in Chr1.
 
 # Get p-value using the peak boundaries as block delimiters
 # Since N and P are large, use large P asymptotic test
 getPValue(as.matrix(data_chr1_only_tads),
           block_boundaries = boundaries_chr1$blockBounds,
           largeP = TRUE)
-
+#> [1] 0
 ```
 
 We observe a $p$-value of $0$ for Cluster 12 as well. In fact, our test reports zero $p$-values for each cluster. This is true even when we use TAD membership identified by **TopDom**, which we do not show above.
 
 In our paper, we also describe a second and completely different approach of grouping features by chromosome membership, using the 22 autosomes. This does not require any TAD information or Hi-C data, and amounts to assuming that peak reads within the same chromosome are dependent, while peak reads between different chromosomes are independent. We demonstrate this below using Cluster 12, for completeness. We also observe $p$-values of $0$ for all clusters using this approach.
 
-```{r chr_grouping, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Run test on Cluster 12 keeping all chromosomes (except X, Y and mt)
 # Check which feature records the last autosomal region
 colnames(subsetted_data[,77911:77912])
+#> [1] "chr22:51221602-51222487" "chrX:165924-166449"
 
 # Keep only autosomal features
 clust12_autosom <- subsetted_data[,1:77911]
@@ -240,11 +337,13 @@ start_points <- c(1,7825,14007,19004,22111,26085,30952,34837,38137,41387,
 # Compute p-value (should be 0)
 getPValue(as.matrix(clust12_autosom), 
           block_boundaries = start_points)
+#> [1] 0
 ```
 
 We saw earlier that the $15$ clusters contain different cell types, so we can also further subdivide our clusters into subclusters comprised uniformly of a particular cell type (e.g., CD4+ cells). We did that and ran the test using all 22 chromosomes again, but obtained zero $p$-values for the subclusters, except for the subcluster of four dendritic cells from Cluster 0. These four dendritic cells appear exchangeable at a significance level $\alpha = 0.05$. 
 
-```{r chr_grouping_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Run test on Cluster 0
 # Choose cluster
 cl <- 1
@@ -261,6 +360,8 @@ selected_subcluster <-
   rownames(satija.cell.annot.cluster[which(satija.cell.annot.cluster$cluster == (cl - 1) &
                                        satija.cell.annot.cluster$annotation == 'Dendritic cell'), ])
 selected_subcluster
+#> [1] "AGCTGATTCTACATCT-1" "CTCGCTACATGGTAAA-1" "GCCATAAGTCGTAGTT-1"
+#> [4] "TGCCTGTGTACTATGC-1"
 
 # Keep only autosomal features
 clust0_dendr_autosom <- subsetted_data[selected_subcluster, 1:77911]
@@ -268,6 +369,7 @@ clust0_dendr_autosom <- subsetted_data[selected_subcluster, 1:77911]
 # Compute p-value using same block delimiters as earlier
 getPValue(as.matrix(clust0_dendr_autosom), 
           block_boundaries = start_points)
+#> [1] 0.2028
 ```
 
 Note that we did not perform this subcluster analysis using TAD callers to partition features in Chromosome 1, owing to there being too little variability in Chromosome 1 within any subcluster for our analysis to be meaningful.  
@@ -302,7 +404,8 @@ Let us consider Cluster 13 ($N=50$ samples) and Cluster 14 ($N=18$ samples), whi
 
 Concretely, for Cluster 13, we include samples whose row sums are between $600$ and $700$ ($12$ such samples). 
 
-```{r rowsum_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Run test on Cluster 13
 # Choose cluster
 cl <- 14
@@ -320,17 +423,20 @@ clust13_chr1_restr <- clust13_chr1_restr[,-topdom_boundaries_chr1_rm0$discardInd
 clust13_chr1_restr <- clust13_chr1_restr[
   which((rowSums(clust13_chr1_restr) < 700) & (rowSums(clust13_chr1_restr) > 600)),]
 nrow(clust13_chr1_restr)  
+#> [1] 12
 
 # Compute p-value
 getPValue(as.matrix(clust13_chr1_restr),
           block_boundaries = topdom_boundaries_chr1_rm0$blockBounds)
+#> [1] 0.1948
 ```
 
 As seen above, the $p$-value is insignificant at $\alpha=0.05$.
 
 We run a similar analysis for Cluster 14 by including samples whose row sums are between $300$ and $400$ ($8$ such samples). We arrive at a similar conclusion. 
 
-```{r rowsum_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Run test on Cluster 14
 # Choose cluster
 cl <- 15
@@ -348,10 +454,12 @@ clust14_chr1_restr <- clust14_chr1_restr[,-topdom_boundaries_chr1_rm0$discardInd
 clust14_chr1_restr <- clust14_chr1_restr[
   which((rowSums(clust14_chr1_restr) < 400) & (rowSums(clust14_chr1_restr) > 300)),]
 nrow(clust14_chr1_restr)  
+#> [1] 7
 
 # Compute p-value
 getPValue(as.matrix(clust14_chr1_restr),
           block_boundaries = topdom_boundaries_chr1_rm0$blockBounds)
+#> [1] 0.0752
 ```
 
 Given that these cells make up smaller than $50\%$ of the total number of cells of their respective cluster, and the row sums for samples from either cluster have high variation, our analysis suggests that the heterogeneities of these two clusters are predominantly driven by the first type of heterogeneity.

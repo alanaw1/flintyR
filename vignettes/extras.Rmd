@@ -3,12 +3,7 @@ title: "Extras"
 output: rmarkdown::html_vignette
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+
 
 This vignette explores more thoroughly some aspects of our work that might be overlooked in the other vignettes or in our paper. In particular, we will
 
@@ -55,7 +50,8 @@ The figure below provides a visualisation of these folding patterns.
 
 Hi-C experiments measure contact frequencies across the genome, thus allowing scientists to identify TADs, which are the chromatin regions more frequently interacting within themselves than among each other. Before we discuss quantitative methods, it will be useful to see what our data looks like. Below, we load Hi-C contact maps obtained from human fibroblast cells (IMR90), as reported in [Dixon et al. (2012)](https://www.nature.com/articles/nature11082). The reason our data is named `hic_imr90_40` is that the Hi-C contact reads are binned at $40,000$ bp resolution; this means that read counts are combined across genomic regions of length $40,000$ bp. 
 
-```{r hi_c_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Load libraries 
 library(tidyverse)
 require(HiTC) # install using Bioconductor if not installed
@@ -67,13 +63,40 @@ data(Dixon2012_IMR90)
 ## Preview data
 # What type of object is it, and how large?
 class(hic_imr90_40) 
+#> [1] "HTClist"
+#> attr(,"package")
+#> [1] "HiTC"
 object.size(hic_imr90_40)
+#> 1209797816 bytes
 
 # What does a Hi-C map look like?
 hic_imr90_40$chr1chr1@intdata[11:20,11:20]
+#> 10 x 10 sparse Matrix of class "dsCMatrix"
+#>                                      
+#> 11 . .  .    .   .  .  .   .   .    .
+#> 12 . 2  .    .   .  .  .   .   .    .
+#> 13 . . 22    2   .  .  .   .   .    1
+#> 14 . .  2 2206 456  .  .   .   2    1
+#> 15 . .  .  456  42  .  .   .   .    1
+#> 16 . .  .    .   . 40  .   .   2    1
+#> 17 . .  .    .   .  . 54   1   1    6
+#> 18 . .  .    .   .  .  1 532  10    9
+#> 19 . .  .    2   .  2  1  10 920   18
+#> 20 . .  1    1   1  1  6   9  18 1240
 
 # How are Hi-C features labeled?
 head(hic_imr90_40$chr1chr1@xgi)
+#> GRanges object with 6 ranges and 1 metadata column:
+#>     seqnames        ranges strand |        name
+#>        <Rle>     <IRanges>  <Rle> | <character>
+#>   1     chr1       1-40000      * |           1
+#>   2     chr1   40001-80000      * |           2
+#>   3     chr1  80001-120000      * |           3
+#>   4     chr1 120001-160000      * |           4
+#>   5     chr1 160001-200000      * |           5
+#>   6     chr1 200001-240000      * |           6
+#>   -------
+#>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 ```
 
 For the rest of this vignette we restrict to Chromosomes 1 and 2, consistent with what we report in our paper. As part of pre-processing, we perform the following steps, as described in Sections 4 and 5.3 of the **HiTC** [vignette](https://bioconductor.org/packages/release/bioc/vignettes/HiTC/inst/doc/HiC_analysis.pdf).
@@ -81,7 +104,8 @@ For the rest of this vignette we restrict to Chromosomes 1 and 2, consistent wit
 - Binning contact frequency measurements into windows of size $500,000$ bp (i.e., *reducing* the resolution from the original $40,000$ bp)
 - Normalising binned contact frequencies with Iterative Correction and Eigenvector decomposition (ICE)
 
-```{r hi_c_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE, out.width = '50%', cache = TRUE}
+
+```r
 ## Restrict Hi-C data to chr1 and chr2
 sset <- reduce(hic_imr90_40, chr=c("chr1", "chr2"))
 
@@ -99,6 +123,8 @@ imr90_500_ICE <-  normICE(imr90_500, max_iter=1000) # converged at iteration 764
 mapC(HTClist(imr90_500_ICE$chr1chr1), trim.range=.95,
      col.pos=c("white", "orange", "red", "black"))
 ```
+
+<img src="figure/hi_c_2-1.png" title="plot of chunk hi_c_2" alt="plot of chunk hi_c_2" width="50%" />
 
 We are now ready to identify TADs on our pre-processed dataset. As mentioned earlier, TADs are distinguished by intra-regional increase in interactions and inter-regional scarcity of interactions. We see this in the heat map above and can heuristically define TADs by inspection. However, to identify TADs in an automated fashion, we need systematic algorithms.
 
@@ -124,12 +150,31 @@ One subtlety about TAD calling in Step 3: rather than inferring domains only, *b
 
 Fortunately, **Hi-TC** has made available the output of running **domainCaller** on our dataset. This is useful for us to gain intuition about what TADs look like, in preparation for the second approach we will introduce. Below, we load the **domainCaller** output.
 
-```{r hi_c_3, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Inspect domainCaller output
 tads_imr90@ranges
+#> IRanges object with 2338 ranges and 0 metadata columns:
+#>                start       end     width
+#>            <integer> <integer> <integer>
+#>      TAD-1    770138   1290137    520000
+#>      TAD-2   1290138   1850140    560003
+#>      TAD-3   1850141   2330140    480000
+#>      TAD-4   2330141   3610140   1280000
+#>      TAD-5   3770141   6077413   2307273
+#>        ...       ...       ...       ...
+#>   TAD-2334 146992309 148552096   1559788
+#>   TAD-2335 148592096 149929342   1337247
+#>   TAD-2336 149929343 151969344   2040002
+#>   TAD-2337 152089345 152746806    657462
+#>   TAD-2338 152786807 154946806   2160000
 
 ## Inspect number of TADs called in each chromosome
 tads_imr90@seqnames
+#> factor-Rle of length 2338 with 23 runs
+#>   Lengths:   236   186   159   133   145   131 ...    63    58    34    27    86
+#>   Values : chr1  chr2  chr3  chr4  chr5  chr6  ... chr19 chr20 chr21 chr22 chrX 
+#> Levels(23): chr1 chr2 chr3 chr4 chr5 chr6 ... chr18 chr19 chr20 chr21 chr22 chrX
 ```
 
 The second approach to calling TADs is **TopDom**. Proposed by [Shin et al. (2016)](https://doi.org/10.1093/nar/gkv1505), **TopDom** relies on a bin signal statistic to identify TADs. For each bin $x\in\mathscr{X}$, let
@@ -164,7 +209,8 @@ Finally, to assign TAD boundaries, an additional Wilcoxon rank sum test is perfo
 
 Below, we demonstrate performing these steps on Chromosome 1 of the IMR90 dataset. We use a recent packaged version of **TopDom**, provided by [Bengtsson et al. (2020)](https://github.com/HenrikBengtsson/TopDom).   
 
-```{r hi_c_4, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Load package
 # install.packages("TopDom")
 library(TopDom)
@@ -191,9 +237,24 @@ topdom_input_500k[,2] <- topdom_input_500k[,2] - 1
 
 # What's the dimension of the newly formatted object?
 dim(topdom_input_500k) # it's N x (N+3)
+#> [1] 499 502
 
 # What does it look like? 
 topdom_input_500k[1:6,1:10]
+#>                                                                                   
+#> 1 chr1       0  500000 0     0.00000     0.00000     0.0000     0.0000     0.00000
+#> 2 chr1  500000 1000000 0 87119.73960  2201.44935   447.1085   141.7870    51.78014
+#> 3 chr1 1000000 1500000 0  2201.44935 83144.23061  2036.0001   292.8696    89.12919
+#> 4 chr1 1500000 2000000 0   447.10847  2036.00013 72933.3532  2894.1141   334.83724
+#> 5 chr1 2000000 2500000 0   141.78698   292.86960  2894.1141 69802.3718  1759.64596
+#> 6 chr1 2500000 3000000 0    51.78014    89.12919   334.8372  1759.6460 67023.35607
+#>             
+#> 1    0.00000
+#> 2   85.59758
+#> 3   80.36681
+#> 4  511.94974
+#> 5 2209.51332
+#> 6 4972.33528
 
 # 2. Save as tab-delimited file
 rel_dir <- "ex_data/scATAC-seq/"
@@ -209,23 +270,143 @@ topdom_res <- TopDom::TopDom(paste0(rel_dir, "500k_topdom_input.tsv"), window.si
 # 4. View results
 # What are the p-values? 
 head(topdom_res$binSignal)
+#>   id  chr from.coord to.coord local.ext  mean.cf       pvalue
+#> 1  1 chr1          0   500000      -0.5   0.0000 1.0000000000
+#> 2  2 chr1     500000  1000000       0.0 292.7723 0.1791632334
+#> 3  3 chr1    1000000  1500000      -1.0 225.5417 0.0002454393
+#> 4  4 chr1    1500000  2000000       0.0 256.5692 0.0001367633
+#> 5  5 chr1    2000000  2500000       0.0 311.2212 0.0009546703
+#> 6  6 chr1    2500000  3000000       0.0 662.2543 0.1389660413
 
 # Which blocks are classified as TADs by TopDom?
 head(topdom_res$bed[which(topdom_res$bed$name ==  "domain"), ])
+#>    chrom chromStart chromEnd   name
+#> 6   chr1     500000  1500000 domain
+#> 7   chr1    1500000  6500000 domain
+#> 8   chr1    6500000 11000000 domain
+#> 10  chr1   12000000 13000000 domain
+#> 11  chr1   13500000 15500000 domain
+#> 12  chr1   15500000 19500000 domain
 ```
 
 To conclude this section, we look at the distribution of classification categories (not just TADs), as well as the distribution sizes (block lengths) of TADs. 
 
-```{r hi_c_5, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Look at distribution of classification results
 kableExtra::kable(table(topdom_res$bed$name),
                   col.names = c("Category",  "Count"))
+```
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Category </th>
+   <th style="text-align:right;"> Count </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> boundary </td>
+   <td style="text-align:right;"> 6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> domain </td>
+   <td style="text-align:right;"> 44 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> gap </td>
+   <td style="text-align:right;"> 5 </td>
+  </tr>
+</tbody>
+</table>
+
+```r
 
 ## Look at distribution of size of TADs
 chr1_tads <- topdom_res$domain[which(topdom_res$domain$tag =="domain"), ]
 kableExtra::kable(table(chr1_tads$size / 5e5),
                   col.names = c("Size (x 5e5 bases)", "Count"))
 ```
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Size (x 5e5 bases) </th>
+   <th style="text-align:right;"> Count </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:right;"> 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:right;"> 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 5 </td>
+   <td style="text-align:right;"> 6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 6 </td>
+   <td style="text-align:right;"> 3 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 7 </td>
+   <td style="text-align:right;"> 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 8 </td>
+   <td style="text-align:right;"> 5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 9 </td>
+   <td style="text-align:right;"> 6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 10 </td>
+   <td style="text-align:right;"> 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 11 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 16 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 18 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 20 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 21 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 24 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 26 </td>
+   <td style="text-align:right;"> 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 29 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+</tbody>
+</table>
 
 Note we use these classified TADs to group our scATAC-seq features. 
 
@@ -241,7 +422,8 @@ There are multiple practical scenarios well suited for such an approach.
 
 Below, we show how our method can be called on a list of distances, provided the features from which the pairwise distances are derived are mutually independent. Briefly, we have $N=100$ individuals from whom we obtain $50$ pairwise distance data, $\{D_1,\ldots,D_{50}\}$. Each pairwise distance matrix $D_b$ is computed from a block of $10$ features, and we assume each block is independent of any other block.  
 
-```{r dist_list_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Simulation of list of distances
 # Set seed for reproducibility
 set.seed(2021)
@@ -267,11 +449,15 @@ for (b in 1:B) {
 
 # Clear garbage
 gc()
+#>             used   (Mb) gc trigger    (Mb) limit (Mb)   max used    (Mb)
+#> Ncells  14068868  751.4   24208967  1292.9         NA   24208967  1292.9
+#> Vcells 885563685 6756.4 1600378470 12210.0      16384 1600348721 12209.7
 ```
 
 We now run our test of exchangeability on the list of distances. 
 
-```{r dist_list_2, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Apply test of exchangeability to simulated distance list
 library(flintyR)
 library(doParallel)
@@ -280,6 +466,7 @@ registerDoParallel()
 
 # Compute p-value
 distDataPValue(dist_list) # should be >= 0.05
+#> [1] 0.384
 ```
 
 # Running Our Test from Terminal
@@ -317,9 +504,179 @@ Note that the analysis for the first scenario is as described in our [Github rep
 
 We find that when using only common variants, all populations, except for the Yoruban population in Nigeria, are non-exchangeable at $\alpha=0.05$ level. However, when additional rare variants are included, all populations are non-exchangeable at $\alpha=0.05$.
 
-```{r terminal_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+
+```r
 ## Print table summarising results
 kableExtra::kable(data.table::fread("exchangeability_results.txt"))
 ```
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> POP </th>
+   <th style="text-align:left;"> DESC </th>
+   <th style="text-align:right;"> MAF1e-2 </th>
+   <th style="text-align:right;"> MAC1 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> GBR </td>
+   <td style="text-align:left;"> British in England and Scotland </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FIN </td>
+   <td style="text-align:left;"> Finnish in Finland </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CHS </td>
+   <td style="text-align:left;"> Southern Han Chinese, China </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PUR </td>
+   <td style="text-align:left;"> Puerto Rican in Puerto Rico </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CDX </td>
+   <td style="text-align:left;"> Chinese Dai in Xishuangbanna, China </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CLM </td>
+   <td style="text-align:left;"> Colombian in Medellin, Colombia </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> IBS </td>
+   <td style="text-align:left;"> Iberian populations in Spain </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PEL </td>
+   <td style="text-align:left;"> Peruvian in Lima, Peru </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PJL </td>
+   <td style="text-align:left;"> Punjabi in Lahore,Pakistan </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> KHV </td>
+   <td style="text-align:left;"> Kinh in Ho Chi Minh City, Vietnam </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ACB </td>
+   <td style="text-align:left;"> African Caribbean in Barbados </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> GWD </td>
+   <td style="text-align:left;"> Gambian in Western Division, The Gambia </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ESN </td>
+   <td style="text-align:left;"> Esan in Nigeria </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BEB </td>
+   <td style="text-align:left;"> Bengali in Bangladesh </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MSL </td>
+   <td style="text-align:left;"> Mende in Sierra Leone </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> STU </td>
+   <td style="text-align:left;"> Sri Lankan Tamil in the UK </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ITU </td>
+   <td style="text-align:left;"> Indian Telugu in the UK </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CEU </td>
+   <td style="text-align:left;"> Utah residents with Northern and Western European ancestry </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> YRI </td>
+   <td style="text-align:left;"> Yoruba in Ibadan, Nigeria </td>
+   <td style="text-align:right;"> 0.07 </td>
+   <td style="text-align:right;"> 0.022 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CHB </td>
+   <td style="text-align:left;"> Han Chinese in Bejing, China </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> JPT </td>
+   <td style="text-align:left;"> Japanese in Tokyo, Japan </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> LWK </td>
+   <td style="text-align:left;"> Luhya in Webuye, Kenya </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ASW </td>
+   <td style="text-align:left;"> African Ancestry in Southwest US </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MXL </td>
+   <td style="text-align:left;"> Mexican Ancestry in Los Angeles, California </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> TSI </td>
+   <td style="text-align:left;"> Toscani in Italy </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> GIH </td>
+   <td style="text-align:left;"> Gujarati Indian in Houston,TX </td>
+   <td style="text-align:right;"> 0.00 </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+</tbody>
+</table>
 
 Thus, our test shows that most populations in the 1KG dataset are non-exchangeable, assuming variants lying in different chromosomes are independent of one another. In the only exception of the Yoruban population (YRI), we find that if only common variants are considered, then the individuals are exchangeable. However, once rare variants are included the individuals lose exchangeability. This observation is consistent with the importance of rare variants capturing recent demographic history, a point acknowledged by population geneticists ([Zaidi and Mathieson, 2021]([https://elifesciences.org/articles/61548)).      
