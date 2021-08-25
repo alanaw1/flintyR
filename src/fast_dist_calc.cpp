@@ -10,7 +10,6 @@ using namespace Rcpp;
 #include "climits"
 
 
-
 //' Binary Vector to Bit
 //'
 //' Converts the first column of an integer matrix X
