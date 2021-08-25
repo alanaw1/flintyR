@@ -323,7 +323,7 @@ We find that when using only common variants, all populations, except for the Yo
 
 ```{r terminal_1, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
 ## Print table summarising results
-kableExtra::kable(data.table::fread("/Users/alanaw/Documents/GitProjects/flintyR/docs/articles/ex_data/1KG/exchangeability_results.txt"))
+kableExtra::kable(data.table::fread("exchangeability_results.txt"))
 ```
 
 Thus, our test shows that most populations in the 1KG dataset are non-exchangeable, assuming variants lying in different chromosomes are independent of one another. In the only exception of the Yoruban population (YRI), we find that if only common variants are considered, then the individuals are exchangeable. However, once rare variants are included the individuals lose exchangeability. This observation is consistent with the importance of rare variants capturing recent demographic history, a point acknowledged by population geneticists ([Zaidi and Mathieson, 2021]([https://elifesciences.org/articles/61548)).      
