@@ -1,0 +1,11 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  ex_vs_hom: ex_vs_hom.html
+  extras: extras.html
+  intro: intro.html
+  single-cell-atac-seq: single-cell-atac-seq.html
+  wvs: wvs.html
+last_built: 2021-08-25T04:43Z
+
