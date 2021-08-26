@@ -22,6 +22,10 @@ Bruno is named after a famous statistican who studied exchangeability. Who might
 - It is *scalable*, so the user does not have to worry about the sample size $N$ or the number of features $P$ of the data. 
 - It is *robust*, meaning that it controls for false positive rate (FPR) and remains powerful in realistic settings including uneven representation of subpopulations, sparsity of discriminative features, and small sample sizes.   
 
+Here is a schema of how **flintyR** works.
+
+![Schema](standalone_5.jpg)
+
 ## **Installation**
 
 **Using CRAN**
