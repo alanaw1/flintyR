@@ -1,6 +1,8 @@
 # **flintyR** 
 
+<!-- badges: start -->
 ![example workflow](https://github.com/alanaw1/flintyR/actions/workflows/pkgdown.yaml/badge.svg)
+<!-- badges: end -->
 
 This is the homepage of **flintyR**, the R version of the software **flinty** (*Fl*exible and *I*nterpretable *N*on-parametric *T*ests of Exchangeabilit*y*). The Python version is available [here](https://songlab-cal.github.io/flinty). 
 
