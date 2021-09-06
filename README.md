@@ -30,7 +30,11 @@ Here is a schema of how **flintyR** works.
 
 **Using CRAN**
 
-To be updated.
+```
+install.packages("flintyR")
+```
+
+If prompted to compile C/C++/Fortran, enter "Yes" to attempt to install these from sources. 
 
 **Using Tarball**
 

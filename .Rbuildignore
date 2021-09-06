@@ -4,10 +4,13 @@
 ^_pkgdown\.yml$
 ^docs$
 ^vignettes$
+^figure$
+^cache$
 ^pkgdown$
 ^README\.md$
 ^Rprof\.out$
 ^bruno_intro\.png$
+^standalone\_5\.jpg$
 ^\.github$
 ^\.Rds$
 ^\.csv$
