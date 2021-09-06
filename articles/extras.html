@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/alanaw1/flintyR/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -87,7 +94,7 @@
       <h1 data-toc-skip>Extras</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/master/vignettes/extras.Rmd"><code>vignettes/extras.Rmd</code></a></small>
       <div class="hidden name"><code>extras.Rmd</code></div>
 
     </div>
@@ -186,20 +193,20 @@
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Restrict Hi-C data to chr1 and chr2</span>
-<span class="va">sset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">reduce</a></span><span class="op">(</span><span class="va">hic_imr90_40</span>, chr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"chr1"</span>, <span class="st">"chr2"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">sset</span> <span class="op">&lt;-</span> <span class="fu">reduce</span><span class="op">(</span><span class="va">hic_imr90_40</span>, chr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"chr1"</span>, <span class="st">"chr2"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Bin contact frequencies</span>
-<span class="va">imr90_500</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="fu">mclapply</span><span class="op">(</span><span class="va">sset</span>, <span class="va">binningC</span>, 
+<span class="va">imr90_500</span> <span class="op">&lt;-</span> <span class="fu">HTClist</span><span class="op">(</span><span class="fu">mclapply</span><span class="op">(</span><span class="va">sset</span>, <span class="va">binningC</span>, 
                               binsize<span class="op">=</span><span class="fl">500000</span>, 
                               bin.adjust<span class="op">=</span><span class="cn">FALSE</span>, 
                               method<span class="op">=</span><span class="st">"sum"</span>,
                               step <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Perform ICE normalization</span>
-<span class="va">imr90_500_ICE</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/normICE.html">normICE</a></span><span class="op">(</span><span class="va">imr90_500</span>, max_iter<span class="op">=</span><span class="fl">1000</span><span class="op">)</span> <span class="co"># converged at iteration 764</span>
+<span class="va">imr90_500_ICE</span> <span class="op">&lt;-</span>  <span class="fu">normICE</span><span class="op">(</span><span class="va">imr90_500</span>, max_iter<span class="op">=</span><span class="fl">1000</span><span class="op">)</span> <span class="co"># converged at iteration 764</span>
 
 <span class="co">## Visualise transformed output of contact map</span>
-<span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/mapC.html">mapC</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">)</span>, trim.range<span class="op">=</span><span class="fl">.95</span>,
+<span class="fu">mapC</span><span class="op">(</span><span class="fu">HTClist</span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">)</span>, trim.range<span class="op">=</span><span class="fl">.95</span>,
      col.pos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="figure/hi_c_2-1.png" title="plot of chunk hi_c_2" alt="plot of chunk hi_c_2" width="50%"></p>
 <p>We are now ready to identify TADs on our pre-processed dataset. As mentioned earlier, TADs are distinguished by intra-regional increase in interactions and inter-regional scarcity of interactions. We see this in the heat map above and can heuristically define TADs by inspection. However, to identify TADs in an automated fashion, we need systematic algorithms.</p>
@@ -277,12 +284,12 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load package</span>
 <span class="co"># install.packages("TopDom")</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/TopDom">TopDom</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">TopDom</span><span class="op">)</span>
 
 <span class="co">## Convert to format readable by TopDom::TopDom</span>
 <span class="co"># 1. Make imr90_500_ICE into N x (N + 3) dataframe</span>
 <span class="co"># We use the multiple assignment function, %&lt;-%, provided by zeallot</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nteetor/zeallot">zeallot</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">zeallot</span><span class="op">)</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>chr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>,
                  start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>,
                  end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -329,7 +336,7 @@
 
 <span class="co"># 3. Load the file and find TADs with TopDom</span>
 <span class="co"># TopDom performs the steps described above</span>
-<span class="va">topdom_res</span> <span class="op">&lt;-</span> <span class="fu">TopDom</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TopDom/man/TopDom.html">TopDom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"500k_topdom_input.tsv"</span><span class="op">)</span>, window.size <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>
+<span class="va">topdom_res</span> <span class="op">&lt;-</span> <span class="fu">TopDom</span><span class="fu">::</span><span class="fu">TopDom</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"500k_topdom_input.tsv"</span><span class="op">)</span>, window.size <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>
 
 <span class="co"># 4. View results</span>
 <span class="co"># What are the p-values? </span>
@@ -354,7 +361,7 @@
 <p>To conclude this section, we look at the distribution of classification categories (not just TADs), as well as the distribution sizes (block lengths) of TADs.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Look at distribution of classification results</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>,
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>,
                   col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Category"</span>,  <span class="st">"Count"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
@@ -396,7 +403,7 @@ gap
 <code class="sourceCode R">
 <span class="co">## Look at distribution of size of TADs</span>
 <span class="va">chr1_tads</span> <span class="op">&lt;-</span> <span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">$</span><span class="va">tag</span> <span class="op">==</span><span class="st">"domain"</span><span class="op">)</span>, <span class="op">]</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">chr1_tads</span><span class="op">$</span><span class="va">size</span> <span class="op">/</span> <span class="fl">5e5</span><span class="op">)</span>,
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">chr1_tads</span><span class="op">$</span><span class="va">size</span> <span class="op">/</span> <span class="fl">5e5</span><span class="op">)</span>,
                   col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Size (x 5e5 bases)"</span>, <span class="st">"Count"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
@@ -593,7 +600,7 @@ Count
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">flintyR</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://alanaw1.github.io/flintyR">flintyR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
 <span class="co"># Register parallel computation</span>
 <span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span>
@@ -634,7 +641,7 @@ Count
 <p>We find that when using only common variants, all populations, except for the Yoruban population in Nigeria, are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span> level. However, when additional rare variants are included, all populations are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Print table summarising results</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="st">"exchangeability_results.txt"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu">kable</span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="st">"exchangeability_results.txt"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
