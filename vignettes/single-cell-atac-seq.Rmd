@@ -517,7 +517,7 @@ col_sparse_ratio <- apply(as.matrix(X_subclust), 2, function(x) {mean(x == 0)})
 hist(col_sparse_ratio, main = "Histogram of Peak Sparsity", xlab = "Peak Sparsity")
 ```
 
-![plot of chunk subcluster_1](figure/subcluster_1-1.png)
+![](ex_data/scATAC-seq/subcluster_1-1.png){width=80%}
 
 ```r
 mean((col_sparse_ratio < 0.8))
@@ -531,7 +531,7 @@ plot(x = col_sparse_ratio, y = col_variances,
      ylab = "Peak Variance")
 ```
 
-![plot of chunk subcluster_1](figure/subcluster_1-2.png)
+![](ex_data/scATAC-seq/subcluster_1-2.png){width=80%}
 
 To see if feature sparsity contributes to heterogeneity, we remove peaks from each group that are too sparse and try running our exchangeability test once more. After several iterations of filtering peaks, we find that additionally removing peaks that have sparsity $\leqslant 0.7$ leads to subcluster exchangeability.
 
@@ -580,7 +580,7 @@ col_sparse_ratio <- apply(as.matrix(X), 2, function(x) {mean(x == 0)})
 hist(col_sparse_ratio, main = "Histogram of Peak Sparsity", xlab = "Peak Sparsity")
 ```
 
-![plot of chunk cluster_1](figure/cluster_1-1.png)
+![](ex_data/scATAC-seq/cluster_1-1.png){width=80%}
 
 ```r
 mean((col_sparse_ratio < 0.8))
@@ -594,7 +594,7 @@ plot(x = col_sparse_ratio, y = col_variances,
      ylab = "Peak Variance")
 ```
 
-![plot of chunk cluster_1](figure/cluster_1-2.png)
+![](ex_data/scATAC-seq/cluster_1-2.png){width=80%}
 
 We now try to group the peaks based on correlations. We perform hierarchical clustering with Ward linkage and distance matrix constructed from peak-peak correlations. (See p. 21 of [Charrad et al., 2014](https://www.jstatsoft.org/article/view/v061i06) for an explanation of the Ward linkage.)  To choose the optimal number of clusters, which correspond to groups of peaks, we use the Dindex metric. (See p. 14 of [Charrad et al., 2014](https://www.jstatsoft.org/article/view/v061i06) for an explanation of how the Dindex works.) We find that $K=46$ clusters is optimal. Thus, we run our test again, with the peaks now grouped into $46$ blocks based on the clustering approach just described.
 
@@ -703,7 +703,7 @@ ggplot(dat) +
   labs(fill = "Group") 
 ```
 
-![plot of chunk cluster_3](figure/cluster_3-1.png)
+![](ex_data/scATAC-seq/cluster_3-1.png){width=80%}
 
 ## Implications for Statistical Modeling of scATAC-seq Peaks
 
