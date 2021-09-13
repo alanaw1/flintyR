@@ -619,9 +619,7 @@ Count
 <span class="co"># View histogram of feature sparsity (% zero normalized peak reads)</span>
 <span class="va">col_sparse_ratio</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">X_subclust</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">}</span><span class="op">)</span> 
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">col_sparse_ratio</span>, main <span class="op">=</span> <span class="st">"Histogram of Peak Sparsity"</span>, xlab <span class="op">=</span> <span class="st">"Peak Sparsity"</span><span class="op">)</span></code></pre></div>
-<div class="figure">
-<img src="figure/subcluster_1-1.png" alt=""><p class="caption">plot of chunk subcluster_1</p>
-</div>
+<p><img src="ex_data/scATAC-seq/subcluster_1-1.png" style="width:80.0%"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">col_sparse_ratio</span> <span class="op">&lt;</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.1429788</span>
@@ -632,9 +630,7 @@ Count
      main <span class="op">=</span> <span class="st">"Peak Variance vs Peak Sparsity"</span>, 
      xlab <span class="op">=</span> <span class="st">"Peak Sparsity"</span>, 
      ylab <span class="op">=</span> <span class="st">"Peak Variance"</span><span class="op">)</span></code></pre></div>
-<div class="figure">
-<img src="figure/subcluster_1-2.png" alt=""><p class="caption">plot of chunk subcluster_1</p>
-</div>
+<p><img src="ex_data/scATAC-seq/subcluster_1-2.png" style="width:80.0%"></p>
 <p>To see if feature sparsity contributes to heterogeneity, we remove peaks from each group that are too sparse and try running our exchangeability test once more. After several iterations of filtering peaks, we find that additionally removing peaks that have sparsity <span class="math inline">\(\leqslant 0.7\)</span> leads to subcluster exchangeability.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run test to explain contribution to heterogeneity</span>
@@ -675,9 +671,7 @@ Count
 <span class="co"># View histogram of feature sparsity (% zero normalized peak reads)</span>
 <span class="va">col_sparse_ratio</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">}</span><span class="op">)</span> 
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">col_sparse_ratio</span>, main <span class="op">=</span> <span class="st">"Histogram of Peak Sparsity"</span>, xlab <span class="op">=</span> <span class="st">"Peak Sparsity"</span><span class="op">)</span></code></pre></div>
-<div class="figure">
-<img src="figure/cluster_1-1.png" alt=""><p class="caption">plot of chunk cluster_1</p>
-</div>
+<p><img src="ex_data/scATAC-seq/cluster_1-1.png" style="width:80.0%"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">col_sparse_ratio</span> <span class="op">&lt;</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.1246055</span>
@@ -688,9 +682,7 @@ Count
      main <span class="op">=</span> <span class="st">"Peak Variance vs Peak Sparsity"</span>, 
      xlab <span class="op">=</span> <span class="st">"Peak Sparsity"</span>, 
      ylab <span class="op">=</span> <span class="st">"Peak Variance"</span><span class="op">)</span></code></pre></div>
-<div class="figure">
-<img src="figure/cluster_1-2.png" alt=""><p class="caption">plot of chunk cluster_1</p>
-</div>
+<p><img src="ex_data/scATAC-seq/cluster_1-2.png" style="width:80.0%"></p>
 <p>We now try to group the peaks based on correlations. We perform hierarchical clustering with Ward linkage and distance matrix constructed from peak-peak correlations. (See p. 21 of <a href="https://www.jstatsoft.org/article/view/v061i06">Charrad et al., 2014</a> for an explanation of the Ward linkage.) To choose the optimal number of clusters, which correspond to groups of peaks, we use the Dindex metric. (See p. 14 of <a href="https://www.jstatsoft.org/article/view/v061i06">Charrad et al., 2014</a> for an explanation of how the Dindex works.) We find that <span class="math inline">\(K=46\)</span> clusters is optimal. Thus, we run our test again, with the peaks now grouped into <span class="math inline">\(46\)</span> blocks based on the clustering approach just described.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Create distance matrix based on pairwise correlations</span>
@@ -789,9 +781,7 @@ Count
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Physical Location (bp)"</span><span class="op">)</span>  <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">565550</span>, <span class="fl">249219853</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Group"</span><span class="op">)</span> </code></pre></div>
-<div class="figure">
-<img src="figure/cluster_3-1.png" alt=""><p class="caption">plot of chunk cluster_3</p>
-</div>
+<p><img src="ex_data/scATAC-seq/cluster_3-1.png" style="width:80.0%"></p>
 </div>
 <div id="implications-for-statistical-modeling-of-scatac-seq-peaks" class="section level2">
 <h2 class="hasAnchor">
