@@ -575,12 +575,12 @@ blockPermute <- function(X,
 #'
 weightedChi2P <- function(val, w1, w2, d1, d2){
   # Setup grid with uniform mesh size 1/10000
-  grid <- seq(0, val, length.out=10000)
-  probs <- pchisq((val - grid)/w1, df=d1, lower.tail=FALSE) * dchisq(grid/w2, df = d2) / w2
+  grid <- seq(0, c(val), length.out=10000)
+  probs <- pchisq((c(val) - grid)/w1, df=d1, lower.tail=FALSE) * dchisq(grid/w2, df = d2) / w2
   # (f(x_k) + f(x_{k-1}))/2
   probs <- (probs[-1] + probs[-length(probs)]) * 0.5
   # diff(grid) = Delta(x_k) = mesh size
-  return(sum(diff(grid)*probs) + pchisq(val/w2, df=d2, lower.tail=FALSE))
+  return(sum(diff(grid)*probs) + pchisq(c(val)/w2, df=d2, lower.tail=FALSE))
 }
 
 #' Covariance Computations Between Pairs of Distances (Independent Case)
