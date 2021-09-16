@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/alanaw1/flintyR/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,13 +88,13 @@
 
       
 
-      </header><script src="extras_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><script src="extras_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Extras</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/master/vignettes/extras.Rmd"><code>vignettes/extras.Rmd</code></a></small>
       <div class="hidden name"><code>extras.Rmd</code></div>
 
     </div>
@@ -201,7 +208,7 @@
 <span class="co">## Visualise transformed output of contact map</span>
 <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/mapC.html">mapC</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">)</span>, trim.range<span class="op">=</span><span class="fl">.95</span>,
      col.pos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="extras_files/figure-html/hi_c_2-1.png" width="50%"></p>
+<p><img src="figure/hi_c_2-1.png" title="plot of chunk hi_c_2" alt="plot of chunk hi_c_2" width="50%"></p>
 <p>We are now ready to identify TADs on our pre-processed dataset. As mentioned earlier, TADs are distinguished by intra-regional increase in interactions and inter-regional scarcity of interactions. We see this in the heat map above and can heuristically define TADs by inspection. However, to identify TADs in an automated fashion, we need systematic algorithms.</p>
 <p>Here, we introduce two such systematic approaches. The first approach, called <strong>domainCaller</strong>, uses the Directionality Index (DI) to call TADs. Let the set of all <span class="math inline">\(40,000\)</span> bp resolution counts be <span class="math inline">\(\mathscr{X}\)</span>. For each bin of contact frequencies <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
 \text{DI}(x) = \left(\frac{B(x) - A(x)}{|B(x) - A(x)|}\right) \left(\frac{(A(x) - E(x))^2}{E(x)} + \frac{(B(x) - E(x))^2}{E(x)}\right),
@@ -245,9 +252,9 @@
 <span class="co">## Inspect number of TADs called in each chromosome</span>
 <span class="va">tads_imr90</span><span class="op">@</span><span class="va">seqnames</span>
 <span class="co">#&gt; factor-Rle of length 2338 with 23 runs</span>
-<span class="co">#&gt;   Lengths:   236   186   159   133   145 ...    63    58    34    27    86</span>
-<span class="co">#&gt;   Values : chr1  chr2  chr3  chr4  chr5  ... chr19 chr20 chr21 chr22 chrX </span>
-<span class="co">#&gt; Levels(23): chr1 chr2 chr3 chr4 chr5 chr6 ... chr19 chr20 chr21 chr22 chrX</span></code></pre></div>
+<span class="co">#&gt;   Lengths:   236   186   159   133   145   131 ...    63    58    34    27    86</span>
+<span class="co">#&gt;   Values : chr1  chr2  chr3  chr4  chr5  chr6  ... chr19 chr20 chr21 chr22 chrX </span>
+<span class="co">#&gt; Levels(23): chr1 chr2 chr3 chr4 chr5 chr6 ... chr18 chr19 chr20 chr21 chr22 chrX</span></code></pre></div>
 <p>The second approach to calling TADs is <strong>TopDom</strong>. Proposed by <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a>, <strong>TopDom</strong> relies on a bin signal statistic to identify TADs. For each bin <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
 \text{binSignal}(x) = \frac{1}{w^2} \sum_{\ell=1}^w \sum_{m=1}^w \text{cont.freq}(U_x(\ell), U_x(m)),
 \end{equation*}\]</span> where</p>
@@ -305,20 +312,20 @@
 
 <span class="co"># What does it look like? </span>
 <span class="va">topdom_input_500k</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
-<span class="co">#&gt;                                                                       </span>
-<span class="co">#&gt; 1 chr1       0  500000 0     0.00000     0.00000     0.0000     0.0000</span>
-<span class="co">#&gt; 2 chr1  500000 1000000 0 87119.73960  2201.44935   447.1085   141.7870</span>
-<span class="co">#&gt; 3 chr1 1000000 1500000 0  2201.44935 83144.23061  2036.0001   292.8696</span>
-<span class="co">#&gt; 4 chr1 1500000 2000000 0   447.10847  2036.00013 72933.3532  2894.1141</span>
-<span class="co">#&gt; 5 chr1 2000000 2500000 0   141.78698   292.86960  2894.1141 69802.3718</span>
-<span class="co">#&gt; 6 chr1 2500000 3000000 0    51.78014    89.12919   334.8372  1759.6460</span>
-<span class="co">#&gt;                         </span>
-<span class="co">#&gt; 1     0.00000    0.00000</span>
-<span class="co">#&gt; 2    51.78014   85.59758</span>
-<span class="co">#&gt; 3    89.12919   80.36681</span>
-<span class="co">#&gt; 4   334.83724  511.94974</span>
-<span class="co">#&gt; 5  1759.64596 2209.51332</span>
-<span class="co">#&gt; 6 67023.35607 4972.33528</span>
+<span class="co">#&gt;                                                                                   </span>
+<span class="co">#&gt; 1 chr1       0  500000 0     0.00000     0.00000     0.0000     0.0000     0.00000</span>
+<span class="co">#&gt; 2 chr1  500000 1000000 0 87119.73960  2201.44935   447.1085   141.7870    51.78014</span>
+<span class="co">#&gt; 3 chr1 1000000 1500000 0  2201.44935 83144.23061  2036.0001   292.8696    89.12919</span>
+<span class="co">#&gt; 4 chr1 1500000 2000000 0   447.10847  2036.00013 72933.3532  2894.1141   334.83724</span>
+<span class="co">#&gt; 5 chr1 2000000 2500000 0   141.78698   292.86960  2894.1141 69802.3718  1759.64596</span>
+<span class="co">#&gt; 6 chr1 2500000 3000000 0    51.78014    89.12919   334.8372  1759.6460 67023.35607</span>
+<span class="co">#&gt;             </span>
+<span class="co">#&gt; 1    0.00000</span>
+<span class="co">#&gt; 2   85.59758</span>
+<span class="co">#&gt; 3   80.36681</span>
+<span class="co">#&gt; 4  511.94974</span>
+<span class="co">#&gt; 5 2209.51332</span>
+<span class="co">#&gt; 6 4972.33528</span>
 
 <span class="co"># 2. Save as tab-delimited file</span>
 <span class="va">rel_dir</span> <span class="op">&lt;-</span> <span class="st">"ex_data/scATAC-seq/"</span>
@@ -587,20 +594,20 @@ Count
 
 <span class="co"># Clear garbage</span>
 <span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;             used  (Mb) gc trigger   (Mb) limit (Mb)  max used   (Mb)</span>
-<span class="co">#&gt; Ncells   7756826 414.3   12453854  665.2         NA  12453854  665.2</span>
-<span class="co">#&gt; Vcells 123284418 940.6  177156004 1351.6      16384 141640162 1080.7</span></code></pre></div>
+<span class="co">#&gt;             used   (Mb) gc trigger    (Mb) limit (Mb)   max used    (Mb)</span>
+<span class="co">#&gt; Ncells  14068868  751.4   24208967  1292.9         NA   24208967  1292.9</span>
+<span class="co">#&gt; Vcells 885563685 6756.4 1600378470 12210.0      16384 1600348721 12209.7</span></code></pre></div>
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">flintyR</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://alanaw1.github.io/flintyR">flintyR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
 <span class="co"># Register parallel computation</span>
 <span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
-<span class="co">#&gt; [1] 0.385</span></code></pre></div>
+<span class="co">#&gt; [1] 0.384</span></code></pre></div>
 </div>
 <div id="running-our-test-from-terminal" class="section level1">
 <h1 class="hasAnchor">
@@ -636,7 +643,7 @@ To obtain population-level files (BIM/BED/FAM) that can be fed into Step 1 above
 <p>We find that when using only common variants, all populations, except for the Yoruban population in Nigeria, are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span> level. However, when additional rare variants are included, all populations are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Print table summarising results</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="st">"/Users/alanaw/Documents/GitProjects/flintyR/docs/articles/ex_data/1KG/exchangeability_results.txt"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="st">"exchangeability_results.txt"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">

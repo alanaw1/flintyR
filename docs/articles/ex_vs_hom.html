@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -71,7 +71,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/alanaw1/flintyR/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,13 +88,13 @@
 
       
 
-      </header><script src="ex_vs_hom_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><script src="ex_vs_hom_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Exchangeability and Homogeneity</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/master/vignettes/ex_vs_hom.Rmd"><code>vignettes/ex_vs_hom.Rmd</code></a></small>
       <div class="hidden name"><code>ex_vs_hom.Rmd</code></div>
 
     </div>
@@ -210,7 +217,9 @@ d(F_\mathcal{S},F_{\mathcal{S}'}) \approx 0,\label{eq:1}
   <span class="fu">coord_fixed</span><span class="op">(</span>ratio <span class="op">=</span> <span class="va">ratio</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"POSLAB"</span><span class="op">)</span></code></pre></div>
-<p><img src="ex_vs_hom_files/figure-html/example_2-1.png" width="700"></p>
+<div class="figure">
+<img src="figure/example_2-1.png" alt=""><p class="caption">plot of chunk example_2</p>
+</div>
 <p>This observation is true in a more general setting. For <span class="math inline">\(P\)</span> features independently distributed according to the mixture distribution described above, it is always possible to draw a finite sample consisting of <span class="math inline">\(N\)</span> observations, which contains two disjoint subsamples that are far apart. Here is some mathematical intuition. For each observation <span class="math inline">\(\mathbf{x}_n\)</span>, let <span class="math inline">\(\mathbf{1}\{\mathbf{x}_n &gt; \mathbf{0}\}\)</span> and <span class="math inline">\(\mathbf{1}\{\mathbf{x}_n &lt; \mathbf{0}\}\)</span> denote, respectively, the event that it is positive and the event that it is negative. A positive observation <span class="math inline">\(\mathbf{x}_n=(x_{n1},\ldots,x_{nP})\)</span> means that each element <span class="math inline">\(x_{nj}\)</span> is positive; likewise for a negative observation. Each component of <span class="math inline">\(\mathbf{x}_n\)</span> is IID according to the mixture distribution that is symmetric about <span class="math inline">\(0\)</span>. This implies that each element <span class="math inline">\(x_{nj}\)</span> satisfies <span class="math inline">\(\mathbb{P}(x_{nj}&gt;0) =\mathbb{P}(x_{nj}&lt;0) = 0.5\)</span>. Multiplying these probabilities, we see that <span class="math inline">\(\mathbb{P}(\mathbf{x}_n &gt; \mathbf{0})=\mathbb{P}(\mathbf{x}_n &lt; \mathbf{0})=0.5^P\)</span>. The indicators are thus Bernoulli distributed with success probability <span class="math inline">\(0.5^P\)</span>. Let <span class="math inline">\(K_+\)</span> and <span class="math inline">\(K_-\)</span> denote the number of positive and negative observations contained in a random draw. Since our observations are independently drawn, we see that for any pair of natural numbers <span class="math inline">\((k_+,k_-)\)</span>, <span class="math display">\[\begin{equation*}
 \mathbb{P}(K_+=k_+, K_-=k_-) = {N\choose k_+}{N-k_+ \choose k_-} \left(\frac{1}{2^P}\right)^{k_+ + k_-}.
 \end{equation*}\]</span> In particular, there is a positive probability that the finite sample drawn at random contains two sets <span class="math inline">\(\mathcal{S}_+, \mathcal{S}_-\)</span> of sizes <span class="math inline">\(k_+\)</span> and <span class="math inline">\(k_-\)</span>. These two sets containing positive observations and negative observations exclusively, we see that they are necessarily far apart.</p>
@@ -404,7 +413,7 @@ d_\text{TV}(F,F') = \sup\{|\mu_F(A) - \mu_{F'}(A)|: A \subseteq \mathbb{R}^P\}.
 <p>Consider Examples 1 and 2. To set the stage, suppose we have samples drawn from these two examples. Assume we have neither information about the generative model nor information about the observation labels (i.e., the subpopulation labels are latent). However, we know the samples were drawn from some population at random. With this information let us use <strong>flinty</strong> to detect exchangeability. We consider what happens when additional information is provided successively.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load packages and set directories</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">flintyR</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://alanaw1.github.io/flintyR">flintyR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
 <span class="co"># Register parallel computation</span>
 <span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -412,7 +421,7 @@ d_\text{TV}(F,F') = \sup\{|\mu_F(A) - \mu_{F'}(A)|: A \subseteq \mathbb{R}^P\}.
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Compute p-values </span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">ex_array</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="co"># Example 1 array</span>
-<span class="co">#&gt; [1] 0.7982</span>
+<span class="co">#&gt; [1] 0.7928</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">ex_2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="co"># Example 2 array</span>
 <span class="co">#&gt; [1] 0</span></code></pre></div>
 <p>We see that at <span class="math inline">\(\alpha=0.05\)</span> we would consider Example 1’s array exchangeable, but not Example 2’s array. In other words, the array from Example 2 is not consistent with simultaneously being exchangeable and having independent columns. This demonstrates that treating features as independent when they are in fact not can lead to the appearance of sample non-exchangeability. Thus, sample exchangeability is <em>contingent on</em> accounting for feature dependencies.</p>

@@ -22,9 +22,9 @@ import numpy as np
 def getHaplotypes(N, P):
     sample_size = int(N)
     chr_length = int(P)  # set to 5e7
-    ts =  msprime.simulate(Ne = 1e4, 
+    ts =  msprime.simulate(Ne=1e4, 
         mutation_rate=2e-8,
-        length = chr_length,
+        length=chr_length,
         recombination_rate=2e-8,
         sample_size=sample_size, 
         num_replicates=1)
