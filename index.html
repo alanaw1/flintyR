@@ -106,15 +106,15 @@
 </h2>
 <p><strong>flintyR</strong> provides exact tests of exchangeability in multivariate datasets.</p>
 <ul>
-<li>It is <em>non-parametric</em> (i.e., makes no distributional assumptions of the features), which makes it suitable for settings where the user might prefer not to make distributional assumptions about their data.<br>
+<li>It is <em>non-parametric</em>, i.e., makes no distributional assumptions of the features. This allows our methods to work in settings where the user might prefer not to make distributional assumptions about their data.<br>
 </li>
-<li>It is <em>flexible</em>, meaning that the practitioner can specify feature dependencies based on their knowledge of the problem. Our tests handle dependent features, should the dependencies satisfy partitionability. See tutorials for details.<br>
+<li>It is <em>flexible</em> on multiple fronts. The practitioner can specify feature dependencies based on their knowledge of the problem. (Our tests handle dependent features, should the dependencies satisfy partitionability.) The practitioner can also supply pairwise distance matrices across independent features if the original sample-by-feature matrix is not available.<br>
 </li>
 <li>It is <em>scalable</em>, so the user does not have to worry about the sample size <span class="math inline"><em>N</em></span> or the number of features <span class="math inline"><em>P</em></span> of the data.</li>
 <li>It is <em>robust</em>, meaning that it controls for false positive rate (FPR) and remains powerful in realistic settings including uneven representation of subpopulations, sparsity of discriminative features, and small sample sizes.</li>
 </ul>
 <p>Here is a schema of how <strong>flintyR</strong> works.</p>
-<p><img src="standalone_5.jpg" alt="Schema"></p>
+<p><img src="standalone_6.jpg" alt="Schema"></p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
