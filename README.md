@@ -17,14 +17,14 @@ Bruno is named after a famous statistican who studied exchangeability. Who might
 
 **flintyR** provides exact tests of exchangeability in multivariate datasets. 
 
-- It is *non-parametric* (i.e., makes no distributional assumptions of the features), which makes it suitable for settings where the user might prefer not to make distributional assumptions about their data.   
-- It is *flexible*, meaning that the practitioner can specify feature dependencies based on their knowledge of the problem. Our tests handle dependent features, should the dependencies satisfy partitionability. See tutorials for details.   
+- It is *non-parametric*, i.e., makes no distributional assumptions of the features. This allows our methods to work in settings where the user might prefer not to make distributional assumptions about their data.   
+- It is *flexible* on multiple fronts. The practitioner can specify feature dependencies based on their knowledge of the problem. (Our tests handle dependent features, should the dependencies satisfy partitionability.) The practitioner can also supply pairwise distance matrices across independent features if the original sample-by-feature matrix is not available.  
 - It is *scalable*, so the user does not have to worry about the sample size $N$ or the number of features $P$ of the data. 
 - It is *robust*, meaning that it controls for false positive rate (FPR) and remains powerful in realistic settings including uneven representation of subpopulations, sparsity of discriminative features, and small sample sizes.   
 
 Here is a schema of how **flintyR** works.
 
-![Schema](standalone_5.jpg)
+![Schema](standalone_6.jpg)
 
 ## **Installation**
 
