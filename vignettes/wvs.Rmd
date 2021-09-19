@@ -317,7 +317,7 @@ heatmap(cor(t(apply(wv_filtered_sg[,-(1:4)], 1, as.numeric))),
         margins = c(2,2))
 ```
 
-![plot of chunk wvs_5-1](figure/wvs_5-1-1.png)
+![](wvs_files/figure-html/wvs_5-1-1.png)
 
 
 Even though we have to zoom into the figure for details, we already see that there are groups of features that are more correlated with one another. Here are three examples:
@@ -602,7 +602,7 @@ res <- NbClust(data.matrix(wv_filtered_sg[,5:51]),
                index = "dindex")
 ```
 
-![plot of chunk wvs_9](figure/wvs_9-1.png)
+![](wvs_files/figure-html/wvs_9-1.png)
 
 ```
 #> *** : The D index is a graphical method of determining the number of clusters. 

@@ -135,7 +135,7 @@ ggplot(data = ex_array, aes(x = V1, y = V2)) +
   labs(colour = "POSLAB")
 ```
 
-![plot of chunk example_2](figure/example_2-1.png)
+![plot of chunk example_2](ex_vs_hom_files/figure-html/example_2-1.png)
 
 This observation is true in a more general setting. For $P$ features independently distributed according to the mixture distribution described above, it is always possible to draw a finite sample consisting of $N$ observations, which contains two disjoint subsamples that are far apart. Here is some mathematical intuition. For each observation $\mathbf{x}_n$, let $\mathbf{1}\{\mathbf{x}_n > \mathbf{0}\}$ and $\mathbf{1}\{\mathbf{x}_n < \mathbf{0}\}$ denote, respectively, the event that it is positive and the event that it is negative. A positive observation $\mathbf{x}_n=(x_{n1},\ldots,x_{nP})$ means that each element $x_{nj}$ is positive; likewise for a negative observation. Each component of $\mathbf{x}_n$ is IID according to the mixture distribution that is symmetric about $0$. This implies that each element $x_{nj}$ satisfies $\mathbb{P}(x_{nj}>0) =\mathbb{P}(x_{nj}<0) = 0.5$. Multiplying these probabilities, we see that $\mathbb{P}(\mathbf{x}_n > \mathbf{0})=\mathbb{P}(\mathbf{x}_n < \mathbf{0})=0.5^P$. The indicators are thus Bernoulli distributed with success probability $0.5^P$. Let $K_+$ and $K_-$ denote the number of positive and negative observations contained in a random draw. Since our observations are independently drawn, we see that for any pair of natural numbers $(k_+,k_-)$,
 \begin{equation*}

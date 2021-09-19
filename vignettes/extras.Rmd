@@ -124,7 +124,7 @@ mapC(HTClist(imr90_500_ICE$chr1chr1), trim.range=.95,
      col.pos=c("white", "orange", "red", "black"))
 ```
 
-<img src="figure/hi_c_2-1.png" title="plot of chunk hi_c_2" alt="plot of chunk hi_c_2" width="50%" />
+<img src="extras_files/figure-html/hi_c_2-1.png" title="plot of chunk hi_c_2" alt="plot of chunk hi_c_2" width="50%" />
 
 We are now ready to identify TADs on our pre-processed dataset. As mentioned earlier, TADs are distinguished by intra-regional increase in interactions and inter-regional scarcity of interactions. We see this in the heat map above and can heuristically define TADs by inspection. However, to identify TADs in an automated fashion, we need systematic algorithms.
 
