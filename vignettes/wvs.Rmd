@@ -317,8 +317,9 @@ heatmap(cor(t(apply(wv_filtered_sg[,-(1:4)], 1, as.numeric))),
         margins = c(2,2))
 ```
 
-![](wvs_files/figure-html/wvs_5-1-1.png)
-
+<p style="text-align:center;">
+<img src="ex_data/WVS/heatmap.jpg" alt="" width="500"/>
+</p>
 
 Even though we have to zoom into the figure for details, we already see that there are groups of features that are more correlated with one another. Here are three examples:
 
