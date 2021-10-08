@@ -126,7 +126,7 @@
 where <span class="math inline">\(F_1\)</span> is the Tracy-Widom distribution with ensemble index <span class="math inline">\(1\)</span> (TW<span class="math inline">\({}_1\)</span>), i.e., <span class="math display">\[\begin{equation*}
 F_1(x) = \exp\left(-\int_x^\infty [u(s)+(s-x)u^2(s)]ds\right)\hspace{1cm} \text{for }x \in \mathbb{R},
 \end{equation*}\]</span> with <span class="math inline">\(u(s)\)</span> defined as the solution to the nonlinear ordinary differential equation <span class="math inline">\(u''=2u^3 + su\)</span> with asymptotic condition <span class="math inline">\(u(s)\sim \frac{1}{2\sqrt{\pi} s^{1/4}}\exp(-\frac{2}{3}s^{3/2})\)</span> as <span class="math inline">\(s\rightarrow\infty\)</span>. (The ODE is called the Painlevé II equation and its solution the Hastings-Mcleod solution.)</p>
-<p>Just like how the famous Central Limit Theorem allows us to construct confidence intervals and perform <span class="math inline">\(z\)</span>- or <span class="math inline">\(t\)</span>-tests on sample means that converge to the Gaussian under some null model, so does Tracy-Widom theory allow us to perform asymptotic tests on a multivariate sample, whose largest singular value converges to the TW<span class="math inline">\({}_1\)</span> under some null model. (Recall that the <span class="math inline">\(z\)</span>- and <span class="math inline">\(t\)</span>-tests are asymptotic tests.)</p>
+<p>Just like how the famous Central Limit Theorem allows us to construct confidence intervals and perform <span class="math inline">\(z\)</span>- or <span class="math inline">\(t\)</span>-tests on sample means that converge to the Gaussian under some null model, so does Tracy-Widom theory allow us to perform asymptotic tests on a multivariate sample, whose largest singular value converges to the TW<span class="math inline">\({}_1\)</span> under some null model. (Recall that the <span class="math inline">\(z\)</span>- and <span class="math inline">\(t\)</span>-tests are asymptotic two-sample tests of difference in sample means, contingent on the Central Limit Theorem working on the means even if the samples themselves are not normally distributed.)</p>
 <p>What is the null model here? In population genetics, a panmictic population produces exchangeable individual genomes. In the presence of population structure, however, stratification of the sampled genomes occurs. Thus, in applying the TW test, we hope to detect stratification or exchangeability in a sample of genomes.</p>
 <p>In a population-genetic setting, the rows of <span class="math inline">\(\mathbf{X}\)</span> are polarised genotypes or haplotypes, i.e., each row lies in either <span class="math inline">\(\{0,1,2\}^P\)</span> or <span class="math inline">\(\{0,1\}^P\)</span>. In <a href="https://doi.org/10.1371/journal.pgen.0020190">Patterson et al. (2006)</a>, the authors propose the following test, in the absence of marker-marker linkages (i.e., LD).</p>
 <ol style="list-style-type: decimal">
@@ -280,14 +280,72 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 <p style="text-align:center;">
 <img src="R_implement_FPR.jpg" alt="smartpca FPR" width="400"></p>
 <p align="center">
-<em>Type I Error Rates for R Implementation.</em>
+<em>Type I Error Rates for R Implementation. Note that an <a href="https://en.wikipedia.org/wiki/Exact_test">exact test</a> should have its empirical Type I error rate lying on or below the y=x line.</em>
 </p>
 <p>These results provide independent verification of the claim in Patterson et al. (2006) that their method is efficacious for independent markers.</p>
 </div>
 <div id="linked-markers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#linked-markers" class="anchor"></a>Linked Markers</h2>
-<p>To be continued.</p>
+<p>As we report briefly in our paper, we explored the performance of <strong>smartpca</strong> and <strong>flinty</strong> on simulated genomes with linked markers. To simulate such data, we rely on <strong>msprime</strong> to generate <span class="math inline">\(N=100\)</span> individual haplotypes across <span class="math inline">\(B=10\)</span> chromosomes, with each chromosome simulated independently of all other chromosomes. Per chromosome, haplotypes are generated from the coalescent with mutation rate and recombination rate set at <span class="math inline">\(2\times 10^{-8}\)</span> and effective population size <span class="math inline">\(10^4\)</span>. We further set the physical length of each chromosome to <span class="math inline">\(10^5\)</span>, so that each chromosome contains order <span class="math inline">\(10^2\)</span> single nucleotide polymorphisms. The code to generate SNPs within a single chromosome can be found <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/msprime_model.py">here</a>. Code to generate the <span class="math inline">\(10\)</span> chromosomes independently can be found in lines 78-106 of <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">this script</a>.</p>
+<p>Note that this generative model results in linked markers because the small recombination rates are insufficient to remove linkage.</p>
+<p>On top of running <strong>smartpca</strong>, we perform LD pruning and marker regression, two strategies suggested by Patterson et al. (2006) to remove linkage. We rely on the <strong>AssocTests</strong> software, recently developed by <a href="https://www.jstatsoft.org/article/view/v094i05">Wang et al. (2020)</a> to run the <strong>smartpca</strong> algorithm within R, after performing LD pruning with <strong>PLINK</strong>, to facilitate smoother analysis. For marker regression, we code from scratch the method described on p. 2086 of Patterson et al. (2006); see lines 5-33 in <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">this script</a>. Consistent with the recommendations in the paper, we use <span class="math inline">\(k=5\)</span> markers in the regression, and pipe the regressed output into our previously coded up eigenvalue significance test, <code>getTWPValue</code>.</p>
+<p>What do we find? Let us list the results by method. We begin by loading the results obtained from running <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">our script</a>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Load results</span>
+<span class="co"># Load libraries</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+
+<span class="co"># Load result file</span>
+<span class="va">EIGENSOFT_dep_df</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"EIGENSOFT_results_dep_df.csv"</span><span class="op">)</span></code></pre></div>
+<ol style="list-style-type: decimal">
+<li>
+<strong>EIGENSOFT/smartpca</strong> (no correction for LD)</li>
+</ol>
+<p>The histogram below shows that at <span class="math inline">\(\alpha=0.05\)</span>, the number of significant eigenvalues is overestimated.</p>
+<p style="text-align:center;">
+<img src="EIGENSOFT_K_a005.jpg" alt="smartpca K plot" width="400"></p>
+<p align="center">
+<em>Histogram of the number of significant eigenvalues, K. For an exchangeable sequence, K should be 0.</em>
+</p>
+<p>Because <span class="math inline">\(K=0\)</span> is the typical decision rule for whether a sample is unstratified (i.e., exchangeable), we can compute the FPR at <span class="math inline">\(\alpha=0.05\)</span>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Compute EIGENSOFT FPR</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The FPR estimate is "</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">EIGENSOFT_dep_df</span><span class="op">$</span><span class="va">EIGENSOFT_a5</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>, <span class="st">"."</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "The FPR estimate is 1."</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Our R Implementation (<code>getTWPValue</code>), with marker regression to correct for LD</li>
+</ol>
+<p>The plot of Type I Error against significance threshold <span class="math inline">\(\alpha\)</span> shows that the conservative test of non-exchangeability also has inflated Type I error.</p>
+<p style="text-align:center;">
+<img src="R_implement_dep_FPR.jpg" alt="R Implementation FPR" width="400"></p>
+<p align="center">
+<em>Type I Error Rates for R Implementation, with simulated markers in LD.</em>
+</p>
+<p>This demonstrates that marker regression alone can be inadequate at accounting for LD whilst deciding whether a sample of genomes is exchangeable.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>
+<strong>AssocTests</strong>, with LD pruning</li>
+</ol>
+<p>LD pruning was performed using PLINK, such that whenever a pair of variants with LD at least <span class="math inline">\(0.1\)</span> within a window of <span class="math inline">\(50\)</span> SNPs is observed, the variant with lower MAF is removed. (You can see line 165 of <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">our script</a> and the <a href="https://groups.google.com/g/plink2-users/c/FSAF_36tIEs">PLINK2 users forum</a> for details.)</p>
+<p>The plot below shows that at <span class="math inline">\(\alpha=0.05\)</span>, the number of significant eigenvalues is overestimated.</p>
+<p style="text-align:center;">
+<img src="EIGENSTRAT_K_a005.jpg" alt="smartpca K plot" width="400"></p>
+<p align="center">
+<em>Histogram of the number of significant eigenvalues, K. For an exchangeable sequence, K should be 0.</em>
+</p>
+<p>This demonstrates that LD pruning alone is also inadequate at accounting for LD whilst deciding whether a sample of genomes is exchangeable.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>flinty</strong></li>
+</ol>
+<p>We assume the variants are partitionable, and moreover assume that variants lying in different chromosomes are independent of one another. (This assumption, if true, enables us to build chromosome-specific evolutionary models with the individual haplotypes as data.)</p>
+<p>The plot of Type I Error against significance threshold <span class="math inline">\(\alpha\)</span> shows that <strong>flinty</strong> reasonably controls the Type I error. Even though the point estimates sometimes lie above the <span class="math inline">\(y=x\)</span> line, the <span class="math inline">\(95\%\)</span> confidence intervals well contain the <span class="math inline">\(y=x\)</span> curve.</p>
+<p style="text-align:center;">
+<img src="flinty_dep_FPR.jpg" alt="smartpca K plot" width="400"></p>
+<p align="center">
+<em>Type I Error Rates for flinty, with simulated markers in LD.</em>
+</p>
 </div>
 </div>
 <div id="other-approaches" class="section level1">
@@ -296,12 +354,12 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 <div id="alternative-normalisation-strategies-for-tw-statistic" class="section level2">
 <h2 class="hasAnchor">
 <a href="#alternative-normalisation-strategies-for-tw-statistic" class="anchor"></a>Alternative Normalisation Strategies for TW Statistic</h2>
-<p>To be continued.</p>
+<p>This section will explore different approaches used to estimate the “effective number of markers” parameter of the observed Wishart matrix computed from the scaled genotype matrix. To be continued.</p>
 </div>
 <div id="empirical-spectral-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#empirical-spectral-distribution" class="anchor"></a>Empirical Spectral Distribution</h2>
-<p>To be continued.</p>
+<p>This section will explore other spectral statistics potentially useful for detecting structure. To be continued.</p>
 </div>
 <div id="parallel-analysis" class="section level2">
 <h2 class="hasAnchor">

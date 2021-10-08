@@ -10,10 +10,13 @@
 ^README\.md$
 ^Rprof\.out$
 ^bruno_intro\.png$
-^standalone\_5\.jpg$
+^standalone\_6\.jpg$
 ^\.github$
 ^\.Rds$
 ^\.csv$
 ^\.gz$
 ^\.gz.tbi$
 ^\.RData$
+^MOM\_estimator\_histogram\.jpg$
+^MOM\_estimator\_histogram\.pdf$
+^\.R$
