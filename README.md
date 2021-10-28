@@ -64,9 +64,10 @@ Examples involving real datasets can be found in the tutorials.
 
 We offer several tutorials on using our software.
 
-- Conceptual explorations of exchangeability (see Exchangeability and Homogeneity)
-- Application to avoiding risking double dipping (see Introduction)
-- Application to single cell genomics 
-- Application to World Values Survey 
+- Conceptual explorations of exchangeability ([here](https://alanaw1.github.io/flintyR/articles/ex_vs_hom.html))
+- Application to avoiding risking double dipping (see [here](https://alanaw1.github.io/flintyR/articles/intro.html))
+- Application to single cell genomics ([here](https://alanaw1.github.io/flintyR/articles/single-cell-atac-seq.html))
+- Application to World Values Survey ([here](https://alanaw1.github.io/flintyR/articles/wvs.html))
+- Application to stratification detection in population genetics ([here](https://alanaw1.github.io/flintyR/articles/pop_strat.html))
 
-We love to see our methods and software used across multiple fields, so please reach out to us if you are interested in using them! If there is enough interest, we are happy to include more tutorials.    
+We love to see our methods and software used across multiple fields, so please reach out to us if you are interested in using them. If there is enough interest, we are happy to include more tutorials.    
