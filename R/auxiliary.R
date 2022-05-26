@@ -444,11 +444,13 @@ cacheBlockPermute2 <- function(X,
 #' Each element in list should be either a distance matrix or a table recording
 #' pairwise distances. 
 #' @param nruns The resampling number (use at least 1000)
+#' @param type Either an unbiased estimate (`'unbiased'`, default), or exact (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.
 #' @return The p-value obtained from comparing the empirical tail cdf of the observed 
 #' \eqn{V} statistic computed from distance data. 
 #' 
 distDataPermute <- function(dist_list,
-                            nruns) {
+                            nruns,
+                            type) {
   # Get number of samples
   N <- unique(sapply(dist_list, function(x) dim(x)[1]))
   
@@ -486,7 +488,17 @@ distDataPermute <- function(dist_list,
   V_vec <- foreach(i=1:nruns, .combine = c) %dopar% newVLocal(all_dist_matrix, forward, reverse)
   
   # Return
-  return(mean(V_vec > V_obs)) # strictly greater than for conservativeness
+  if (type == "valid") {
+    return(mean(c(V_vec,V_obs) >= V_obs)) # Hemerik and Goeman (2018)
+  } else if (type == "unbiased") {
+    return(mean(V_vec > V_obs)) # strictly greater than for conservativeness
+  } else {
+    unbiased <- mean(V_vec > V_obs)
+    valid <- mean(c(V_vec,V_obs) >= V_obs)
+    to_return <- c(unbiased,valid)
+    names(to_return) <- c("unbiased","valid")
+    return(to_return)
+  }
 }
 
 #' p-value Computation for Test of Exchangeability with Block Dependencies
@@ -503,6 +515,7 @@ distDataPermute <- function(dist_list,
 #' block of non-independent features starts. Default is NULL.
 #' @param block_labels Length \eqn{P} vector recording the block label of each feature.
 #' Default is NULL.
+#' @param type Either an unbiased estimate (`'unbiased'`, default), or exact (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.
 #' @param p The power p of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}
 #' @param nruns The resampling number (use at least 1000)
 #' @return The block permutation p-value
@@ -511,6 +524,7 @@ blockPermute <- function(X,
                          block_boundaries = NULL,
                          block_labels = NULL,
                          nruns,
+                         type,
                          p = 2) {
   # Check that exactly one of block_labels or block_boundaries is NULL
   if (!is.null(block_labels) & !is.null(block_boundaries)) {
@@ -551,7 +565,18 @@ blockPermute <- function(X,
       V_vec <- cacheBlockPermute2(X, block_boundaries, nruns, p)
     }
   }
-  return(mean(V_vec > V_obs)) # strictly greater than for conservativeness
+  # Return
+  if (type == "valid") {
+    return(mean(c(V_vec,V_obs) >= V_obs)) # Hemerik and Goeman (2018)
+  } else if (type == "unbiased") {
+    return(mean(V_vec > V_obs)) # strictly greater than for conservativeness
+  } else {
+    unbiased <- mean(V_vec > V_obs)
+    valid <- mean(c(V_vec,V_obs) >= V_obs)
+    to_return <- c(unbiased,valid)
+    names(to_return) <- c("unbiased","valid")
+    return(to_return)
+  }
 }
 
 #' Tail Probability for Chi Square Convolution Random Variable

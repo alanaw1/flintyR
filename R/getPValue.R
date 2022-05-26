@@ -22,7 +22,7 @@
 #' If \eqn{P} or \eqn{B} is small, however, stick with permutations.
 #'
 #' Dependencies: All functions in auxiliary.R
-#' @param X The binary or real matrix on which to perform test of exchangeability
+#' @param X The binary or real matrix on which to perform test of exchangeability.
 #' @param block_boundaries Vector denoting the positions where a new
 #' block of non-independent features starts. Default is NULL.
 #' @param block_labels Length \eqn{P} vector recording the block label of each feature.
@@ -30,8 +30,9 @@
 #' @param largeP Boolean indicating whether to use large \eqn{P} asymptotics. Default is FALSE.
 #' @param largeN Boolean indicating whether to use large \eqn{N} asymptotics. Default is FALSE.
 #' @param nruns Resampling number for exact test. Default is 5000.
+#' @param type Either an unbiased estimate of (`'unbiased'`, default), or valid, but biased estimate of, (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.
 #' @param p The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}. Default is 2.
-#' @return The p-value to be used to test the null hypothesis of exchangeability
+#' @return The p-value to be used to test the null hypothesis of exchangeability.
 #' @export
 #' @importFrom doParallel %dopar%
 #' @examples
@@ -119,6 +120,7 @@ getPValue <- function(X,
                       largeP = FALSE,
                       largeN = FALSE,
                       nruns = 5000,
+                      type = 'unbiased',
                       p = 2) {
   # [!] Check data matrix X is a matrix
   assertthat::assert_that(is.matrix(X),
@@ -132,9 +134,13 @@ getPValue <- function(X,
     }
   }
 
+  # [!] Check that type is well-defined
+  assertthat::assert_that((type == "unbiased" | type == "valid" | type == "both"),
+                          msg = "Please specify a valid type (`unbiased`, `valid`, or `both`)")
+
   # [!] Check classes of largeP, largeN and nruns
   assertthat::assert_that(is.logical(largeP),
-                          msg = "largeP must be either TRUE or FALSE.") 
+                          msg = "largeP must be either TRUE or FALSE.")
   assertthat::assert_that(is.logical(largeN),
                           msg = "largeN must be either TRUE or FALSE.")
   assertthat::assert_that(isTRUE(all.equal(nruns, as.integer(nruns))) & is.numeric(nruns) & nruns >= 1,
@@ -182,8 +188,8 @@ getPValue <- function(X,
     # [!] Check for non-conventional labeling
     assertthat::assert_that(max(block_labels) == length(unique(block_labels)),
                             msg = "Block labels are not from 1 to B. Please relabel blocks using this convention.")
-  
-    # EDGE CASE: a single block is specified -- sample should automatically be exchangeable  
+
+    # EDGE CASE: a single block is specified -- sample should automatically be exchangeable
     if (max(block_labels) == 1) {
       cat("All blocks are labeled 1, i.e., no independent sets of features detected, so samples are assumed exchangeable.\n")
       return(1)
@@ -204,7 +210,7 @@ getPValue <- function(X,
     return(blockLargeP(X, block_boundaries, block_labels, p)) # large P block
   }
   if (!largeP & !largeN) {
-    return(blockPermute(X, block_boundaries, block_labels, nruns, p))
+    return(blockPermute(X, block_boundaries, block_labels, nruns, type, p))
   }
 }
 
@@ -220,42 +226,44 @@ getPValue <- function(X,
 #' pairwise distances between individuals across \eqn{B} independent features.
 #'
 #' Dependencies: distDataLargeP and distDataPermute from auxiliary.R
-#' @param dist_list The list of distances
+#' @param dist_list The list of distances.
 #' @param largeP Boolean indicating whether to use large \eqn{P} asymptotics. Default is FALSE.
 #' @param nruns Resampling number for exact test. Default is 1000.
-#' @return The p-value to be used to test the null hypothesis of exchangeability
+#' @param type Either an unbiased estimate of (`'unbiased'`, default), or valid, but biased estimate of, (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.
+#' @return The p-value to be used to test the null hypothesis of exchangeability.
 #' @export
 #' @importFrom doParallel %dopar%
-#' 
+#'
 distDataPValue <- function(dist_list,
                            largeP = FALSE,
-                           nruns = 1000) {
-  
-  # [!] Check that dist_list is a list 
+                           nruns = 1000,
+                           type = 'unbiased') {
+
+  # [!] Check that dist_list is a list
   assertthat::assert_that(is.list(dist_list),
                           msg = "Input is not a valid list of distance matrices.")
-  
+
   # [!] Check that each element of dist_list is a distance matrix
   assertthat::assert_that(all(sapply(dist_list, function(x) is.matrix(x))),
                           msg = "Not all elements of dist_list is a distance matrix. Check list provided.")
-  
-  # [!] Check all distance matrices have the same dimension 
+
+  # [!] Check all distance matrices have the same dimension
   assertthat::assert_that(var(sapply(dist_list, function(x) dim(x)[1])) == 0,
                           msg = "Not all matrices have the same dimension. Check distance matrices provided.")
-  
+
   # [!] Check all distance matrices are square
   assertthat::assert_that(all(sapply(dist_list, function(x) {dim(x)[1] == dim(x)[2]})),
                           msg = "Not all matrices are square. Check distance matrices provided.")
-  
+
   # [!] Check that largeP and no. independent features are consistent
   if (length(dist_list) < 50 & largeP) {
     stop("Too few independent distance matrices for chi-square approximation to be valid, please set largeP = FALSE.")
   }
-  
+
   # Get p-value
   if (largeP) {
     return(distDataLargeP(dist_list))
   } else {
-    return(distDataPermute(dist_list, nruns))
+    return(distDataPermute(dist_list, nruns, type))
   }
 }
