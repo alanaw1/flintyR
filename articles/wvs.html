@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/alanaw1/flintyR/">
+  <a href="https://github.com/alanaw1/flintyR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -94,47 +90,47 @@
       <h1 data-toc-skip>Analysis of World Values Survey Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/master/vignettes/wvs.Rmd"><code>vignettes/wvs.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/HEAD/vignettes/wvs.Rmd" class="external-link"><code>vignettes/wvs.Rmd</code></a></small>
       <div class="hidden name"><code>wvs.Rmd</code></div>
 
     </div>
 
     
     
-<p><em>We are grateful to <a href="https://www.lse.ac.uk/PBS/People/Rachel-Spicer">Rachel Spicer</a>, Post Doctoral Fellow at the London School of Economics and Political Science, for feedback on enhancing accessibility and reproducibility of this vignette.</em></p>
-<p>In psychological studies, decades of analyses of data originating from primarily Western, Educated, Industrial, Rich and Democratic (WEIRD) societies have contributed to the lack of replicability and generalizability of findings (<a href="https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-inthe-world/BF84F7517D56AFF7B7EB58411A554C17">Henrich et al., 2010</a>). This has motivated the development of metrics that quantify meaningful cultural differences between societies (<a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782">Muthukrishna et al., 2020</a>), which bear on the validity of porting results obtained from analyzing one population over to another different population.</p>
+<p><em>We are grateful to <a href="https://www.lse.ac.uk/PBS/People/Rachel-Spicer" class="external-link">Rachel Spicer</a>, Post Doctoral Fellow at the London School of Economics and Political Science, for feedback on enhancing accessibility and reproducibility of this vignette.</em></p>
+<p>In psychological studies, decades of analyses of data originating from primarily Western, Educated, Industrial, Rich and Democratic (WEIRD) societies have contributed to the lack of replicability and generalizability of findings (<a href="https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-inthe-world/BF84F7517D56AFF7B7EB58411A554C17" class="external-link">Henrich et al., 2010</a>). This has motivated the development of metrics that quantify meaningful cultural differences between societies (<a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782" class="external-link">Muthukrishna et al., 2020</a>), which bear on the validity of porting results obtained from analyzing one population over to another different population.</p>
 <p style="text-align:center;">
 <img src="ex_data/WVS/aps_fig6.jpg" alt="" width="500"></p>
 <p align="center">
-<em>2D <a href="https://www.jstor.org/stable/2110441?seq=1">non-metric multidimensional scaling (NMDS)</a> plot generated from a distance matrix summarising how culturally distinct regions are. Each entry of the distance matrix reports the cultural fixation index (<span class="math inline">\(\text{CF}_{ST}\)</span>) between two regions. Also shown are distances within the regions, which capture within-nation variation. Figure reproduced from <a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782">Muthukrishna et al. (2020)</a>, with permission from Michael Muthukrishna.</em>
+<em>2D <a href="https://www.jstor.org/stable/2110441?seq=1" class="external-link">non-metric multidimensional scaling (NMDS)</a> plot generated from a distance matrix summarising how culturally distinct regions are. Each entry of the distance matrix reports the cultural fixation index (<span class="math inline">\(\text{CF}_{ST}\)</span>) between two regions. Also shown are distances within the regions, which capture within-nation variation. Figure reproduced from <a href="https://journals.sagepub.com/doi/full/10.1177/0956797620916782" class="external-link">Muthukrishna et al. (2020)</a>, with permission from Michael Muthukrishna.</em>
 </p>
-In contrast to between-society differences that reflect important cultural heterogeneities, differences within putatively singular populations or societies could suggest the presence of distinct communities that reflect meaningful sociological or demographic characteristics. For example, it is known that genealogical communities exist within the United States, and the persistence of homogamous mating in such communities (the determinants of which include, some scholars have suggested, geographic isolation and homophilous sorting by transmitted cultural traits; see <a href="https://www.jstor.org/stable/223487?seq=1">Kalmijn, 1998</a> and <a href="https://press.princeton.edu/books/paperback/9780691082837/cultural-transmission-and-evolution-mpb-16-volume-16">Feldman and Cavalli-Sforza, 1981</a>) is manifested in genetic differences (<a href="https://www.nature.com/articles/ncomms14238">Han et al., 2017</a>). See the Figure below and pay attention to the French Canadians, the Amish, the New Mexicans and the Scandinavians.
+In contrast to between-society differences that reflect important cultural heterogeneities, differences within putatively singular populations or societies could suggest the presence of distinct communities that reflect meaningful sociological or demographic characteristics. For example, it is known that genealogical communities exist within the United States, and the persistence of homogamous mating in such communities (the determinants of which include, some scholars have suggested, geographic isolation and homophilous sorting by transmitted cultural traits; see <a href="https://www.jstor.org/stable/223487?seq=1" class="external-link">Kalmijn, 1998</a> and <a href="https://press.princeton.edu/books/paperback/9780691082837/cultural-transmission-and-evolution-mpb-16-volume-16" class="external-link">Feldman and Cavalli-Sforza, 1981</a>) is manifested in genetic differences (<a href="https://www.nature.com/articles/ncomms14238" class="external-link">Han et al., 2017</a>). See the Figure below and pay attention to the French Canadians, the Amish, the New Mexicans and the Scandinavians.
 <p style="text-align:center;">
 <img src="ex_data/WVS/naturecomms_fig3.jpeg" alt="Distribution of ancestral birth locations in North America associated with IBD clusters" width="500"></p>
 <p align="center">
-<em>Distribution of ancestral birth locations in North America associated with clusters of individuals. A higher odds ratio (OR) implies that most present-day descendants of individuals from that ancestral birth location belong to the same cluster. Figure reproduced from <a href="https://www.nature.com/articles/ncomms14238">Han et al. (2017)</a> under the Creative Commons Attribution (CC-BY) license.</em>
+<em>Distribution of ancestral birth locations in North America associated with clusters of individuals. A higher odds ratio (OR) implies that most present-day descendants of individuals from that ancestral birth location belong to the same cluster. Figure reproduced from <a href="https://www.nature.com/articles/ncomms14238" class="external-link">Han et al. (2017)</a> under the Creative Commons Attribution (CC-BY) license.</em>
 </p>
 <p>📖 In this vignette, we will:</p>
 <ul>
 <li>show how <strong>flinty</strong> can be used to provide evidence for the presence of distinct subpopulations within a single-population sample of individual responses to survey questionnaires,</li>
 <li>demonstrate how <strong>flinty</strong> can generate exchangeable subsamples of individual “culturomes”, in the absence of labels on the individuals.</li>
 </ul>
-<div id="world-values-survey-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#world-values-survey-data" class="anchor"></a>World Values Survey Data</h1>
-<p>We obtain publicly available survey questionnaire response data from the <a href="https://www.worldvaluessurvey.org/wvs.jsp">World Values Survey (WVS)</a>. The WVS is a research program aimed at understanding how beliefs, values and norms change over time and across nations globally; it is the largest non-commercial, cross-national, and time-series survey of public attitudes and values around the world. Motivated by the question of within-society differences, we focus on interrogating the cultural homogeneity of Singaporeans based on a representative collection of responses to the WVS questionnaire. To illustrate our method we use data from Wave 6 of the WVS that was released in 2012. (A report by <a href="https://lkyspp.nus.edu.sg/docs/default-source/ips/ips-exchange-series-17.pdf">Mathew, Teo, Tay and Wang, 2021</a> analyzing Singaporeans from 2020’s Wave 7 of the WVS has been published by the Institute of Policy Studies; here is a <a href="https://lkyspp.nus.edu.sg/ips/news/details/attitudes-towards-institutions-politics-and-policies-key-findings-from-the-world-value-survey">press release</a>.)</p>
-<p>To download the WVS data, please read the instructions in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/wvs">Github repo</a>.</p>
+<div class="section level2">
+<h2 id="world-values-survey-data">World Values Survey Data<a class="anchor" aria-label="anchor" href="#world-values-survey-data"></a>
+</h2>
+<p>We obtain publicly available survey questionnaire response data from the <a href="https://www.worldvaluessurvey.org/wvs.jsp" class="external-link">World Values Survey (WVS)</a>. The WVS is a research program aimed at understanding how beliefs, values and norms change over time and across nations globally; it is the largest non-commercial, cross-national, and time-series survey of public attitudes and values around the world. Motivated by the question of within-society differences, we focus on interrogating the cultural homogeneity of Singaporeans based on a representative collection of responses to the WVS questionnaire. To illustrate our method we use data from Wave 6 of the WVS that was released in 2012. (A report by <a href="https://lkyspp.nus.edu.sg/docs/default-source/ips/ips-exchange-series-17.pdf" class="external-link">Mathew, Teo, Tay and Wang, 2021</a> analyzing Singaporeans from 2020’s Wave 7 of the WVS has been published by the Institute of Policy Studies; here is a <a href="https://lkyspp.nus.edu.sg/ips/news/details/attitudes-towards-institutions-politics-and-policies-key-findings-from-the-world-value-survey" class="external-link">press release</a>.)</p>
+<p>To download the WVS data, please read the instructions in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/wvs" class="external-link">Github repo</a>.</p>
 <p>The code below loads and describes the WVS data <em>before</em> running data processing steps.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load packages</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
 
 <span class="co">## Load the data</span>
 <span class="co">## This file can be downloaded with registration from the WVS website</span>
-<span class="va">wvs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"ex_data/WVS/F00007762-WV6_Data_R_v20180912.Rds"</span><span class="op">)</span>
+<span class="va">wvs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"ex_data/WVS/F00007762-WV6_Data_R_v20180912.Rds"</span><span class="op">)</span>
 
 <span class="co"># How many samples and how many features?</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">wvs</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">wvs</span><span class="op">)</span>
 <span class="co">#&gt; [1] 89565   440</span>
 
 <span class="co"># Show the wvs tibble before processing...</span>
@@ -161,8 +157,8 @@ In contrast to between-society differences that reflect important cultural heter
 <span class="co">#&gt; #   V35 &lt;labelled&gt;, V36 &lt;labelled&gt;, V37 &lt;labelled&gt;, V38 &lt;labelled&gt;, …</span>
 
 <span class="co"># What doe each feature correspond to? </span>
-<span class="va">feature_anno</span> <span class="op">&lt;-</span> <span class="va">wvs</span> <span class="op">%&gt;%</span> <span class="fu">map_chr</span><span class="op">(</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">label</span><span class="op">)</span> 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">feature_anno</span><span class="op">)</span>
+<span class="va">feature_anno</span> <span class="op">&lt;-</span> <span class="va">wvs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">label</span><span class="op">)</span> 
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">feature_anno</span><span class="op">)</span>
 <span class="co">#&gt;                                 V1                                 V2 </span>
 <span class="co">#&gt;                             "Wave"                     "Country Code" </span>
 <span class="co">#&gt;                                V2A                                 V3 </span>
@@ -172,7 +168,7 @@ In contrast to between-society differences that reflect important cultural heter
 
 <span class="co"># What are the labels  (i.e., categories) attached to feature V2?</span>
 <span class="co"># [!] Numbers do not indicate the number of samples with that label in the full dataset</span>
-<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">wvs</span><span class="op">$</span><span class="va">V2</span>, <span class="st">"labels"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">wvs</span><span class="op">$</span><span class="va">V2</span>, <span class="st">"labels"</span><span class="op">)</span>
 <span class="co">#&gt;    Missing; Unknown Not asked in survey      Not applicable           No answer </span>
 <span class="co">#&gt;                  -5                  -4                  -3                  -2 </span>
 <span class="co">#&gt;          Don't know             Algeria          Azerbaijan           Argentina </span>
@@ -207,20 +203,20 @@ In contrast to between-society differences that reflect important cultural heter
 <span class="co">#&gt;                 818                 840                 858                 860 </span>
 <span class="co">#&gt;               Yemen </span>
 <span class="co">#&gt;                 887</span></code></pre></div>
-<div id="data-processing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-processing" class="anchor"></a>Data Processing</h2>
-<p>We mirror the approach taken by Muthukrishna et al. (2020) — itself built on the work of <a href="https://doi.org/10.1073/pnas.0903232106">Bell, Richerson and McElreath (2009)</a> — to include only a subset of the questions as features and to recode responses to those questions. Concretely, we</p>
+<div class="section level3">
+<h3 id="data-processing">Data Processing<a class="anchor" aria-label="anchor" href="#data-processing"></a>
+</h3>
+<p>We mirror the approach taken by Muthukrishna et al. (2020) — itself built on the work of <a href="https://doi.org/10.1073/pnas.0903232106" class="external-link">Bell, Richerson and McElreath (2009)</a> — to include only a subset of the questions as features and to recode responses to those questions. Concretely, we</p>
 <ol style="list-style-type: decimal">
 <li>Remove questions exploring personal idiosyncrasies rather than cultural beliefs (e.g., self-reported state of health is discarded);<br>
 </li>
 <li>Recode by pooling similar responses into a single numerical categorical response (e.g., “very important” and “rather important” are pooled)</li>
 </ol>
-<p>We provide scripts accomplishing this in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/wvs">Github repo</a>.</p>
+<p>We provide scripts accomplishing this in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/wvs" class="external-link">Github repo</a>.</p>
 <p>To facilitate our presentation, we have saved data generated from performing Steps 1 and 2 above. Below is code to load and preview this saved file.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load the data </span>
-<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"ex_data/WVS/all_MM_num_filtered_recode.RData"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"ex_data/WVS/all_MM_num_filtered_recode.RData"</span><span class="op">)</span>
 
 <span class="co">## View data</span>
 <span class="va">wv_num_filtered_</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
@@ -271,11 +267,11 @@ In contrast to between-society differences that reflect important cultural heter
 <p>We restrict our samples to individuals from Singapore. We obtain a dataset <span class="math inline">\(\mathbf{X}\)</span> with <span class="math inline">\(N=1715\)</span> observations and <span class="math inline">\(51\)</span> categorical features, the first four of which are individual metadata. Thus there are <span class="math inline">\(P=47\)</span> questionnaire response features in total.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Select individuals from Singapore</span>
-<span class="va">wv_filtered_sg</span> <span class="op">&lt;-</span> <span class="va">wv_num_filtered_</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">`Country Code`</span> <span class="op">==</span> <span class="st">"Singapore"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">select_if</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/remove_missing.html">remove_missing</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="va">as.factor</span><span class="op">)</span><span class="op">)</span>
+<span class="va">wv_filtered_sg</span> <span class="op">&lt;-</span> <span class="va">wv_num_filtered_</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">`Country Code`</span> <span class="op">==</span> <span class="st">"Singapore"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html" class="external-link">select_if</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/remove_missing.html" class="external-link">remove_missing</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="va">as.factor</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Error in filter(., `Country Code` == "Singapore"): object 'Country Code' not found</span>
 
 <span class="co">## View data</span>
@@ -326,66 +322,66 @@ In contrast to between-society differences that reflect important cultural heter
 <span class="co">#&gt; 12                       1                           1</span>
 
 <span class="co">## Get data dimensions</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1715   51</span></code></pre></div>
 </div>
-<div id="one-hot-encoding" class="section level2">
-<h2 class="hasAnchor">
-<a href="#one-hot-encoding" class="anchor"></a>One-Hot Encoding</h2>
+<div class="section level3">
+<h3 id="one-hot-encoding">One-Hot Encoding<a class="anchor" aria-label="anchor" href="#one-hot-encoding"></a>
+</h3>
 <p>A challenge in measuring distances between categorical survey response variables is to determine which distance correctly measures “how far apart” we believe different pairs of categories should be. For example, should “strongly agree” and “not applicable” be more far apart than “strongly disagree” and “not applicable”? (This always depends on the downstream task; e.g., are distances used for visualization, or for classification, or something else.)</p>
 <p>To compute Hamming distances between categorical variables, we perform <em>one-hot encoding</em> of all categorical variables with more than two categories. One-hot encoding means we assume that distances between pairs of categories are agnostic to the categories themselves. For example, consider the variable “Justifiable: Homosexuality”. After recoding there are three categories, 0, 1 and 2. Since differences between categories 0, 1 and 2 are assumed not to depend on the choice of categories, we transform 0, 1 and 2 into <span class="math inline">\(3\)</span>-bits 100, 010 and 001, so that when computing Hamming distances between the categories, differences between any pair of categories is <span class="math inline">\(1\)</span>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Binarize array and generate block delimiters</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mltools</span><span class="op">)</span> <span class="co"># for one_hot to work</span>
-<span class="va">wv_filtered_sg_bin</span> <span class="op">&lt;-</span> <span class="fu">one_hot</span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">51</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ben519/mltools" class="external-link">mltools</a></span><span class="op">)</span> <span class="co"># for one_hot to work</span>
+<span class="va">wv_filtered_sg_bin</span> <span class="op">&lt;-</span> <span class="fu">one_hot</span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">51</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Check dimension of one-hot encoded matrix</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">wv_filtered_sg_bin</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">wv_filtered_sg_bin</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1715  120</span>
 
 <span class="co">## Get block delimiters </span>
-<span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">47</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Count number of levels in the factor </span>
-  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="va">p</span><span class="op">+</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="va">p</span><span class="op">+</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
   
   <span class="co"># Add to block delimiter vector accordingly</span>
-  <span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">block_membership</span>,
-                        <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">p</span>,<span class="va">k</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">block_membership</span>,
+                        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">p</span>,<span class="va">k</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="va">block_delims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">block_delims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">47</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Find position of first occurrence of p in block_membership </span>
-  <span class="va">block_delims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">block_delims</span>,<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">p</span>,<span class="va">block_membership</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">block_delims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">block_delims</span>,<span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">p</span>,<span class="va">block_membership</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
 </div>
-<div id="results" class="section level1">
-<h1 class="hasAnchor">
-<a href="#results" class="anchor"></a>Results</h1>
-<div id="how-do-responses-correlate-with-one-another" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-do-responses-correlate-with-one-another" class="anchor"></a>How do responses correlate with one another?</h2>
-<p>Before we run any tests of exchangeability, let us visualize, using a heatmap and a dendrogram, how responses to the different survey questions correlate with one another. To generate our dendrogram, we perform hierarchical clustering with Ward linkage and distance matrix constructed from sample-sample correlations. (See p. 21 of <a href="https://www.jstatsoft.org/article/view/v061i06">Charrad et al., 2014</a> for an explanation of the Ward linkage.) Note that we do not need the one-hot encoded version of <span class="math inline">\(\mathbf{X}\)</span> to accomplish this step.</p>
+<div class="section level2">
+<h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
+</h2>
+<div class="section level3">
+<h3 id="how-do-responses-correlate-with-one-another">How do responses correlate with one another?<a class="anchor" aria-label="anchor" href="#how-do-responses-correlate-with-one-another"></a>
+</h3>
+<p>Before we run any tests of exchangeability, let us visualize, using a heatmap and a dendrogram, how responses to the different survey questions correlate with one another. To generate our dendrogram, we perform hierarchical clustering with Ward linkage and distance matrix constructed from sample-sample correlations. (See p. 21 of <a href="https://www.jstatsoft.org/article/view/v061i06" class="external-link">Charrad et al., 2014</a> for an explanation of the Ward linkage.) Note that we do not need the one-hot encoded version of <span class="math inline">\(\mathbf{X}\)</span> to accomplish this step.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Generate a dendrogram</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">dendextend</span><span class="op">)</span> <span class="co"># for ladderize to work</span>
-<span class="va">features_hclust_Euclidean_ward</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">as.dist</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://talgalili.github.io/dendextend/" class="external-link">dendextend</a></span><span class="op">)</span> <span class="co"># for ladderize to work</span>
+<span class="va">features_hclust_Euclidean_ward</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">as.dist</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
                                            method <span class="op">=</span> <span class="st">"ward.D"</span><span class="op">)</span>
-<span class="va">features_dend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html">as.dendrogram</a></span><span class="op">(</span><span class="va">features_hclust_Euclidean_ward</span><span class="op">)</span> <span class="co"># generate dendrogram for plotting heat map with</span></code></pre></div>
+<span class="va">features_dend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html" class="external-link">as.dendrogram</a></span><span class="op">(</span><span class="va">features_hclust_Euclidean_ward</span><span class="op">)</span> <span class="co"># generate dendrogram for plotting heat map with</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Generate heat map to visualize correlations</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span> <span class="co"># for brewer.pal to work</span>
-<span class="va">color.scheme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">10</span>,<span class="st">"RdBu"</span><span class="op">)</span><span class="op">)</span> <span class="co"># generate the color scheme to use</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span> <span class="co"># for brewer.pal to work</span>
+<span class="va">color.scheme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span><span class="fl">10</span>,<span class="st">"RdBu"</span><span class="op">)</span><span class="op">)</span> <span class="co"># generate the color scheme to use</span>
 
-<span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+<span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">heatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
         Rowv <span class="op">=</span> <span class="fu">ladderize</span><span class="op">(</span><span class="va">features_dend</span><span class="op">)</span>,
         Colv <span class="op">=</span> <span class="fu">ladderize</span><span class="op">(</span><span class="va">features_dend</span><span class="op">)</span>,
         cexRow <span class="op">=</span> <span class="fl">0.3</span>,
         cexCol <span class="op">=</span> <span class="fl">0.3</span>,
-        margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+        margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p style="text-align:center;">
 <img src="ex_data/WVS/heatmap.jpg" alt="" width="500"></p>
 <p>Even though we have to zoom into the figure for details, we already see that there are groups of features that are more correlated with one another. Here are three examples:</p>
@@ -397,8 +393,8 @@ In contrast to between-society differences that reflect important cultural heter
 <p>The questions corresponding to the IDs are printed below.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Print table of responses with IDs</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-                             Question <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+                             Question <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:right;">
@@ -789,137 +785,137 @@ How proud of nationality
 </table>
 <p>We thus see that Group 1 corresponds to “government and the law”, Group 2 corresponds to religion, and Group 3 corresponds to politics. Interestingly, “Important in life: Work” is grouped with politics.</p>
 </div>
-<div id="are-singaporeans-culturally-homogeneous" class="section level2">
-<h2 class="hasAnchor">
-<a href="#are-singaporeans-culturally-homogeneous" class="anchor"></a>Are Singaporeans Culturally Homogeneous?</h2>
+<div class="section level3">
+<h3 id="are-singaporeans-culturally-homogeneous">Are Singaporeans Culturally Homogeneous?<a class="anchor" aria-label="anchor" href="#are-singaporeans-culturally-homogeneous"></a>
+</h3>
 <p>Our first goal is to check whether our entire sample is homogeneous. We run our test, using block delimiters that demarcate one-hot encoded responses.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load packages and set directories</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://alanaw1.github.io/flintyR/">flintyR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alanaw1.github.io/flintyR/" class="external-link">flintyR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span>
 <span class="co"># Register parallel computation</span>
-<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">## Get p-value</span>
-<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg_bin</span><span class="op">)</span>,  
+<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg_bin</span><span class="op">)</span>,  
           block_boundaries <span class="op">=</span> <span class="va">block_delims</span>,
           largeP <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># since P is almost 50 we use asymptotic test</span>
 <span class="co">#&gt; [1] 0</span></code></pre></div>
 <p>We obtain a <span class="math inline">\(p\)</span>-value of <span class="math inline">\(0\)</span>. This is not surprising, given that (as we’ve just seen) the assumption of statistical independence between responses is likely false. Next, we try grouping these features into <span class="math inline">\(B\)</span> blocks (<span class="math inline">\(B\leqslant P\)</span>) based on the same hierarchical clustering procedure we used to visualize correlations. We still find that no matter how many blocks <span class="math inline">\(B\)</span> we select (amounting to cutting the clustering dendrogram to form <span class="math inline">\(B\)</span> clusters), we still obtain <span class="math inline">\(p=0\)</span>. Below, we show an example of this computation for <span class="math inline">\(B=6\)</span>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Cluster features into k = 6 groups to obtain feature grouping</span>
-<span class="va">dist_matrix_Euclidean</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html">data.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">51</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span> <span class="co"># L2 distance</span>
-<span class="va">hclust_Euclidean_ward</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="va">dist_matrix_Euclidean</span>, method <span class="op">=</span> <span class="st">"ward.D"</span><span class="op">)</span>
-<span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">hclust_Euclidean_ward</span>, k <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">dist_matrix_Euclidean</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">51</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span> <span class="co"># L2 distance</span>
+<span class="va">hclust_Euclidean_ward</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="va">dist_matrix_Euclidean</span>, method <span class="op">=</span> <span class="st">"ward.D"</span><span class="op">)</span>
+<span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html" class="external-link">cutree</a></span><span class="op">(</span><span class="va">hclust_Euclidean_ward</span>, k <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">## Get block delimiters from group membership</span>
-<span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">47</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Count number of levels in the factor </span>
-  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="va">p</span><span class="op">+</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="va">p</span><span class="op">+</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
   
   <span class="co"># Add to block delimiter vector accordingly</span>
   <span class="va">which_group</span> <span class="op">&lt;-</span> <span class="va">clusters</span><span class="op">[</span><span class="va">p</span>,<span class="op">]</span>  
-  <span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">block_membership</span>,
-                        <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">which_group</span>,<span class="va">k</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">block_membership</span>,
+                        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">which_group</span>,<span class="va">k</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co">## Compute p-value with block boundaries obtained from feature grouping</span>
-<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg_bin</span><span class="op">)</span>,
+<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg_bin</span><span class="op">)</span>,
           block_labels <span class="op">=</span> <span class="va">block_membership</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0</span></code></pre></div>
 <p>This suggests the correlation structure between the features is complex, and it is likely that there are clusters within the samples that have distinct cluster-specific correlation structures between their features. In a demographic context, we suspect that there are distinct communities of Singaporeans, wherein the responses to the WVS questions have correlation patterns unique to the community.</p>
 </div>
-<div id="what-patterns-of-variation-characterize-exchangeable-clusters-of-singaporeans" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-patterns-of-variation-characterize-exchangeable-clusters-of-singaporeans" class="anchor"></a>What Patterns of Variation Characterize Exchangeable Clusters of Singaporeans?</h2>
-<p>Motivated by evidence of heterogeneity, we try to find distinct communities of Singaporeans within our sample. Similar to how we grouped our features, we cluster the samples using hierarchical clustering with Ward linkage and distance matrix constructed from Euclidean distances computed between samples. We assume that such a clustering is efficacious at recovering demographically meaningful communities. We obtain <span class="math inline">\(K=10\)</span> as the optimal number of clusters using the Dindex metric. (See p. 14 of <a href="https://www.jstatsoft.org/article/view/v061i06">Charrad et al., 2014</a> for an explanation of how the Dindex works.)</p>
+<div class="section level3">
+<h3 id="what-patterns-of-variation-characterize-exchangeable-clusters-of-singaporeans">What Patterns of Variation Characterize Exchangeable Clusters of Singaporeans?<a class="anchor" aria-label="anchor" href="#what-patterns-of-variation-characterize-exchangeable-clusters-of-singaporeans"></a>
+</h3>
+<p>Motivated by evidence of heterogeneity, we try to find distinct communities of Singaporeans within our sample. Similar to how we grouped our features, we cluster the samples using hierarchical clustering with Ward linkage and distance matrix constructed from Euclidean distances computed between samples. We assume that such a clustering is efficacious at recovering demographically meaningful communities. We obtain <span class="math inline">\(K=10\)</span> as the optimal number of clusters using the Dindex metric. (See p. 14 of <a href="https://www.jstatsoft.org/article/view/v061i06" class="external-link">Charrad et al., 2014</a> for an explanation of how the Dindex works.)</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform tuning to decide the optimal number of clusters </span>
 <span class="co">## K to group samples into</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">NbClust</span><span class="op">)</span> <span class="co"># for NbClust to work</span>
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">NbClust</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html">data.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">51</span><span class="op">]</span><span class="op">)</span>,
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sites.google.com/site/malikacharrad/research/nbclust-package" class="external-link">NbClust</a></span><span class="op">)</span> <span class="co"># for NbClust to work</span>
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">NbClust</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">51</span><span class="op">]</span><span class="op">)</span>,
                distance <span class="op">=</span> <span class="st">"euclidean"</span>, 
                min.nc <span class="op">=</span> <span class="fl">2</span>, 
                max.nc <span class="op">=</span> <span class="fl">12</span>, 
                method <span class="op">=</span> <span class="st">"ward.D2"</span>,
                index <span class="op">=</span> <span class="st">"dindex"</span><span class="op">)</span></code></pre></div>
 <p><img src="wvs_files/figure-html/wvs_9-1.png"></p>
-<pre><code>#&gt; *** : The D index is a graphical method of determining the number of clusters. 
-#&gt;                 In the plot of D index, we seek a significant knee (the significant peak in Dindex
-#&gt;                 second differences plot) that corresponds to a significant increase of the value of
-#&gt;                 the measure. 
-#&gt; 
+<pre><code><span class="co">#&gt; *** : The D index is a graphical method of determining the number of clusters. </span>
+<span class="co">#&gt;                 In the plot of D index, we seek a significant knee (the significant peak in Dindex</span>
+<span class="co">#&gt;                 second differences plot) that corresponds to a significant increase of the value of</span>
+<span class="co">#&gt;                 the measure. </span>
+<span class="co">#&gt; </span>
 
-## Minimize clustering gain on Dindex
--diff(res$All.index) #  minimized at q = 11, so N_opt = (q - 1) = 10
-#&gt;      3      4      5      6      7      8      9     10     11     12 
-#&gt; 0.0738 0.0516 0.0447 0.0419 0.0278 0.0200 0.0215 0.0213 0.0153 0.0161
+<span class="co">## Minimize clustering gain on Dindex</span>
+<span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">All.index</span><span class="op">)</span> <span class="co">#  minimized at q = 11, so N_opt = (q - 1) = 10</span>
+<span class="co">#&gt;      3      4      5      6      7      8      9     10     11     12 </span>
+<span class="co">#&gt; 0.0738 0.0516 0.0447 0.0419 0.0278 0.0200 0.0215 0.0213 0.0153 0.0161</span>
 
-## Perform hierarchical clustering
-samples_dist_matrix_Euclidean &lt;- stats::dist(data.matrix(wv_filtered_sg[,5:51]), method = "euclidean") # L2 distance
-samples_hclust_Euclidean_ward &lt;- hclust(samples_dist_matrix_Euclidean, method = "ward.D")
+<span class="co">## Perform hierarchical clustering</span>
+<span class="va">samples_dist_matrix_Euclidean</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="va">wv_filtered_sg</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">51</span><span class="op">]</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span> <span class="co"># L2 distance</span>
+<span class="va">samples_hclust_Euclidean_ward</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="va">samples_dist_matrix_Euclidean</span>, method <span class="op">=</span> <span class="st">"ward.D"</span><span class="op">)</span>
 
-## Obtain cluster membership for K = 10 clusters
-samples_clusters &lt;- cutree(samples_hclust_Euclidean_ward, k = 10)</code></pre>
+<span class="co">## Obtain cluster membership for K = 10 clusters</span>
+<span class="va">samples_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html" class="external-link">cutree</a></span><span class="op">(</span><span class="va">samples_hclust_Euclidean_ward</span>, k <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre>
 <p>After obtaining <span class="math inline">\(10\)</span> clusters, we group the features independently <em>for each sample cluster</em> using the same hierarchical clustering approach. We then perform the block version of our test at multiple number of blocks <span class="math inline">\(B\)</span> partitioning our features, where each configuration corresponds to cutting the clustering dendrogram to form <span class="math inline">\(B\)</span> feature clusters. Below, we demonstrate an example of this procedure for one cluster containing <span class="math inline">\(241\)</span> individuals.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Select subsample corresponding to Cluster 8</span>
-<span class="va">sg_c8</span> <span class="op">&lt;-</span> <span class="va">wv_filtered_sg</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">samples_clusters</span> <span class="op">==</span> <span class="fl">8</span><span class="op">)</span>,<span class="op">]</span>
+<span class="va">sg_c8</span> <span class="op">&lt;-</span> <span class="va">wv_filtered_sg</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">samples_clusters</span> <span class="op">==</span> <span class="fl">8</span><span class="op">)</span>,<span class="op">]</span>
 <span class="va">sg_c8</span> <span class="op">&lt;-</span> <span class="va">sg_c8</span><span class="op">[</span>,<span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span> <span class="co"># remove metadata</span>
 
 <span class="co">## Check that each feature has at least two categorical levels </span>
-<span class="va">sg_c8</span> <span class="op">%&gt;%</span> 
-  <span class="fu">map</span><span class="op">(</span><span class="va">levels</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># get levels per feature</span>
-  <span class="fu">map</span><span class="op">(</span><span class="va">length</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># get number of levels </span>
-  <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># collapse into vector</span>
+<span class="va">sg_c8</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># get levels per feature</span>
+  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">length</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># get number of levels </span>
+  <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># collapse into vector</span>
 <span class="co">#&gt;  [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 4 4 4 3 3 3 2 3 3 3 3 2 2 2 4 3 2 2 2 3 3 3</span>
 <span class="co">#&gt; [40] 3 3 3 3 3 3 3 2</span>
 
 <span class="co">## Perform feature clustering</span>
-<span class="va">c8features_hclust_Euclidean_ward</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">as.dist</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html">data.matrix</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
+<span class="va">c8features_hclust_Euclidean_ward</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">as.dist</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
                                            method <span class="op">=</span> <span class="st">"ward.D"</span><span class="op">)</span>
-<span class="va">c8features_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">c8features_hclust_Euclidean_ward</span>, k <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> 
+<span class="va">c8features_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html" class="external-link">cutree</a></span><span class="op">(</span><span class="va">c8features_hclust_Euclidean_ward</span>, k <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> 
 
 <span class="co">## Binarize array</span>
-<span class="va">sg_c8_bin</span> <span class="op">&lt;-</span> <span class="fu">one_hot</span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">)</span><span class="op">)</span>
+<span class="va">sg_c8_bin</span> <span class="op">&lt;-</span> <span class="fu">one_hot</span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Get block delimiters from group membership</span>
-<span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">47</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Count number of levels in the factor </span>
-  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">[</span>,<span class="va">p</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
   
   <span class="co"># Add to block delimiter vector accordingly</span>
   <span class="va">which_group</span> <span class="op">&lt;-</span> <span class="va">c8features_clusters</span><span class="op">[</span><span class="va">p</span><span class="op">]</span>  
-  <span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">block_membership</span>,
-                        <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">which_group</span>,<span class="va">k</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">block_membership</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">block_membership</span>,
+                        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">which_group</span>,<span class="va">k</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co">## Compute p-value with block boundaries obtained from feature grouping</span>
-<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">sg_c8_bin</span><span class="op">)</span>,
+<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">sg_c8_bin</span><span class="op">)</span>,
           block_labels <span class="op">=</span> <span class="va">block_membership</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.1484</span></code></pre></div>
 <p>After performing the steps described, we find that all but one cluster (Cluster 8, shown in the code chunk above) returned significant <span class="math inline">\(p\)</span>-values that imply heterogeneity. However, for the only homogeneous cluster, we find that up to <span class="math inline">\(B=10\)</span> blocks, the samples appear homogeneous. This is no longer true when we treat all <span class="math inline">\(P=47\)</span> features as statistically independent. Thus, for this cluster, the variation in responses can be attributed to partitionable feature dependencies.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Compute p-value when assuming features are statistically independent</span>
 <span class="co"># [!] This should return p-value of 0</span>
-<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">sg_c8_bin</span><span class="op">)</span>,  
+<span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">sg_c8_bin</span><span class="op">)</span>,  
           block_boundaries <span class="op">=</span> <span class="va">block_delims</span>,
           largeP <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># since P is almost 50 we use asymptotic test</span>
 <span class="co">#&gt; [1] 8.881366e-13</span></code></pre></div>
 <p>Now that we have found an exchangeable cluster of Singaporeans, we characterize the feature dependencies for this community of individuals.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Generate heatmap with dendrogram capturing feature-feature correlations</span>
-<span class="va">c8features_dend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html">as.dendrogram</a></span><span class="op">(</span><span class="va">c8features_hclust_Euclidean_ward</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html">data.matrix</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+<span class="va">c8features_dend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html" class="external-link">as.dendrogram</a></span><span class="op">(</span><span class="va">c8features_hclust_Euclidean_ward</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">heatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="va">sg_c8</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
         Rowv <span class="op">=</span> <span class="fu">ladderize</span><span class="op">(</span><span class="va">c8features_dend</span><span class="op">)</span>,
         Colv <span class="op">=</span> <span class="fu">ladderize</span><span class="op">(</span><span class="va">c8features_dend</span><span class="op">)</span>,
         cexRow <span class="op">=</span> <span class="fl">0.3</span>,
         cexCol <span class="op">=</span> <span class="fl">0.3</span>,
-        margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+        margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p style="text-align:center;">
 <img src="ex_data/WVS/c8_heatmap.jpg" alt="" width="500"></p>
 <p>Here, we see that there are groups of features that are more correlated with one another. Here are three examples:</p>
@@ -944,11 +940,13 @@ samples_clusters &lt;- cutree(samples_hclust_Euclidean_ward, k = 10)</code></pre
 
 
       <footer><div class="copyright">
-  <p>Developed by Alan Aw.</p>
+  <p></p>
+<p>Developed by Alan Aw.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -956,6 +954,8 @@ samples_clusters &lt;- cutree(samples_hclust_Euclidean_ward, k = 10)</code></pre
 
   
 
+
+  
 
   </body>
 </html>
