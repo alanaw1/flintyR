@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -63,6 +59,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/pop_strat.html">Population Stratification</a>
     </li>
     <li>
@@ -76,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/alanaw1/flintyR/">
+  <a href="https://github.com/alanaw1/flintyR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -91,20 +90,20 @@
 
       
 
-      </header><script src="pop_strat_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Population Stratification</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/master/vignettes/pop_strat.Rmd"><code>vignettes/pop_strat.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/HEAD/vignettes/pop_strat.Rmd" class="external-link"><code>vignettes/pop_strat.Rmd</code></a></small>
       <div class="hidden name"><code>pop_strat.Rmd</code></div>
 
     </div>
 
     
     
-<p><em>We are grateful to <a href="https://www.broadinstitute.org/bios/nick-patterson">Nick Patterson</a>, a Senior Computational Biologist in the Medical and Population Genetics Program at the Broad Institute of MIT and Harvard, for helpful discussions that spurred the creation of this vignette.</em></p>
+<p><em>We are grateful to <a href="https://www.broadinstitute.org/bios/nick-patterson" class="external-link">Nick Patterson</a>, a Senior Computational Biologist in the Medical and Population Genetics Program at the Broad Institute of MIT and Harvard, for helpful discussions that spurred the creation of this vignette.</em></p>
 <p>In our paper, we report how our methods can detect whether a set of genomes is exchangeable.</p>
 <p>📖 In this vignette, we will</p>
 <ul>
@@ -113,12 +112,12 @@
 <li>Explore other approaches and potential extensions</li>
 </ul>
 <p>For pedagogical purposes, we code up all methods (except for <strong>flinty</strong>, of course) from scratch whenever possible. We welcome readers to re-use our code for their own work.</p>
-<div id="comparing-flinty-and-eigensoft" class="section level1">
-<h1 class="hasAnchor">
-<a href="#comparing-flinty-and-eigensoft" class="anchor"></a>Comparing flinty and EIGENSOFT</h1>
-<div id="introduction-to-eigensoft-and-smartpca" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction-to-eigensoft-and-smartpca" class="anchor"></a>Introduction to EIGENSOFT and smartpca</h2>
+<div class="section level2">
+<h2 id="comparing-flinty-and-eigensoft">Comparing flinty and EIGENSOFT<a class="anchor" aria-label="anchor" href="#comparing-flinty-and-eigensoft"></a>
+</h2>
+<div class="section level3">
+<h3 id="introduction-to-eigensoft-and-smartpca">Introduction to EIGENSOFT and smartpca<a class="anchor" aria-label="anchor" href="#introduction-to-eigensoft-and-smartpca"></a>
+</h3>
 <p><strong>EIGENSOFT</strong> (v7.2.1) is a software with multiple functionalities for genetic datasets: testing for stratification on genotype data, performing PCA on genotypes, and detecting causal variants whilst accounting for stratification. The first two functionalities are accomplished by the <strong>smartpca</strong> “submodule”, whereas the latter is accomplished by another submodule named <strong>EIGENSTRAT</strong>. This Section focuses on <strong>smartpca</strong>.</p>
 <p>As explained in our paper, an asymptotic result known as the Tracy-Widom theorem motivates a formal test of stratification relying on the largest eigenvalue of the sample covariance matrix. Concretely, suppose that <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{N\times P}\)</span> consists of <span class="math inline">\(N\)</span> i.i.d. sub-Gaussian <span class="math inline">\(P\)</span>-vectors (e.g., each entry being iid <span class="math inline">\(N(0,1)\)</span> distributed satisfies this). Let <span class="math inline">\(s_1(\mathbf{X})\)</span> denote the largest singular value of <span class="math inline">\(\mathbf{X}\)</span>; this is equal to the square-root of the largest eigenvalue of <span class="math inline">\(\mathbf{X}\mathbf{X}^T\)</span>. Then, as <span class="math inline">\(N,P\rightarrow\infty\)</span> with <span class="math inline">\(P/N \rightarrow \gamma\in(0,\infty)\)</span>, Tracy-Widom theory says that <span class="math display">\[\begin{equation*}
 \frac{s_1^2 - (\sqrt{N-1}+\sqrt{P})^2}{(\sqrt{N-1}+\sqrt{P})\left(\frac{1}{\sqrt{N-1}}+\frac{1}{\sqrt{P}}\right)^{1/3}} \overset{d}{\longrightarrow} F_1(s),
@@ -128,7 +127,7 @@ F_1(x) = \exp\left(-\int_x^\infty [u(s)+(s-x)u^2(s)]ds\right)\hspace{1cm} \text{
 \end{equation*}\]</span> with <span class="math inline">\(u(s)\)</span> defined as the solution to the nonlinear ordinary differential equation <span class="math inline">\(u''=2u^3 + su\)</span> with asymptotic condition <span class="math inline">\(u(s)\sim \frac{1}{2\sqrt{\pi} s^{1/4}}\exp(-\frac{2}{3}s^{3/2})\)</span> as <span class="math inline">\(s\rightarrow\infty\)</span>. (The ODE is called the Painlevé II equation and its solution the Hastings-Mcleod solution.)</p>
 <p>Just like how the famous Central Limit Theorem allows us to construct confidence intervals and perform <span class="math inline">\(z\)</span>- or <span class="math inline">\(t\)</span>-tests on sample means that converge to the Gaussian under some null model, so does Tracy-Widom theory allow us to perform asymptotic tests on a multivariate sample, whose largest singular value converges to the TW<span class="math inline">\({}_1\)</span> under some null model. (Recall that the <span class="math inline">\(z\)</span>- and <span class="math inline">\(t\)</span>-tests are asymptotic two-sample tests of difference in sample means, contingent on the Central Limit Theorem working on the means even if the samples themselves are not normally distributed.)</p>
 <p>What is the null model here? In population genetics, a panmictic population produces exchangeable individual genomes. In the presence of population structure, however, stratification of the sampled genomes occurs. Thus, in applying the TW test, we hope to detect stratification or exchangeability in a sample of genomes.</p>
-<p>In a population-genetic setting, the rows of <span class="math inline">\(\mathbf{X}\)</span> are polarised genotypes or haplotypes, i.e., each row lies in either <span class="math inline">\(\{0,1,2\}^P\)</span> or <span class="math inline">\(\{0,1\}^P\)</span>. In <a href="https://doi.org/10.1371/journal.pgen.0020190">Patterson et al. (2006)</a>, the authors propose the following test, in the absence of marker-marker linkages (i.e., LD).</p>
+<p>In a population-genetic setting, the rows of <span class="math inline">\(\mathbf{X}\)</span> are polarised genotypes or haplotypes, i.e., each row lies in either <span class="math inline">\(\{0,1,2\}^P\)</span> or <span class="math inline">\(\{0,1\}^P\)</span>. In <a href="https://doi.org/10.1371/journal.pgen.0020190" class="external-link">Patterson et al. (2006)</a>, the authors propose the following test, in the absence of marker-marker linkages (i.e., LD).</p>
 <ol style="list-style-type: decimal">
 <li>
 <p>Perform Hardy-Weinberg normalisation.</p>
@@ -141,7 +140,7 @@ F_1(x) = \exp\left(-\int_x^\infty [u(s)+(s-x)u^2(s)]ds\right)\hspace{1cm} \text{
 <li><p>Order the eigenvalues of <span class="math inline">\(\mathbf{C}\)</span> so that <span class="math inline">\(\lambda_1&gt;\lambda_2&gt;\ldots&gt;\lambda_{N-1}&gt;0\)</span>. (Due to normalisation in Step 1, the last eigenvalue is zero. Hint: what is <span class="math inline">\(\mathbf{M}^T\mathbf{1}\)</span>?)</p></li>
 <li>
 <p>Compute the effective number of markers.</p>
-<p>Instead of analysing the largest singular value of <span class="math inline">\(\mathbf{X}\)</span>, analyse the largest eigenvalue of <span class="math inline">\(\mathbf{C}\)</span>. This is because the TW<span class="math inline">\({}_1\)</span> approximation really applies to the <em>square</em> of the largest singular value, which is just the largest eigenvalue (i.e., <span class="math inline">\(s_1^2=\lambda_1\)</span>). Because <span class="math inline">\(\mathbf{C}\)</span> has an approximate Wishart distribution, one estimates the <a href="https://mathworld.wolfram.com/WishartDistribution.html">degrees of freedom parameter</a> of the Wishart, <span class="math inline">\(P'\)</span>, rather than using the putative number of features, <span class="math inline">\(P\)</span>:</p>
+<p>Instead of analysing the largest singular value of <span class="math inline">\(\mathbf{X}\)</span>, analyse the largest eigenvalue of <span class="math inline">\(\mathbf{C}\)</span>. This is because the TW<span class="math inline">\({}_1\)</span> approximation really applies to the <em>square</em> of the largest singular value, which is just the largest eigenvalue (i.e., <span class="math inline">\(s_1^2=\lambda_1\)</span>). Because <span class="math inline">\(\mathbf{C}\)</span> has an approximate Wishart distribution, one estimates the <a href="https://mathworld.wolfram.com/WishartDistribution.html" class="external-link">degrees of freedom parameter</a> of the Wishart, <span class="math inline">\(P'\)</span>, rather than using the putative number of features, <span class="math inline">\(P\)</span>:</p>
 <p><span class="math display">\[\begin{equation*}
  P' = \frac{(N+1)\left(\sum_{i}\lambda_i\right)^2}{\left((N-1)\sum_{i}\lambda_i^2\right) - \left(\sum_{i}\lambda_i\right)^2}.
  \end{equation*}\]</span></p>
@@ -179,9 +178,9 @@ F_1(x) = \exp\left(-\int_x^\infty [u(s)+(s-x)u^2(s)]ds\right)\hspace{1cm} \text{
 The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k\)</span>th eigenvalue of the sample covariance matrix. The second column, <em>difference</em>, reports the difference between the <span class="math inline">\((k+1)\)</span>th and <span class="math inline">\(k\)</span>th eigenvalues in the previous column. The <em>twstat</em> column reports the scaled Tracy-Widom statistic, as described in Step 6 of the algorithm above. The <em>p-value</em> reports the tail probability, as described in Step 7. Finally, <em>effect.n</em> is the effective number of markers described in Step 4, which loosely speaking is a substitute estimate of the number of features (rather than using the number of features <span class="math inline">\(P\)</span>). See Step 4 for why this is done.
 </details>
 </div>
-<div id="independent-markers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#independent-markers" class="anchor"></a>Independent Markers</h2>
+<div class="section level3">
+<h3 id="independent-markers">Independent Markers<a class="anchor" aria-label="anchor" href="#independent-markers"></a>
+</h3>
 <p>In our paper we demonstrated that our method controls Type I Error. Can the same be said of the population-genetic <strong>EIGENSOFT</strong>? Since we believe that details matter to understanding <em>at the operational level</em>, we take care to elaborate on our simulation setup and the nuts and bolts of running the <strong>smartpca</strong> submodule. Subsequent sections will be presented with brevity.</p>
 <p>We first consider how good <strong>EIGENSOFT/smartpca</strong> is at detecting exchangeability in the case of independent markers. We plan to examine performance on stratification in future work.</p>
 <p>To simulate genomic data under an exchangeable null, we generate <span class="math inline">\(N=100\)</span> synthetic individual haplotypes, where each haplotype is comprised of <span class="math inline">\(P=200\)</span> independent markers, each realised by Bernoulli distributions with heads probability determined by a fixed population allele frequency ranging between <span class="math inline">\(0.2\)</span> and <span class="math inline">\(0.8\)</span>. This is shown in code below.</p>
@@ -195,25 +194,25 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 <span class="co">## the number of independent alleles.</span>
 <span class="va">getExHaplotypes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">N</span>, <span class="va">num_ind_markers</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Create population allele frequencies</span>
-  <span class="va">allele_freqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">num_ind_markers</span>, min <span class="op">=</span> <span class="fl">0.2</span>, max <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
+  <span class="va">allele_freqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">num_ind_markers</span>, min <span class="op">=</span> <span class="fl">0.2</span>, max <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
   
   <span class="co"># Generate array</span>
-  <span class="va">out_array</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="st">"cbind"</span>,
-                       <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">allele_freqs</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">1</span>,<span class="va">x</span><span class="op">)</span><span class="op">}</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">out_array</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"rs"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_ind_markers</span><span class="op">)</span>
+  <span class="va">out_array</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"cbind"</span>,
+                       <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">allele_freqs</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">1</span>,<span class="va">x</span><span class="op">)</span><span class="op">}</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">out_array</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"rs"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_ind_markers</span><span class="op">)</span>
   
   <span class="co"># Return</span>
-  <span class="va">to_return</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">out_array</span>,
+  <span class="va">to_return</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">out_array</span>,
                     bounds <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">num_ind_markers</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">to_return</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">to_return</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co">## Generate array</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
 <span class="va">ex_array</span> <span class="op">&lt;-</span> <span class="fu">getExHaplotypes</span><span class="op">(</span>N<span class="op">=</span><span class="fl">100</span>, num_ind_markers<span class="op">=</span><span class="fl">200</span><span class="op">)</span>
 
 <span class="co">## Print</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">ex_array</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ex_array</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt;       rs1 rs2 rs3 rs4 rs5 rs6 rs7 rs8 rs9 rs10</span>
 <span class="co">#&gt;  [1,]   0   1   1   1   0   0   1   1   1    1</span>
 <span class="co">#&gt;  [2,]   0   1   0   0   0   0   1   0   1    1</span>
@@ -233,42 +232,42 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 <p align="center">
 <em>Example pca.par file to be read by EIGENSOFT/smartpca.</em>
 </p>
-<p>Additionally, with help from the <strong>RMTstat</strong> package (<a href="https://cran.rstudio.com/web/packages/RMTstat/index.html">Johnstone et al., 2014</a>), we implement from scratch the algorithm described in the beginning, just to see how well its performance agrees with the <strong>smartpca</strong> software. We use a two-tailed test for conservativeness.</p>
+<p>Additionally, with help from the <strong>RMTstat</strong> package (<a href="https://cran.rstudio.com/web/packages/RMTstat/index.html" class="external-link">Johnstone et al., 2014</a>), we implement from scratch the algorithm described in the beginning, just to see how well its performance agrees with the <strong>smartpca</strong> software. We use a two-tailed test for conservativeness.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Function to compute significance of largest eigenvalue </span>
 <span class="co">## in the correlation matrix. We closely follow p. 2078 of</span>
 <span class="co">## PPR2006.</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va">RMTstat</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/evanbiederstedt/RMTstat" class="external-link">RMTstat</a></span><span class="op">)</span>
 <span class="va">getTWPValue</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">M</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># 1. Assume M is computed as in Equations 1, 2, and 3.</span>
   <span class="co"># Use regressMatrix function to remove LD if necessary</span>
-  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">M</span><span class="op">)</span>
+  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">M</span><span class="op">)</span>
   
   <span class="co"># 2. Compute X = MM'. X is m x m</span>
-  <span class="va">X</span> <span class="op">&lt;-</span> <span class="va">M</span> <span class="op">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">M</span><span class="op">)</span>
+  <span class="va">X</span> <span class="op">&lt;-</span> <span class="va">M</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">M</span><span class="op">)</span>
   
   <span class="co"># 3. Order the eigenvalues of X so that ...</span>
-  <span class="va">eigen_X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eigen.html">eigen</a></span><span class="op">(</span><span class="va">X</span>, symmetric <span class="op">=</span> <span class="cn">TRUE</span>, only.values <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">values</span>
+  <span class="va">eigen_X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eigen.html" class="external-link">eigen</a></span><span class="op">(</span><span class="va">X</span>, symmetric <span class="op">=</span> <span class="cn">TRUE</span>, only.values <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">values</span>
   <span class="va">eigen_X</span> <span class="op">&lt;-</span> <span class="va">eigen_X</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">m</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span>
   
   <span class="co"># 4. Estimate n' from Equation 10</span>
-  <span class="va">n_prime</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">m</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="op">(</span><span class="va">m</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
+  <span class="va">n_prime</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">m</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="op">(</span><span class="va">m</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
   
   <span class="co"># 5. The largest eigenvalue of M is lambda_1. Set l</span>
-  <span class="va">lambda_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span>
-  <span class="va">l</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">m</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="va">lambda_1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span>
+  <span class="va">lambda_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span>
+  <span class="va">l</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">m</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="va">lambda_1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">eigen_X</span><span class="op">)</span>
   
   <span class="co"># 6. Normalize l with Equations 5-7, where the effective number of markers n' replaces n</span>
-  <span class="va">mu_mn</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">n_prime</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">n_prime</span>
-  <span class="va">sigma_mn</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">n_prime</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">n_prime</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">n_prime</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>
+  <span class="va">mu_mn</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n_prime</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">n_prime</span>
+  <span class="va">sigma_mn</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n_prime</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">n_prime</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n_prime</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>
   <span class="va">tw_stat</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">l</span> <span class="op">-</span> <span class="va">mu_mn</span><span class="op">)</span> <span class="op">/</span> <span class="va">sigma_mn</span>
   
   <span class="co"># Compute and return p-value</span>
   <span class="co"># Using two-tailed test for conservativeness</span>
-  <span class="va">p_val</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RMTstat/man/TracyWidom.html">ptw</a></span><span class="op">(</span><span class="va">tw_stat</span>, beta <span class="op">=</span> <span class="fl">1</span>, lower.tail <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/RMTstat/man/TracyWidom.html">ptw</a></span><span class="op">(</span><span class="va">tw_stat</span>, beta <span class="op">=</span> <span class="fl">1</span>, lower.tail <span class="op">=</span> <span class="cn">F</span><span class="op">)</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">p_val</span><span class="op">)</span>
+  <span class="va">p_val</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RMTstat/man/TracyWidom.html" class="external-link">ptw</a></span><span class="op">(</span><span class="va">tw_stat</span>, beta <span class="op">=</span> <span class="fl">1</span>, lower.tail <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/RMTstat/man/TracyWidom.html" class="external-link">ptw</a></span><span class="op">(</span><span class="va">tw_stat</span>, beta <span class="op">=</span> <span class="fl">1</span>, lower.tail <span class="op">=</span> <span class="cn">F</span><span class="op">)</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">p_val</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>A functional script that performs the tasks above, and generates the results about to be reported, can be downloaded from <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo.R">Github</a>. (You will need <strong>EIGENSOFT</strong> installed.)</p>
+<p>A functional script that performs the tasks above, and generates the results about to be reported, can be downloaded from <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo.R" class="external-link">Github</a>. (You will need <strong>EIGENSOFT</strong> installed.)</p>
 <p>We simulate <span class="math inline">\(200\)</span> exchangeable haplotypes matrices, with each matrix generated by <code>getExHaplotypes</code>. We estimate Type I Error rates by counting the fraction of false rejections of the null hypothesis at a specified significance threshold, <span class="math inline">\(\alpha\)</span>.</p>
 <p>We find that <strong>smartpca</strong> controls Type I Error at commonly chosen significance thresholds (<span class="math inline">\(\alpha\in\{0.01,0.05\}\)</span>): even though the point estimates of Type I Error rate appear slightly above the nominal <span class="math inline">\(\alpha\)</span>, the <span class="math inline">\(95\%\)</span> confidence intervals well contain <span class="math inline">\(\alpha\)</span>.</p>
 <p style="text-align:center;">
@@ -280,25 +279,25 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 <p style="text-align:center;">
 <img src="R_implement_FPR.jpg" alt="smartpca FPR" width="400"></p>
 <p align="center">
-<em>Type I Error Rates for R Implementation. Note that an <a href="https://en.wikipedia.org/wiki/Exact_test">exact test</a> should have its empirical Type I error rate lying on or below the y=x line.</em>
+<em>Type I Error Rates for R Implementation. Note that an <a href="https://en.wikipedia.org/wiki/Exact_test" class="external-link">exact test</a> should have its empirical Type I error rate lying on or below the y=x line.</em>
 </p>
 <p>These results provide independent verification of the claim in Patterson et al. (2006) that their method is efficacious for independent markers.</p>
 </div>
-<div id="linked-markers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#linked-markers" class="anchor"></a>Linked Markers</h2>
-<p>As we report briefly in our paper, we explored the performance of <strong>smartpca</strong> and <strong>flinty</strong> on simulated genomes with linked markers. To simulate such data, we rely on <strong>msprime</strong> to generate <span class="math inline">\(N=100\)</span> individual haplotypes across <span class="math inline">\(B=10\)</span> chromosomes, with each chromosome simulated independently of all other chromosomes. Per chromosome, haplotypes are generated from the coalescent with mutation rate and recombination rate set at <span class="math inline">\(2\times 10^{-8}\)</span> and effective population size <span class="math inline">\(10^4\)</span>. We further set the physical length of each chromosome to <span class="math inline">\(10^5\)</span>, so that each chromosome contains order <span class="math inline">\(10^2\)</span> single nucleotide polymorphisms. The code to generate SNPs within a single chromosome can be found <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/msprime_model.py">here</a>. Code to generate the <span class="math inline">\(10\)</span> chromosomes independently can be found in lines 78-106 of <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">this script</a>.</p>
+<div class="section level3">
+<h3 id="linked-markers">Linked Markers<a class="anchor" aria-label="anchor" href="#linked-markers"></a>
+</h3>
+<p>As we report briefly in our paper, we explored the performance of <strong>smartpca</strong> and <strong>flinty</strong> on simulated genomes with linked markers. To simulate such data, we rely on <strong>msprime</strong> to generate <span class="math inline">\(N=100\)</span> individual haplotypes across <span class="math inline">\(B=10\)</span> chromosomes, with each chromosome simulated independently of all other chromosomes. Per chromosome, haplotypes are generated from the coalescent with mutation rate and recombination rate set at <span class="math inline">\(2\times 10^{-8}\)</span> and effective population size <span class="math inline">\(10^4\)</span>. We further set the physical length of each chromosome to <span class="math inline">\(10^5\)</span>, so that each chromosome contains order <span class="math inline">\(10^2\)</span> single nucleotide polymorphisms. The code to generate SNPs within a single chromosome can be found <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/msprime_model.py" class="external-link">here</a>. Code to generate the <span class="math inline">\(10\)</span> chromosomes independently can be found in lines 78-106 of <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R" class="external-link">this script</a>.</p>
 <p>Note that this generative model results in linked markers because the small recombination rates are insufficient to remove linkage.</p>
-<p>On top of running <strong>smartpca</strong>, we perform LD pruning and marker regression, two strategies suggested by Patterson et al. (2006) to remove linkage. We rely on the <strong>AssocTests</strong> software, recently developed by <a href="https://www.jstatsoft.org/article/view/v094i05">Wang et al. (2020)</a> to run the <strong>smartpca</strong> algorithm within R, after performing LD pruning with <strong>PLINK</strong>, to facilitate smoother analysis. For marker regression, we code from scratch the method described on p. 2086 of Patterson et al. (2006); see lines 5-33 in <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">this script</a>. Consistent with the recommendations in the paper, we use <span class="math inline">\(k=5\)</span> markers in the regression, and pipe the regressed output into our previously coded up eigenvalue significance test, <code>getTWPValue</code>.</p>
-<p>What do we find? Let us list the results by method. We begin by loading the results obtained from running <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">our script</a>.</p>
+<p>On top of running <strong>smartpca</strong>, we perform LD pruning and marker regression, two strategies suggested by Patterson et al. (2006) to remove linkage. We rely on the <strong>AssocTests</strong> software, recently developed by <a href="https://www.jstatsoft.org/article/view/v094i05" class="external-link">Wang et al. (2020)</a> to run the <strong>smartpca</strong> algorithm within R, after performing LD pruning with <strong>PLINK</strong>, to facilitate smoother analysis. For marker regression, we code from scratch the method described on p. 2086 of Patterson et al. (2006); see lines 5-33 in <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R" class="external-link">this script</a>. Consistent with the recommendations in the paper, we use <span class="math inline">\(k=5\)</span> markers in the regression, and pipe the regressed output into our previously coded up eigenvalue significance test, <code>getTWPValue</code>.</p>
+<p>What do we find? Let us list the results by method. We begin by loading the results obtained from running <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R" class="external-link">our script</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load results</span>
 <span class="co"># Load libraries</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
 <span class="co"># Load result file</span>
-<span class="va">EIGENSOFT_dep_df</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"EIGENSOFT_results_dep_df.csv"</span><span class="op">)</span></code></pre></div>
+<span class="va">EIGENSOFT_dep_df</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"EIGENSOFT_results_dep_df.csv"</span><span class="op">)</span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>
 <strong>EIGENSOFT/smartpca</strong> (no correction for LD)</li>
@@ -312,7 +311,7 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 <p>Because <span class="math inline">\(K=0\)</span> is the typical decision rule for whether a sample is unstratified (i.e., exchangeable), we can compute the FPR at <span class="math inline">\(\alpha=0.05\)</span>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Compute EIGENSOFT FPR</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The FPR estimate is "</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">EIGENSOFT_dep_df</span><span class="op">$</span><span class="va">EIGENSOFT_a5</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>, <span class="st">"."</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The FPR estimate is "</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">EIGENSOFT_dep_df</span><span class="op">$</span><span class="va">EIGENSOFT_a5</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>, <span class="st">"."</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "The FPR estimate is 1."</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Our R Implementation (<code>getTWPValue</code>), with marker regression to correct for LD</li>
@@ -328,7 +327,7 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 <li>
 <strong>AssocTests</strong>, with LD pruning</li>
 </ol>
-<p>LD pruning was performed using PLINK, such that whenever a pair of variants with LD at least <span class="math inline">\(0.1\)</span> within a window of <span class="math inline">\(50\)</span> SNPs is observed, the variant with lower MAF is removed. (You can see line 165 of <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R">our script</a> and the <a href="https://groups.google.com/g/plink2-users/c/FSAF_36tIEs">PLINK2 users forum</a> for details.)</p>
+<p>LD pruning was performed using PLINK, such that whenever a pair of variants with LD at least <span class="math inline">\(0.1\)</span> within a window of <span class="math inline">\(50\)</span> SNPs is observed, the variant with lower MAF is removed. (You can see line 165 of <a href="https://github.com/alanaw1/exchangeability_test/blob/main/scripts/population_stratification/EIGENSOFT_EIGENSTRAT_demo_dep.R" class="external-link">our script</a> and the <a href="https://groups.google.com/g/plink2-users/c/FSAF_36tIEs" class="external-link">PLINK2 users forum</a> for details.)</p>
 <p>The plot below shows that at <span class="math inline">\(\alpha=0.05\)</span>, the number of significant eigenvalues is overestimated.</p>
 <p style="text-align:center;">
 <img src="EIGENSTRAT_K_a005.jpg" alt="smartpca K plot" width="400"></p>
@@ -348,22 +347,22 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 </p>
 </div>
 </div>
-<div id="other-approaches" class="section level1">
-<h1 class="hasAnchor">
-<a href="#other-approaches" class="anchor"></a>Other Approaches</h1>
-<div id="alternative-normalisation-strategies-for-tw-statistic" class="section level2">
-<h2 class="hasAnchor">
-<a href="#alternative-normalisation-strategies-for-tw-statistic" class="anchor"></a>Alternative Normalisation Strategies for TW Statistic</h2>
+<div class="section level2">
+<h2 id="other-approaches">Other Approaches<a class="anchor" aria-label="anchor" href="#other-approaches"></a>
+</h2>
+<div class="section level3">
+<h3 id="alternative-normalisation-strategies-for-tw-statistic">Alternative Normalisation Strategies for TW Statistic<a class="anchor" aria-label="anchor" href="#alternative-normalisation-strategies-for-tw-statistic"></a>
+</h3>
 <p>This section will explore different approaches used to estimate the “effective number of markers” parameter of the observed Wishart matrix computed from the scaled genotype matrix. To be continued.</p>
 </div>
-<div id="empirical-spectral-distribution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#empirical-spectral-distribution" class="anchor"></a>Empirical Spectral Distribution</h2>
+<div class="section level3">
+<h3 id="empirical-spectral-distribution">Empirical Spectral Distribution<a class="anchor" aria-label="anchor" href="#empirical-spectral-distribution"></a>
+</h3>
 <p>This section will explore other spectral statistics potentially useful for detecting structure. To be continued.</p>
 </div>
-<div id="parallel-analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#parallel-analysis" class="anchor"></a>Parallel Analysis</h2>
+<div class="section level3">
+<h3 id="parallel-analysis">Parallel Analysis<a class="anchor" aria-label="anchor" href="#parallel-analysis"></a>
+</h3>
 <p>To be continued.</p>
 </div>
 </div>
@@ -380,11 +379,13 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 
 
       <footer><div class="copyright">
-  <p>Developed by Alan Aw.</p>
+  <p></p>
+<p>Developed by Alan Aw.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -392,6 +393,8 @@ The first column, <em>eigenvalue</em>, reports the <span class="math inline">\(k
 
   
 
+
+  
 
   </body>
 </html>

@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -63,6 +59,9 @@
       <a href="articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="articles/pop_strat.html">Population Stratification</a>
     </li>
     <li>
@@ -76,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/alanaw1/flintyR/">
+  <a href="https://github.com/alanaw1/flintyR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -93,19 +92,16 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="flintyr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#flintyr" class="anchor"></a><strong>flintyR</strong>
+<div class="section level1">
+<div class="page-header"><h1 id="flintyr">
+<strong>flintyR</strong><a class="anchor" aria-label="anchor" href="#flintyr"></a>
 </h1></div>
 <!-- badges: start -->
-
-<p>This is the homepage of <strong>flintyR</strong>, the R version of the software <strong>flinty</strong> (<em>Fl</em>exible and <em>I</em>nterpretable <em>N</em>on-parametric <em>T</em>ests of Exchangeabilit<em>y</em>). The Python version is available <a href="https://songlab-cal.github.io/flinty">here</a>.</p>
-<img src="bruno_intro.png" alt="Bruno appears"><p align="center">
-<i> Bruno is named after a famous statistican who studied exchangeability. Who might that <a href="http://www.brunodefinetti.it/">be</a>? </i>
-</p>
-<div id="what-does-this-package-offer" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-does-this-package-offer" class="anchor"></a><strong>What does this package offer?</strong>
+<p>This is the homepage of <strong>flintyR</strong>, the R version of the software <strong>flinty</strong> (<em>Fl</em>exible and <em>I</em>nterpretable <em>N</em>on-parametric <em>T</em>ests of Exchangeabilit<em>y</em>). The Python version is available <a href="https://songlab-cal.github.io/flinty" class="external-link">here</a>.</p>
+<img src="bruno_intro.png" title="fig:" alt="Bruno appears"><p align="center"><i> Bruno is named after a famous statistican who studied exchangeability. Who might that <a href="http://www.brunodefinetti.it/" class="external-link">be</a>? </i></p>
+<div class="section level2">
+<h2 id="what-does-this-package-offer">
+<strong>What does this package offer?</strong><a class="anchor" aria-label="anchor" href="#what-does-this-package-offer"></a>
 </h2>
 <p><strong>flintyR</strong> provides exact tests of exchangeability in multivariate datasets.</p>
 <ul>
@@ -117,46 +113,48 @@
 <li>It is <em>robust</em>, meaning that it controls for false positive rate (FPR) and remains powerful in realistic settings including uneven representation of subpopulations, sparsity of discriminative features, and small sample sizes.</li>
 </ul>
 <p>Here is a schema of how <strong>flintyR</strong> works.</p>
-<p><img src="standalone_6.jpg" alt="Schema"></p>
+<div class="figure">
+<img src="standalone_6.jpg" alt=""><p class="caption">Schema</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a><strong>Installation</strong>
+</div>
+<div class="section level2">
+<h2 id="installation">
+<strong>Installation</strong><a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p><strong>Using CRAN</strong></p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("flintyR")</a></code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"flintyR"</span><span class="op">)</span></code></pre>
 <p>If prompted to compile C/C++/Fortran, enter “Yes” to attempt to install these from sources.</p>
 <p><strong>Using Tarball</strong></p>
-<ol>
-<li>Download the tar ball for <strong>flintyR</strong> from <a href="https://github.com/songlab-cal/flinty/tree/main/software/R">here</a>.</li>
+<ol style="list-style-type: decimal">
+<li>Download the tar ball for <strong>flintyR</strong> from <a href="https://github.com/songlab-cal/flinty/tree/main/software/R" class="external-link">here</a>.</li>
 <li>Run the following line, changing <code>FILE_PATH_TO_TAR_BALL</code>.</li>
 </ol>
-<pre><code>devtools::install.packages("FILE_PATH_TO_TAR_BALL",
-                 repos = NULL, type = "source")
-# Example: devtools::install.packages("/Users/alanaw/Documents/flintyR_0.0.1.tar.gz", repos = NULL, type = "source")</code></pre>
+<pre><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"FILE_PATH_TO_TAR_BALL"</span>,
+                 repos <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span>
+<span class="co"># Example: devtools::install.packages("/Users/alanaw/Documents/flintyR_0.0.1.tar.gz", repos = NULL, type = "source")</span></code></pre>
 </div>
-<div id="example-usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-usage" class="anchor"></a><strong>Example Usage</strong>
+<div class="section level2">
+<h2 id="example-usage">
+<strong>Example Usage</strong><a class="anchor" aria-label="anchor" href="#example-usage"></a>
 </h2>
 <p>The code below demonstrates running our test on a binary matrix.</p>
-<pre><code># library(flintyR)
-X &lt;- matrix(nrow = 5, ncol = 10, rbinom(50, 1, 0.5))
-getPValue(X) # perform exact test with 5000 permutations
-# Output should be larger than 0.05</code></pre>
+<pre><code><span class="co"># library(flintyR)</span>
+<span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">5</span>, ncol <span class="op">=</span> <span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="co"># perform exact test with 5000 permutations</span>
+<span class="co"># Output should be larger than 0.05</span></code></pre>
 <p>Examples involving real datasets can be found in the tutorials.</p>
 </div>
-<div id="tutorials" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tutorials" class="anchor"></a><strong>Tutorials</strong>
+<div class="section level2">
+<h2 id="tutorials">
+<strong>Tutorials</strong><a class="anchor" aria-label="anchor" href="#tutorials"></a>
 </h2>
 <p>We offer several tutorials on using our software.</p>
 <ul>
-<li>Conceptual explorations of exchangeability (<a href="https://alanaw1.github.io/flintyR/articles/ex_vs_hom.html">here</a>)</li>
-<li>Application to avoiding risking double dipping (see <a href="https://alanaw1.github.io/flintyR/articles/intro.html">here</a>)</li>
-<li>Application to single cell genomics (<a href="https://alanaw1.github.io/flintyR/articles/single-cell-atac-seq.html">here</a>)</li>
-<li>Application to World Values Survey (<a href="https://alanaw1.github.io/flintyR/articles/wvs.html">here</a>)</li>
-<li>Application to stratification detection in population genetics (<a href="https://alanaw1.github.io/flintyR/articles/pop_strat.html">here</a>)</li>
+<li>Conceptual explorations of exchangeability (<a href="https://alanaw1.github.io/flintyR/articles/ex_vs_hom.html" class="external-link">here</a>)</li>
+<li>Application to avoiding risking double dipping (see <a href="https://alanaw1.github.io/flintyR/articles/intro.html" class="external-link">here</a>)</li>
+<li>Application to single cell genomics (<a href="https://alanaw1.github.io/flintyR/articles/single-cell-atac-seq.html" class="external-link">here</a>)</li>
+<li>Application to World Values Survey (<a href="https://alanaw1.github.io/flintyR/articles/wvs.html" class="external-link">here</a>)</li>
+<li>Application to stratification detection in population genetics (<a href="https://alanaw1.github.io/flintyR/articles/pop_strat.html" class="external-link">here</a>)</li>
 </ul>
 <p>We love to see our methods and software used across multiple fields, so please reach out to us if you are interested in using them. If there is enough interest, we are happy to include more tutorials.</p>
 </div>
@@ -165,46 +163,56 @@ getPValue(X) # perform exact test with 5000 permutations
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=flintyR">https://​cloud.r-project.org/​package=flintyR</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/alanaw1/flintyR/">https://​github.com/​alanaw1/​flintyR/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/alanaw1/flintyR/issues">https://​github.com/​alanaw1/​flintyR/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=flintyR" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/alanaw1/flintyR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/alanaw1/flintyR/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;= 3)</li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Alan Aw <br><small class="roles"> Maintainer, author </small> <a href="https://orcid.org/0000-0001-9455-7878" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing flintyR</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/alanaw1/flintyR/actions/workflows/pkgdown.yaml"><img src="https://github.com/alanaw1/flintyR/actions/workflows/pkgdown.yaml/badge.svg" alt="example workflow"></a></li>
+<li>Alan Aw <br><small class="roles"> Maintainer, author </small> <a href="https://orcid.org/0000-0001-9455-7878" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/alanaw1/flintyR/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/alanaw1/flintyR/actions/workflows/pkgdown.yaml/badge.svg" alt="example workflow"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Alan Aw.</p>
+  <p></p>
+<p>Developed by Alan Aw.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -212,6 +220,8 @@ getPValue(X) # perform exact test with 5000 permutations
 
   
 
+
+  
 
   </body>
 </html>

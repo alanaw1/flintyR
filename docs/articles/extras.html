@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flintyR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -63,6 +59,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/pop_strat.html">Population Stratification</a>
     </li>
     <li>
@@ -76,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/alanaw1/flintyR/">
+  <a href="https://github.com/alanaw1/flintyR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -91,13 +90,13 @@
 
       
 
-      </header><script src="extras_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Extras</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/master/vignettes/extras.Rmd"><code>vignettes/extras.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alanaw1/flintyR/blob/HEAD/vignettes/extras.Rmd" class="external-link"><code>vignettes/extras.Rmd</code></a></small>
       <div class="hidden name"><code>extras.Rmd</code></div>
 
     </div>
@@ -111,22 +110,22 @@
 <li>Provide a population genetics example of how to run our method from the terminal</li>
 </ul>
 <p>If you’ve come here for the details, you’re in the right place 🙂</p>
-<div id="generating-topologically-associating-domains-for-scatac-seq-data-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#generating-topologically-associating-domains-for-scatac-seq-data-analysis" class="anchor"></a>Generating Topologically Associating Domains for scATAC-seq Data Analysis</h1>
-<p><em>This Section supplements our <a href="https://alanaw1.github.io/flintyR/articles/single-cell-atac-seq.html">Analysis of Single Cell ATAC-seq Data</a> vignette.</em></p>
-<div id="what-are-topologically-associating-domains-tads" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-are-topologically-associating-domains-tads" class="anchor"></a>What are Topologically Associating Domains (TADs)?</h2>
-<p><em>Adapted from two review papers, <a href="https://doi.org/10.1016/j.molcel.2016.05.018">Dixon et al. (2016)</a> appearing in Molecular Cell and <a href="https://doi.org/10.1126/sciadv.aaw1668">Szabo et al. (2019)</a> appearing in Science Advances.</em></p>
+<div class="section level2">
+<h2 id="generating-topologically-associating-domains-for-scatac-seq-data-analysis">Generating Topologically Associating Domains for scATAC-seq Data Analysis<a class="anchor" aria-label="anchor" href="#generating-topologically-associating-domains-for-scatac-seq-data-analysis"></a>
+</h2>
+<p><em>This Section supplements our <a href="https://alanaw1.github.io/flintyR/articles/single-cell-atac-seq.html" class="external-link">Analysis of Single Cell ATAC-seq Data</a> vignette.</em></p>
+<div class="section level3">
+<h3 id="what-are-topologically-associating-domains-tads">What are Topologically Associating Domains (TADs)?<a class="anchor" aria-label="anchor" href="#what-are-topologically-associating-domains-tads"></a>
+</h3>
+<p><em>Adapted from two review papers, <a href="https://doi.org/10.1016/j.molcel.2016.05.018" class="external-link">Dixon et al. (2016)</a> appearing in Molecular Cell and <a href="https://doi.org/10.1126/sciadv.aaw1668" class="external-link">Szabo et al. (2019)</a> appearing in Science Advances.</em></p>
 <p>To understand TADs, we must first understand how a eukaryotic genome organises itself in space. Scientists already proposed, more than one hundred years ago, that chromosomes in “resting” interphase nuclei (i.e., not undergoing division) exist as chromosome territories. The figure below shows the writing of the late 19th century German zoologist Theodor Boveri, in which he described the looping of chromosomes amongst other ideas he had about “chromosome individuality.”</p>
 <p align="center">
 <img src="boveri_p202.png" width="400"></p>
 <p align="center">
-<em>Obtained from <a href="https://www.biodiversitylibrary.org/page/52621809">Boveri (1909)</a>, available freely through the Biodiversity Heritage Library.</em>
+<em>Obtained from <a href="https://www.biodiversitylibrary.org/page/52621809" class="external-link">Boveri (1909)</a>, available freely through the Biodiversity Heritage Library.</em>
 </p>
 <p>Similar to how chromosomes in the genome organise themselves territorially, each chromosome also has its own organisation, also referred to as chromosome folding. Within each chromosome are histone proteins, around which DNA is wound. Such compact DNA-histone complexes are called chromatin. The degree of packing of these complexes (i.e., how tightly compact or loose) is a dynamic process that depends on the stage of the cell cycle the cell is at.</p>
-<p>Recent technologies have allowed the quantification of the folding patterns described above. Notably, chromosome conformation capture methods like Hi-C (<a href="https://doi.org/10.1126/science.1181369">Lieberman-Aiden et al., 2009</a>) have uncovered folding patterns across different scales, measured through interactions (chromosomal contact frequencies). Here are two notable patterns:</p>
+<p>Recent technologies have allowed the quantification of the folding patterns described above. Notably, chromosome conformation capture methods like Hi-C (<a href="https://doi.org/10.1126/science.1181369" class="external-link">Lieberman-Aiden et al., 2009</a>) have uncovered folding patterns across different scales, measured through interactions (chromosomal contact frequencies). Here are two notable patterns:</p>
 <ul>
 <li>At large scales, chromosomes segregate into regions of preferential long-range interactions, forming two mutually excluded types of chromatin. These types correspond to gene-rich and active chromatin and to repressive chromatin.<br>
 </li>
@@ -136,29 +135,29 @@
 <p align="center">
 <img src="szabo_fig1.jpg" width="400"></p>
 <p align="center">
-<em>Hierarchical folding of the eukaryotic genome. (A) Many levels of chromatin folding, from the finest (DNA-histone association) to the coarsest (segregation of chromatin into active and repressed compartments). Each chromosome occupies its own territory within the nucleus. (B) Schematic representation of Hi-C maps at different genomic scales, reflecting different layers of high-order chromosome folding. Genomic coordinates are indicated along both axes. Figure reproduced from <a href="https://advances.sciencemag.org/content/5/4/eaaw1668">Szabo et al. (2019)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
+<em>Hierarchical folding of the eukaryotic genome. (A) Many levels of chromatin folding, from the finest (DNA-histone association) to the coarsest (segregation of chromatin into active and repressed compartments). Each chromosome occupies its own territory within the nucleus. (B) Schematic representation of Hi-C maps at different genomic scales, reflecting different layers of high-order chromosome folding. Genomic coordinates are indicated along both axes. Figure reproduced from <a href="https://advances.sciencemag.org/content/5/4/eaaw1668" class="external-link">Szabo et al. (2019)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
 </p>
 </div>
-<div id="how-do-we-find-tads" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-do-we-find-tads" class="anchor"></a>How do we find TADs?</h2>
-<p>Hi-C experiments measure contact frequencies across the genome, thus allowing scientists to identify TADs, which are the chromatin regions more frequently interacting within themselves than among each other. Before we discuss quantitative methods, it will be useful to see what our data looks like. Below, we load Hi-C contact maps obtained from human fibroblast cells (IMR90), as reported in <a href="https://www.nature.com/articles/nature11082">Dixon et al. (2012)</a>. The reason our data is named <code>hic_imr90_40</code> is that the Hi-C contact reads are binned at <span class="math inline">\(40,000\)</span> bp resolution; this means that read counts are combined across genomic regions of length <span class="math inline">\(40,000\)</span> bp.</p>
+<div class="section level3">
+<h3 id="how-do-we-find-tads">How do we find TADs?<a class="anchor" aria-label="anchor" href="#how-do-we-find-tads"></a>
+</h3>
+<p>Hi-C experiments measure contact frequencies across the genome, thus allowing scientists to identify TADs, which are the chromatin regions more frequently interacting within themselves than among each other. Before we discuss quantitative methods, it will be useful to see what our data looks like. Below, we load Hi-C contact maps obtained from human fibroblast cells (IMR90), as reported in <a href="https://www.nature.com/articles/nature11082" class="external-link">Dixon et al. (2012)</a>. The reason our data is named <code>hic_imr90_40</code> is that the Hi-C contact reads are binned at <span class="math inline">\(40,000\)</span> bp resolution; this means that read counts are combined across genomic regions of length <span class="math inline">\(40,000\)</span> bp.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load libraries </span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va">HiTC</span><span class="op">)</span> <span class="co"># install using Bioconductor if not installed</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va">HiCDataHumanIMR90</span><span class="op">)</span> <span class="co"># install using Bioconductor if not installed</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">HiTC</span><span class="op">)</span> <span class="co"># install using Bioconductor if not installed</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">HiCDataHumanIMR90</span><span class="op">)</span> <span class="co"># install using Bioconductor if not installed</span>
 
 <span class="co">## Load data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Dixon2012_IMR90</span><span class="op">)</span> 
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Dixon2012_IMR90</span><span class="op">)</span> 
 
 <span class="co">## Preview data</span>
 <span class="co"># What type of object is it, and how large?</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">hic_imr90_40</span><span class="op">)</span> 
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">hic_imr90_40</span><span class="op">)</span> 
 <span class="co">#&gt; [1] "HTClist"</span>
 <span class="co">#&gt; attr(,"package")</span>
 <span class="co">#&gt; [1] "HiTC"</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/object.size.html">object.size</a></span><span class="op">(</span><span class="va">hic_imr90_40</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">hic_imr90_40</span><span class="op">)</span>
 <span class="co">#&gt; 1209797816 bytes</span>
 
 <span class="co"># What does a Hi-C map look like?</span>
@@ -177,7 +176,7 @@
 <span class="co">#&gt; 20 . .  1    1   1  1  6   9  18 1240</span>
 
 <span class="co"># How are Hi-C features labeled?</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">hic_imr90_40</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">xgi</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hic_imr90_40</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">xgi</span><span class="op">)</span>
 <span class="co">#&gt; GRanges object with 6 ranges and 1 metadata column:</span>
 <span class="co">#&gt;     seqnames        ranges strand |        name</span>
 <span class="co">#&gt;        &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span>
@@ -189,28 +188,28 @@
 <span class="co">#&gt;   6     chr1 200001-240000      * |           6</span>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></code></pre></div>
-<p>For the rest of this vignette we restrict to Chromosomes 1 and 2, consistent with what we report in our paper. As part of pre-processing, we perform the following steps, as described in Sections 4 and 5.3 of the <strong>HiTC</strong> <a href="https://bioconductor.org/packages/release/bioc/vignettes/HiTC/inst/doc/HiC_analysis.pdf">vignette</a>.</p>
+<p>For the rest of this vignette we restrict to Chromosomes 1 and 2, consistent with what we report in our paper. As part of pre-processing, we perform the following steps, as described in Sections 4 and 5.3 of the <strong>HiTC</strong> <a href="https://bioconductor.org/packages/release/bioc/vignettes/HiTC/inst/doc/HiC_analysis.pdf" class="external-link">vignette</a>.</p>
 <ul>
 <li>Binning contact frequency measurements into windows of size <span class="math inline">\(500,000\)</span> bp (i.e., <em>reducing</em> the resolution from the original <span class="math inline">\(40,000\)</span> bp)</li>
 <li>Normalising binned contact frequencies with Iterative Correction and Eigenvector decomposition (ICE)</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Restrict Hi-C data to chr1 and chr2</span>
-<span class="va">sset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">reduce</a></span><span class="op">(</span><span class="va">hic_imr90_40</span>, chr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"chr1"</span>, <span class="st">"chr2"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">sset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/purrr/man/reduce.html" class="external-link">reduce</a></span><span class="op">(</span><span class="va">hic_imr90_40</span>, chr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chr1"</span>, <span class="st">"chr2"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Bin contact frequencies</span>
-<span class="va">imr90_500</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="fu">mclapply</span><span class="op">(</span><span class="va">sset</span>, <span class="va">binningC</span>, 
+<span class="va">imr90_500</span> <span class="op">&lt;-</span> <span class="fu">HTClist</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">mclapply</a></span><span class="op">(</span><span class="va">sset</span>, <span class="va">binningC</span>, 
                               binsize<span class="op">=</span><span class="fl">500000</span>, 
                               bin.adjust<span class="op">=</span><span class="cn">FALSE</span>, 
                               method<span class="op">=</span><span class="st">"sum"</span>,
                               step <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Perform ICE normalization</span>
-<span class="va">imr90_500_ICE</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/normICE.html">normICE</a></span><span class="op">(</span><span class="va">imr90_500</span>, max_iter<span class="op">=</span><span class="fl">1000</span><span class="op">)</span> <span class="co"># converged at iteration 764</span>
+<span class="va">imr90_500_ICE</span> <span class="op">&lt;-</span>  <span class="fu">normICE</span><span class="op">(</span><span class="va">imr90_500</span>, max_iter<span class="op">=</span><span class="fl">1000</span><span class="op">)</span> <span class="co"># converged at iteration 764</span>
 
 <span class="co">## Visualise transformed output of contact map</span>
-<span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/mapC.html">mapC</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiTC/man/HTClist-class.html">HTClist</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">)</span>, trim.range<span class="op">=</span><span class="fl">.95</span>,
-     col.pos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">mapC</span><span class="op">(</span><span class="fu">HTClist</span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">)</span>, trim.range<span class="op">=</span><span class="fl">.95</span>,
+     col.pos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="extras_files/figure-html/hi_c_2-1.png" title="plot of chunk hi_c_2" alt="plot of chunk hi_c_2" width="50%"></p>
 <p>We are now ready to identify TADs on our pre-processed dataset. As mentioned earlier, TADs are distinguished by intra-regional increase in interactions and inter-regional scarcity of interactions. We see this in the heat map above and can heuristically define TADs by inspection. However, to identify TADs in an automated fashion, we need systematic algorithms.</p>
 <p>Here, we introduce two such systematic approaches. The first approach, called <strong>domainCaller</strong>, uses the Directionality Index (DI) to call TADs. Let the set of all <span class="math inline">\(40,000\)</span> bp resolution counts be <span class="math inline">\(\mathscr{X}\)</span>. For each bin of contact frequencies <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
@@ -231,7 +230,7 @@
 <li>Fit a hidden Markov model (HMM) to <span class="math inline">\(\{\text{DI}(x):x\in \mathscr{X}\}\)</span>.</li>
 <li>Use the inferred HMM states to define regions and classify them into TADs.</li>
 </ol>
-<p>In Step 2 and Step 3, the HMM used is a three-state model (upstream bias, downstream bias, and no bias) with transition probabilities between successive bins. Details of this HMM can be found in Supplementary Figure 28 of <a href="https://www.nature.com/articles/nature11082">Dixon et al. (2012)</a>.</p>
+<p>In Step 2 and Step 3, the HMM used is a three-state model (upstream bias, downstream bias, and no bias) with transition probabilities between successive bins. Details of this HMM can be found in Supplementary Figure 28 of <a href="https://www.nature.com/articles/nature11082" class="external-link">Dixon et al. (2012)</a>.</p>
 <p>One subtlety about TAD calling in Step 3: rather than inferring domains only, <em>both</em> domains and boundaries are inferred. A domain is initiated at the beginning of a single downstream biased state, and ends with the last state that is upstream biased. Regions between domains are classified as topological boundaries.</p>
 <p>Fortunately, <strong>Hi-TC</strong> has made available the output of running <strong>domainCaller</strong> on our dataset. This is useful for us to gain intuition about what TADs look like, in preparation for the second approach we will introduce. Below, we load the <strong>domainCaller</strong> output.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -258,7 +257,7 @@
 <span class="co">#&gt;   Lengths:   236   186   159   133   145   131 ...    63    58    34    27    86</span>
 <span class="co">#&gt;   Values : chr1  chr2  chr3  chr4  chr5  chr6  ... chr19 chr20 chr21 chr22 chrX </span>
 <span class="co">#&gt; Levels(23): chr1 chr2 chr3 chr4 chr5 chr6 ... chr18 chr19 chr20 chr21 chr22 chrX</span></code></pre></div>
-<p>The second approach to calling TADs is <strong>TopDom</strong>. Proposed by <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a>, <strong>TopDom</strong> relies on a bin signal statistic to identify TADs. For each bin <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
+<p>The second approach to calling TADs is <strong>TopDom</strong>. Proposed by <a href="https://doi.org/10.1093/nar/gkv1505" class="external-link">Shin et al. (2016)</a>, <strong>TopDom</strong> relies on a bin signal statistic to identify TADs. For each bin <span class="math inline">\(x\in\mathscr{X}\)</span>, let <span class="math display">\[\begin{equation*}
 \text{binSignal}(x) = \frac{1}{w^2} \sum_{\ell=1}^w \sum_{m=1}^w \text{cont.freq}(U_x(\ell), U_x(m)),
 \end{equation*}\]</span> where</p>
 <ul>
@@ -274,43 +273,43 @@
 <p align="center">
 <img src="shin_fig1A.png" width="400"></p>
 <p align="center">
-<em>Denoting the bin <span class="math inline">\(x\)</span> by its index <span class="math inline">\(i\)</span>, <span class="math inline">\(\text{binSignal}(i)\)</span> is the average contact frequency between an upstream and a downstream chromatin region (<span class="math inline">\(U_i\)</span> and <span class="math inline">\(D_i\)</span>) in a window of size <span class="math inline">\(2w\)</span> surrounding the bin. Its value is relatively high if bin <span class="math inline">\(i\)</span> is located inside a TAD (red diamond), and reaches a local minimum at a TAD boundary. Figure adapted from <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
+<em>Denoting the bin <span class="math inline">\(x\)</span> by its index <span class="math inline">\(i\)</span>, <span class="math inline">\(\text{binSignal}(i)\)</span> is the average contact frequency between an upstream and a downstream chromatin region (<span class="math inline">\(U_i\)</span> and <span class="math inline">\(D_i\)</span>) in a window of size <span class="math inline">\(2w\)</span> surrounding the bin. Its value is relatively high if bin <span class="math inline">\(i\)</span> is located inside a TAD (red diamond), and reaches a local minimum at a TAD boundary. Figure adapted from <a href="https://doi.org/10.1093/nar/gkv1505" class="external-link">Shin et al. (2016)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
 </p>
 <p>After computing bin signals for each bin, there is still a need to distinguish true local minima from false minima. To accomplish this, a sequential polygonal approximation technique is used to fit a smooth curve to the binsignal vs bin index graph. See the Figure below for a visualisation.</p>
 <p align="center">
 <img src="shin_fig1B.png" width="400"></p>
 <p align="center">
-<em>Turning points (blue circles) are identified in the original curve (black), and dominant local minima (red inverted triangles) are detected by fitting a piecewise linear curve (sequential polygonal approximation). Figure adapted from <a href="https://doi.org/10.1093/nar/gkv1505">Shin et al. (2016)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
+<em>Turning points (blue circles) are identified in the original curve (black), and dominant local minima (red inverted triangles) are detected by fitting a piecewise linear curve (sequential polygonal approximation). Figure adapted from <a href="https://doi.org/10.1093/nar/gkv1505" class="external-link">Shin et al. (2016)</a> under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.</em>
 </p>
 <p>Finally, to assign TAD boundaries, an additional Wilcoxon rank sum test is performed on the local minima selected.</p>
-<p>Below, we demonstrate performing these steps on Chromosome 1 of the IMR90 dataset. We use a recent packaged version of <strong>TopDom</strong>, provided by <a href="https://github.com/HenrikBengtsson/TopDom">Bengtsson et al. (2020)</a>.</p>
+<p>Below, we demonstrate performing these steps on Chromosome 1 of the IMR90 dataset. We use a recent packaged version of <strong>TopDom</strong>, provided by <a href="https://github.com/HenrikBengtsson/TopDom" class="external-link">Bengtsson et al. (2020)</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Load package</span>
 <span class="co"># install.packages("TopDom")</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/TopDom">TopDom</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/TopDom" class="external-link">TopDom</a></span><span class="op">)</span>
 
 <span class="co">## Convert to format readable by TopDom::TopDom</span>
 <span class="co"># 1. Make imr90_500_ICE into N x (N + 3) dataframe</span>
 <span class="co"># We use the multiple assignment function, %&lt;-%, provided by zeallot</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nteetor/zeallot">zeallot</a></span><span class="op">)</span>
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>chr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>,
-                 start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>,
-                 end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">chr_</span>, <span class="va">start_</span>, <span class="va">end_</span><span class="op">)</span> <span class="op">%&lt;-%</span> 
-    <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"\\:|\\-"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">df</span>, 
-              <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>chr <span class="op">=</span> <span class="va">chr_</span>,
-                         start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">start_</span><span class="op">)</span>,
-                         end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">end_</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nteetor/zeallot" class="external-link">zeallot</a></span><span class="op">)</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>chr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,
+                 start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>,
+                 end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">chr_</span>, <span class="va">start_</span>, <span class="va">end_</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/zeallot/man/operator.html" class="external-link">%&lt;-%</a></span> 
+    <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"\\:|\\-"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">df</span>, 
+              <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>chr <span class="op">=</span> <span class="va">chr_</span>,
+                         start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">start_</span><span class="op">)</span>,
+                         end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">end_</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="va">topdom_input_500k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
+<span class="va">topdom_input_500k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">imr90_500_ICE</span><span class="op">$</span><span class="va">chr1chr1</span><span class="op">@</span><span class="va">intdata</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/tibble/man/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
 <span class="va">topdom_input_500k</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">topdom_input_500k</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span>
 
 <span class="co"># What's the dimension of the newly formatted object?</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="co"># it's N x (N+3)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">topdom_input_500k</span><span class="op">)</span> <span class="co"># it's N x (N+3)</span>
 <span class="co">#&gt; [1] 499 502</span>
 
 <span class="co"># What does it look like? </span>
@@ -339,11 +338,11 @@
 
 <span class="co"># 3. Load the file and find TADs with TopDom</span>
 <span class="co"># TopDom performs the steps described above</span>
-<span class="va">topdom_res</span> <span class="op">&lt;-</span> <span class="fu">TopDom</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TopDom/man/TopDom.html">TopDom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"500k_topdom_input.tsv"</span><span class="op">)</span>, window.size <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>
+<span class="va">topdom_res</span> <span class="op">&lt;-</span> <span class="fu">TopDom</span><span class="fu">::</span><span class="fu">TopDom</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">rel_dir</span>, <span class="st">"500k_topdom_input.tsv"</span><span class="op">)</span>, window.size <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>
 
 <span class="co"># 4. View results</span>
 <span class="co"># What are the p-values? </span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">binSignal</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">binSignal</span><span class="op">)</span>
 <span class="co">#&gt;   id  chr from.coord to.coord local.ext  mean.cf       pvalue</span>
 <span class="co">#&gt; 1  1 chr1          0   500000      -0.5   0.0000 1.0000000000</span>
 <span class="co">#&gt; 2  2 chr1     500000  1000000       0.0 292.7723 0.1791632334</span>
@@ -353,7 +352,7 @@
 <span class="co">#&gt; 6  6 chr1    2500000  3000000       0.0 662.2543 0.1389660413</span>
 
 <span class="co"># Which blocks are classified as TADs by TopDom?</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span>  <span class="st">"domain"</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span>  <span class="st">"domain"</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt;    chrom chromStart chromEnd   name</span>
 <span class="co">#&gt; 6   chr1     500000  1500000 domain</span>
 <span class="co">#&gt; 7   chr1    1500000  6500000 domain</span>
@@ -364,8 +363,8 @@
 <p>To conclude this section, we look at the distribution of classification categories (not just TADs), as well as the distribution sizes (block lengths) of TADs.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Look at distribution of classification results</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>,
-                  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Category"</span>,  <span class="st">"Count"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">bed</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>,
+                  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Category"</span>,  <span class="st">"Count"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -405,9 +404,9 @@ gap
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## Look at distribution of size of TADs</span>
-<span class="va">chr1_tads</span> <span class="op">&lt;-</span> <span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">$</span><span class="va">tag</span> <span class="op">==</span><span class="st">"domain"</span><span class="op">)</span>, <span class="op">]</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">chr1_tads</span><span class="op">$</span><span class="va">size</span> <span class="op">/</span> <span class="fl">5e5</span><span class="op">)</span>,
-                  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Size (x 5e5 bases)"</span>, <span class="st">"Count"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">chr1_tads</span> <span class="op">&lt;-</span> <span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">topdom_res</span><span class="op">$</span><span class="va">domain</span><span class="op">$</span><span class="va">tag</span> <span class="op">==</span><span class="st">"domain"</span><span class="op">)</span>, <span class="op">]</span>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">chr1_tads</span><span class="op">$</span><span class="va">size</span> <span class="op">/</span> <span class="fl">5e5</span><span class="op">)</span>,
+                  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Size (x 5e5 bases)"</span>, <span class="st">"Count"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -559,9 +558,9 @@ Count
 <p>Note we use these classified TADs to group our scATAC-seq features.</p>
 </div>
 </div>
-<div id="test-of-exchangeability-using-pairwise-distances" class="section level1">
-<h1 class="hasAnchor">
-<a href="#test-of-exchangeability-using-pairwise-distances" class="anchor"></a>Test of Exchangeability Using Pairwise Distances</h1>
+<div class="section level2">
+<h2 id="test-of-exchangeability-using-pairwise-distances">Test of Exchangeability Using Pairwise Distances<a class="anchor" aria-label="anchor" href="#test-of-exchangeability-using-pairwise-distances"></a>
+</h2>
 <p>Our test of exchangeability works for settings where only pairwise distance data is available. Given a list of pairwise distances between <span class="math inline">\(N\)</span> individuals, <span class="math inline">\(\{D_1,\ldots,D_B\}\)</span>, and assuming these distances are independent of one another, our test can determine whether the individuals making up the <span class="math inline">\(N\)</span>-sample are exchangeable at a user-specified significance threshold (e.g., <span class="math inline">\(\alpha=0.05\)</span>). (See Section of our paper.)</p>
 <p>There are multiple practical scenarios well suited for such an approach.</p>
 <ul>
@@ -574,21 +573,21 @@ Count
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Simulation of list of distances</span>
 <span class="co"># Set seed for reproducibility</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
 
 <span class="co"># Generate data</span>
 <span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-<span class="va">num_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Special.html">choose</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">2</span><span class="op">)</span>
+<span class="va">num_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">choose</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">2</span><span class="op">)</span>
 <span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">50</span>
-<span class="va">dist_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">dist_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">B</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Generate fake data </span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">b</span> <span class="op">&lt;=</span> <span class="va">B</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">fake_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">1</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">fake_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">fake_samples</span>, method <span class="op">=</span> <span class="st">"manhattan"</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">fake_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">1</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">fake_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">fake_samples</span>, method <span class="op">=</span> <span class="st">"manhattan"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="va">fake_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">fake_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">fake_samples</span>, method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">fake_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">fake_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">fake_samples</span>, method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span>
   
   <span class="co"># Add to list</span>
@@ -596,26 +595,26 @@ Count
 <span class="op">}</span>
 
 <span class="co"># Clear garbage</span>
-<span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/gc.html" class="external-link">gc</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;             used   (Mb) gc trigger    (Mb) limit (Mb)   max used    (Mb)</span>
 <span class="co">#&gt; Ncells  14068868  751.4   24208967  1292.9         NA   24208967  1292.9</span>
 <span class="co">#&gt; Vcells 885563685 6756.4 1600378470 12210.0      16384 1600348721 12209.7</span></code></pre></div>
 <p>We now run our test of exchangeability on the list of distances.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Apply test of exchangeability to simulated distance list</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://alanaw1.github.io/flintyR">flintyR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alanaw1.github.io/flintyR/" class="external-link">flintyR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span>
 <span class="co"># Register parallel computation</span>
-<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Compute p-value</span>
 <span class="fu"><a href="../reference/distDataPValue.html">distDataPValue</a></span><span class="op">(</span><span class="va">dist_list</span><span class="op">)</span> <span class="co"># should be &gt;= 0.05</span>
 <span class="co">#&gt; [1] 0.384</span></code></pre></div>
 </div>
-<div id="running-our-test-from-terminal" class="section level1">
-<h1 class="hasAnchor">
-<a href="#running-our-test-from-terminal" class="anchor"></a>Running Our Test from Terminal</h1>
-<p>For users who prefer to run jobs from the terminal, we describe how to embed our test within “terminal-friendly” scripts. To facilitate our exposition, we use data from the 1000 Genomes (1KG) project (<a href="https://www.nature.com/articles/nature15393">The 1000 Genomes Project Consortium, 2015</a>). The 1KG data consists of individual genomes spanning 26 populations and 5 superpopulations. You may learn more about, and see some preliminary analyses of, the data <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a>. If you are a geneticist, you probably already know more interesting analyses of this data.</p>
+<div class="section level2">
+<h2 id="running-our-test-from-terminal">Running Our Test from Terminal<a class="anchor" aria-label="anchor" href="#running-our-test-from-terminal"></a>
+</h2>
+<p>For users who prefer to run jobs from the terminal, we describe how to embed our test within “terminal-friendly” scripts. To facilitate our exposition, we use data from the 1000 Genomes (1KG) project (<a href="https://www.nature.com/articles/nature15393" class="external-link">The 1000 Genomes Project Consortium, 2015</a>). The 1KG data consists of individual genomes spanning 26 populations and 5 superpopulations. You may learn more about, and see some preliminary analyses of, the data <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/" class="external-link">here</a>. If you are a geneticist, you probably already know more interesting analyses of this data.</p>
 <p>The challenge here is that genomes are typically provided in VCF or BIM/BED/FAM or PGEN/PVAR/PSAM format. Moreover, they can be very large and thus cannot be loaded in memory.</p>
 <p>Suppose our task at hand is to run a test of exchangeability on each 1KG population. There are millions of polymorphic variants, and we assume variants lying in different chromosomes are independent of one another. Since there are 22 autosomal chromosomes, this means that our features are grouped into 22 large blocks.</p>
 <p>To accomplish our task, we perform the following steps.</p>
@@ -629,24 +628,24 @@ Count
 </li>
 <li>Run test of exchangeability on list of distance matrices. (See previous Section on this.)</li>
 </ol>
-<p>Scripts that perform the steps above can be found in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG">Github repo</a>, along with guidance on reproducing our results.</p>
+<p>Scripts that perform the steps above can be found in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG" class="external-link">Github repo</a>, along with guidance on reproducing our results.</p>
 <details><summary><b>Preparing the population-level files</b>
 </summary>
-To obtain population-level files (BIM/BED/FAM) that can be fed into Step 1 above, we perform the following steps: (1) Download 1KG Phase 3 data (PGEN and PVAR) from <a href="https://www.cog-genomics.org/plink/2.0/resources">here</a>, see <strong>Merged dataset</strong>; (2) Filter to keep only variants that are in HapMap3 and UK Biobank; (3) Remove related individuals; (4) Filter to keep only biallelic SNPs with minor allele count at least <span class="math inline">\(1\)</span> (<em>this differs from usual filtering of alleles that satisfy MAF at least <span class="math inline">\(0.01\)</span></em>); (5) Generate BED/BIM/FAM files for each population using population ID files. All of these steps are accomplished using PLINK2.
+To obtain population-level files (BIM/BED/FAM) that can be fed into Step 1 above, we perform the following steps: (1) Download 1KG Phase 3 data (PGEN and PVAR) from <a href="https://www.cog-genomics.org/plink/2.0/resources" class="external-link">here</a>, see <strong>Merged dataset</strong>; (2) Filter to keep only variants that are in HapMap3 and UK Biobank; (3) Remove related individuals; (4) Filter to keep only biallelic SNPs with minor allele count at least <span class="math inline">\(1\)</span> (<em>this differs from usual filtering of alleles that satisfy MAF at least <span class="math inline">\(0.01\)</span></em>); (5) Generate BED/BIM/FAM files for each population using population ID files. All of these steps are accomplished using PLINK2.
 </details><p><br></p>
-<div id="does-variant-filtering-affect-exchangeability" class="section level2">
-<h2 class="hasAnchor">
-<a href="#does-variant-filtering-affect-exchangeability" class="anchor"></a>Does Variant Filtering Affect Exchangeability?</h2>
+<div class="section level3">
+<h3 id="does-variant-filtering-affect-exchangeability">Does Variant Filtering Affect Exchangeability?<a class="anchor" aria-label="anchor" href="#does-variant-filtering-affect-exchangeability"></a>
+</h3>
 <p>Just to demonstrate a concrete implementation of the embedding approach and the scripts prepared above, we report <span class="math inline">\(p\)</span>-values obtained by running our test on two versions of the 1KG data differing in the variants included.</p>
 <ul>
 <li>(Rare variants included, as described in <strong>Preparing the population-level files</strong> above) All biallelic variants that have minor allele count (MAC) at least <span class="math inline">\(1\)</span> in the 1KG dataset are included.</li>
-<li>(Common variants only, as seen <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/">here</a> and provided by the <code>read_1000G</code> function of the <strong>bigsnpr</strong> package) Only biallelic variants that have minor allele frequency at least <span class="math inline">\(0.01\)</span> in the 1KG dataset are included.</li>
+<li>(Common variants only, as seen <a href="https://alanaw1.github.io/post/2021/03/03/visualizing-1000-genomes-data/" class="external-link">here</a> and provided by the <code>read_1000G</code> function of the <strong>bigsnpr</strong> package) Only biallelic variants that have minor allele frequency at least <span class="math inline">\(0.01\)</span> in the 1KG dataset are included.</li>
 </ul>
-<p>Note that the analysis for the first scenario is as described in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG">Github repo</a>.</p>
+<p>Note that the analysis for the first scenario is as described in our <a href="https://github.com/alanaw1/exchangeability_test/tree/main/data-analysis/1KG" class="external-link">Github repo</a>.</p>
 <p>We find that when using only common variants, all populations, except for the Yoruban population in Nigeria, are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span> level. However, when additional rare variants are included, all populations are non-exchangeable at <span class="math inline">\(\alpha=0.05\)</span>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Print table summarising results</span>
-<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="st">"exchangeability_results.txt"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span><span class="st">"exchangeability_results.txt"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1029,7 +1028,7 @@ Gujarati Indian in Houston,TX
 </tr>
 </tbody>
 </table>
-<p>Thus, our test shows that most populations in the 1KG dataset are non-exchangeable, assuming variants lying in different chromosomes are independent of one another. In the only exception of the Yoruban population (YRI), we find that if only common variants are considered, then the individuals are exchangeable. However, once rare variants are included the individuals lose exchangeability. This observation is consistent with the importance of rare variants capturing recent demographic history, a point acknowledged by population geneticists (<a href="%5Bhttps://elifesciences.org/articles/61548">Zaidi and Mathieson, 2021</a>).</p>
+<p>Thus, our test shows that most populations in the 1KG dataset are non-exchangeable, assuming variants lying in different chromosomes are independent of one another. In the only exception of the Yoruban population (YRI), we find that if only common variants are considered, then the individuals are exchangeable. However, once rare variants are included the individuals lose exchangeability. This observation is consistent with the importance of rare variants capturing recent demographic history, a point acknowledged by population geneticists (<a href="%5Bhttps://elifesciences.org/articles/61548" class="external-link">Zaidi and Mathieson, 2021</a>).</p>
 </div>
 </div>
   </div>
@@ -1045,11 +1044,13 @@ Gujarati Indian in Houston,TX
 
 
       <footer><div class="copyright">
-  <p>Developed by Alan Aw.</p>
+  <p></p>
+<p>Developed by Alan Aw.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -1057,6 +1058,8 @@ Gujarati Indian in Houston,TX
 
   
 
+
+  
 
   </body>
 </html>

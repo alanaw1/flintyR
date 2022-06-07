@@ -1,12 +1,13 @@
 pandoc: 2.11.4
-pkgdown: 1.6.1
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   ex_vs_hom: ex_vs_hom.html
   extras: extras.html
   intro: intro.html
+  ld_splitting: ld_splitting.html
   pop_strat: pop_strat.html
   single-cell-atac-seq: single-cell-atac-seq.html
   wvs: wvs.html
-last_built: 2021-09-27T04:31Z
+last_built: 2022-06-06T23:59Z
 
