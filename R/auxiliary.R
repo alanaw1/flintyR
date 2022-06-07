@@ -50,16 +50,20 @@ getHammingDistance <- function(X) {
 getLpDistance <- function(X, p) {
   # The number of columns of X is 1 (edge case)
   if (is.null(dim(X))) {
-    return(as.vector(dist(X, p = p)^p))
+    return(as.vector(dist(X, 
+                          method = "minkowski", 
+                          p = p)^p)) # [!] 5/30/22 - returns Euclidean distance unless Minkowski is specified
   }
-
+  
   # The number of columns of X is >1 and X is high-dim
   if (dim(X)[1] > 100 & dim(X)[2] > 64) {
     return(lp_distance(t(X), p))
   }
-
+  
   # X is not too large
-  return(as.vector(dist(X, p = p)^p))
+  return(as.vector(dist(X, 
+                        method = "minkowski", 
+                        p = p)^p)) # [!] 5/30/22 - returns Euclidean distance unless Minkowski is specified
   #Rfast::Dist(X, method = "euclidean", vector = TRUE)
 }
 
@@ -141,7 +145,7 @@ getRealVStat <- function(X, p) {
 #'
 naiveBlockPermute1 <- function(X,
                                block_labels,
-                               p = 2) {
+                               p) {
   # Check block labels (done in the downstream function)
   # Count number of independent blocks
   num_blocks <- max(block_labels)
@@ -189,7 +193,7 @@ naiveBlockPermute1 <- function(X,
 #'
 naiveBlockPermute2 <- function(X,
                                block_boundaries,
-                               p = 2) {
+                               p) {
   # Save the number of blocks
   num_blocks <- length(block_boundaries)
   # Pemuted version of X to be returned
@@ -489,12 +493,12 @@ distDataPermute <- function(dist_list,
   
   # Return
   if (type == "valid") {
-    return(mean(c(V_vec,V_obs) >= V_obs)) # Hemerik and Goeman (2018)
+    return(mean(c(V_vec,as.numeric(V_obs)) >= as.numeric(V_obs))) # Hemerik and Goeman (2018)
   } else if (type == "unbiased") {
-    return(mean(V_vec > V_obs)) # strictly greater than for conservativeness
+    return(mean(V_vec > as.numeric(V_obs))) # strictly greater than for conservativeness
   } else {
-    unbiased <- mean(V_vec > V_obs)
-    valid <- mean(c(V_vec,V_obs) >= V_obs)
+    unbiased <- mean(V_vec > as.numeric(V_obs))
+    valid <- mean(c(V_vec,as.numeric(V_obs)) >= as.numeric(V_obs))
     to_return <- c(unbiased,valid)
     names(to_return) <- c("unbiased","valid")
     return(to_return)
@@ -567,12 +571,16 @@ blockPermute <- function(X,
   }
   # Return
   if (type == "valid") {
-    return(mean(c(V_vec,V_obs) >= V_obs)) # Hemerik and Goeman (2018)
+    return(mean(c(V_vec,as.numeric(V_obs)) >= as.numeric(V_obs))) # Hemerik and Goeman (2018)
   } else if (type == "unbiased") {
-    return(mean(V_vec > V_obs)) # strictly greater than for conservativeness
+    return(mean(V_vec > as.numeric(V_obs))) # strictly greater than for conservativeness
   } else {
-    unbiased <- mean(V_vec > V_obs)
-    valid <- mean(c(V_vec,V_obs) >= V_obs)
+    #print(V_vec[1:10]) # [!]
+    #print(summary(V_vec)) # [!]
+    #hist(V_vec) # [!]
+    #print(as.numeric(V_obs)) # [!]
+    unbiased <- mean(V_vec > as.numeric(V_obs))
+    valid <- mean(c(V_vec,as.numeric(V_obs)) >= as.numeric(V_obs))
     to_return <- c(unbiased,valid)
     names(to_return) <- c("unbiased","valid")
     return(to_return)
