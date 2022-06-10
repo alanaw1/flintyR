@@ -103,6 +103,7 @@
 
     
     
+<p><em>We are grateful to <a href="https://privefl.github.io/index.html" class="external-link">Florian Privé</a>, Senior Researcher at Aarhus University, for feedback on accuracy and enhancing accessibility of this vignette.</em></p>
 <p>In our paper, we describe how our method is also a test of feature independence, provided the observations are exchangeable. In this vignette, we will</p>
 <ul>
 <li>show how this test of feature independence can be applied in a statistical genomics setting to a problem known as linkage disequilibrium (LD) splitting</li>
@@ -149,7 +150,7 @@
 <div class="section level2">
 <h2 id="test-of-independence">Test of Independence<a class="anchor" aria-label="anchor" href="#test-of-independence"></a>
 </h2>
-<p>The goal of splitting a large LD matrix into smaller, mutually “approximately independent” submatrices is to leverage these matrices as reasonable measures of local genomic correlations. An implicit assumption is that the cohort from which the LD matrix is derived is unstratified, such that regions of recombination are roughly homogeneous within the cohort. This can be interpreted as an <em>exchangeability assumption</em> on the individuals: if there were two or more subpopulations that have distinct genome-wide LD patterns, we would not expect the same bandedness, or split points, to be shared between them.</p>
+<p>The goal of splitting a large LD matrix into smaller, mutually “approximately independent” submatrices is to leverage these matrices as reasonable measures of local genomic correlations. An implicit assumption is that the cohort from which the LD matrix is derived is unstratified, such that regions of recombination are roughly homogeneous within the cohort. This can be interpreted as an <em>exchangeability assumption</em> on the individuals: if there were two or more subpopulations that have distinct genome-wide LD patterns, given that LD blocks are a function of LD patterns, we would not expect the same bandedness, or split points, to be shared between them. (As previous papers like <a href="https://www.sciencedirect.com/science/article/pii/S0002929707628791" class="external-link">Evans and Cardon, 2005</a> and <a href="https://genome.cshlp.org/content/15/4/454.full.html" class="external-link">De La Vega, 2005</a> have shown, there are population differences in LD patterns, which are driven by unique population histories.)</p>
 <p>Nevertheless, should we assume the individuals from which the LD matrix is computed are exchangeable, we may proceed to identify split points that demarcate approximately independent regions.</p>
 <p>Approaches like <strong>ldetect</strong>, <strong>Big-LD</strong> and <strong>snp_ldsplit</strong> all rely on deterministic approaches to identifying an optimal LD split. In particular, once the optimal split is found, it is used for downstream tasks. A more careful approach is to consider whether the split, which yields approximately independent blocks, is consistent with the null hypothesis that <em>both the individuals are exchangeable and the blocks of features are independent</em>. Because our method explicitly requires these two conditions for the null hypothesis, it readily applies to this setting.</p>
 <div class="section level3">
@@ -165,18 +166,7 @@
 <code class="sourceCode R"><span class="co">## Perform test of independence on blocks of SNPs for 1KG Africans</span>
 <span class="co"># Load data and compute minor allele frequency</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
-<span class="co">#&gt; ── Attaching packages ────────────────── tidyverse 1.3.1 ──</span>
-<span class="co">#&gt; ✔ ggplot2 3.3.6     ✔ purrr   0.3.4</span>
-<span class="co">#&gt; ✔ tibble  3.1.7     ✔ dplyr   1.0.9</span>
-<span class="co">#&gt; ✔ tidyr   1.2.0     ✔ stringr 1.4.0</span>
-<span class="co">#&gt; ✔ readr   2.1.2     ✔ forcats 0.5.1</span>
-<span class="co">#&gt; ── Conflicts ───────────────────── tidyverse_conflicts() ──</span>
-<span class="co">#&gt; ✖ purrr::accumulate() masks foreach::accumulate()</span>
-<span class="co">#&gt; ✖ dplyr::filter()     masks stats::filter()</span>
-<span class="co">#&gt; ✖ dplyr::lag()        masks stats::lag()</span>
-<span class="co">#&gt; ✖ purrr::when()       masks foreach::when()</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://privefl.github.io/bigsnpr/" class="external-link">bigsnpr</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: bigstatsr</span>
 <span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_attach.html" class="external-link">snp_attach</a></span><span class="op">(</span><span class="st">"~/Documents/research/pgs/030121/super_pop_files/AFR/1000G_AFR.rds"</span><span class="op">)</span>
 <span class="va">G</span> <span class="op">&lt;-</span> <span class="va">test</span><span class="op">$</span><span class="va">genotypes</span>
 <span class="va">maf_gw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_MAF.html" class="external-link">snp_MAF</a></span><span class="op">(</span><span class="va">G</span><span class="op">)</span>
@@ -222,7 +212,7 @@
 <h3 id="subsetting-to-yorubans-produces-independent-ld-block-split">Subsetting to Yorubans Produces Independent LD Block Split<a class="anchor" aria-label="anchor" href="#subsetting-to-yorubans-produces-independent-ld-block-split"></a>
 </h3>
 <p>We suspect the failure to identify LD splits that produce independent blocks is owing to lack of exchangeability of the individuals. There are African Caribbean, Yoruban, and Esan individuals making up the 1KG African superpopulation, for instance. (See this <a href="https://www.coriell.org/1/NHGRI/Collections/1000-Genomes-Project-Collection/1000-Genomes-Project" class="external-link">list</a> for details.) These populations have distinct recent population histories that may induce distinct patterns of linkage between variants.</p>
-<p>We show how our test might support this explanation. We repeat the same steps enumerated above, this time on the subset of Yoruban individuals (<span class="math inline">\(N=108\)</span>).</p>
+<p>We show how our test might support this explanation. We repeat the same steps enumerated above, this time on the subset of Yoruban individuals. Because the sample size is now small (<span class="math inline">\(N=108\)</span> Yoruban individuals), we now use a higher <code>thr_r2</code> of <span class="math inline">\(0.2\)</span> to ensure that the LD splitting algorithm accounts for spurious positive correlations (i.e., <span class="math inline">\(r^2&gt;0\)</span> purely by chance). Note we have also performed this analysis for smaller <code>thr_r2</code> (e.g., <span class="math inline">\(0\)</span>), and our findings below are invariant to the smaller threshold.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform test of independence on blocks of SNPs for 1KG Yorubans</span>
 <span class="co"># Load data and compute minor allele frequency</span>
@@ -233,11 +223,17 @@
 
 <span class="co"># Compute correlation matrix, discarding rare variants</span>
 <span class="va">yri_corr2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_cor.html" class="external-link">snp_cor</a></span><span class="op">(</span><span class="va">yri_G</span>, ind.col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">yri_test</span><span class="op">$</span><span class="va">map</span><span class="op">$</span><span class="va">chromosome</span> <span class="op">==</span> <span class="fl">22</span> <span class="op">&amp;</span> <span class="va">yri_test</span><span class="op">$</span><span class="va">map</span><span class="op">$</span><span class="va">MAF</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span> <span class="co"># 18376 x 18376</span>
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_ldsplit.html" class="external-link">snp_ldsplit</a></span><span class="op">(</span><span class="va">yri_corr2</span>, thr_r2 <span class="op">=</span> <span class="fl">0</span>, min_size <span class="op">=</span> <span class="fl">500</span>, max_size <span class="op">=</span> <span class="fl">10000</span>, max_K <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>
-<span class="va">argmin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span><span class="op">)</span><span class="op">)</span>
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_ldsplit.html" class="external-link">snp_ldsplit</a></span><span class="op">(</span><span class="va">yri_corr2</span>, thr_r2 <span class="op">=</span> <span class="fl">0.2</span>, min_size <span class="op">=</span> <span class="fl">500</span>, max_size <span class="op">=</span> <span class="fl">10000</span>, max_K <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>
+<span class="va">argmin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> 
 
 <span class="co"># Get split points to feed into flinty</span>
 <span class="va">all_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">all_last</span><span class="op">[[</span><span class="va">argmin</span><span class="op">]</span><span class="op">]</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>
+
+<span class="co"># How many blocks are there?</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The number of blocks found is "</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">all_ind</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "The number of blocks found is 15"</span>
+
+<span class="co"># Subset </span>
 <span class="va">yri_G_22_2</span> <span class="op">&lt;-</span> <span class="va">yri_G</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">yri_test</span><span class="op">$</span><span class="va">map</span><span class="op">$</span><span class="va">chromosome</span> <span class="op">==</span> <span class="fl">22</span> <span class="op">&amp;</span> <span class="va">yri_test</span><span class="op">$</span><span class="va">map</span><span class="op">$</span><span class="va">MAF</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">]</span>
 
 <span class="co"># Run test of independence</span>
@@ -248,22 +244,200 @@
           nruns <span class="op">=</span> <span class="fl">3000</span>,
           type <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span>
 <span class="co">#&gt;  unbiased     valid </span>
-<span class="co">#&gt; 0.6406667 0.6407864</span></code></pre></div>
-<p>We find that the <span class="math inline">\(p\)</span>-value is now insignificant at the <span class="math inline">\(\alpha=0.05\)</span> level. This shows that for the Yoruban population, <strong>snp_ldsplit</strong> produced a set of split points that partition the variants into blocks that are statistically independent.</p>
-<p>As secondary analysis, we also explore other “non-optimal” choices of block splits identified by <strong>snp_ldsplit</strong>. (The optimal split is the one that minimizes the sum of squares of correlations between blocks.) We specifically consider whether non-optimal LD splits could produce independent blocks of variants for the population.</p>
+<span class="co">#&gt; 0.6506667 0.6507831</span></code></pre></div>
+<p>We find that the <span class="math inline">\(p\)</span>-value is now insignificant at the <span class="math inline">\(\alpha=0.05\)</span> level.</p>
+<p>To further ensure that the larger <span class="math inline">\(p\)</span>-value is <em>not</em> driven by using a smaller subsample of individuals, we perform a random subsampling analysis, in which we draw <span class="math inline">\(108\)</span> individuals at random from the <span class="math inline">\(652\)</span> African individuals, perform block splitting for that subset of individuals, and run <strong>flinty</strong>. We perform <span class="math inline">\(250\)</span> random subsampling routines.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Perform test of independence on blocks of SNPs for 1KG random subsamples</span>
+<span class="co">## [!] Not run here (takes ~ 3min x 250 = 750min on Macbook Pro)</span>
+<span class="co"># Create dataframe to store results</span>
+<span class="va">results.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>NBLOCKS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, 
+                         UNBIASED <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, 
+                         VALID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># Perform subsampling experiment</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">250</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/date.html" class="external-link">date</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">": Running experiment for seed "</span>, <span class="va">i</span><span class="op">)</span>
+  
+  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span>
+  <span class="va">ind.ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">652</span>, <span class="fl">108</span><span class="op">)</span><span class="op">)</span>
+  
+  <span class="va">subsamp.maf_gw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_MAF.html" class="external-link">snp_MAF</a></span><span class="op">(</span><span class="va">G</span>, ind.row<span class="op">=</span><span class="va">ind.ids</span><span class="op">)</span>
+  <span class="va">subsamp.corr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_cor.html" class="external-link">snp_cor</a></span><span class="op">(</span><span class="va">G</span>, ind.col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">map</span><span class="op">$</span><span class="va">chromosome</span> <span class="op">==</span> <span class="fl">22</span> <span class="op">&amp;</span> <span class="va">subsamp.maf_gw</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span>
+  
+  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/date.html" class="external-link">date</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">": Performing split finding"</span><span class="op">)</span>
+  <span class="va">subsamp.res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://privefl.github.io/bigsnpr/reference/snp_ldsplit.html" class="external-link">snp_ldsplit</a></span><span class="op">(</span><span class="va">subsamp.corr</span>, 
+                             thr_r2 <span class="op">=</span> <span class="fl">0.2</span>, 
+                             min_size <span class="op">=</span> <span class="fl">500</span>, 
+                             max_size <span class="op">=</span> <span class="fl">10000</span>, 
+                             max_K <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>
+  
+  <span class="va">argmin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">subsamp.res</span><span class="op">$</span><span class="va">cost</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">subsamp.res</span><span class="op">$</span><span class="va">cost</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> 
+  
+  <span class="co"># Get split points to feed into flinty</span>
+  <span class="va">all_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">subsamp.res</span><span class="op">$</span><span class="va">all_last</span><span class="op">[[</span><span class="va">argmin</span><span class="op">]</span><span class="op">]</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>
+  
+  <span class="co"># How many blocks are there?</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The number of blocks found is "</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">all_ind</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+  
+  <span class="co"># Subset </span>
+  <span class="va">subsamp.G</span> <span class="op">&lt;-</span> <span class="va">G</span><span class="op">[</span><span class="va">ind.ids</span>,
+                 <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">map</span><span class="op">$</span><span class="va">chromosome</span> <span class="op">==</span> <span class="fl">22</span> <span class="op">&amp;</span> <span class="va">subsamp.maf_gw</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">]</span>
+  
+  <span class="co"># Run test of independence</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/date.html" class="external-link">date</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">": Performing independence test"</span><span class="op">)</span>
+  <span class="va">subsamp.pvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="va">subsamp.G</span>, 
+                             block_boundaries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="va">all_ind</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>,
+                             p <span class="op">=</span> <span class="fl">1</span>,
+                             largeP <span class="op">=</span> <span class="cn">FALSE</span>,
+                             nruns <span class="op">=</span> <span class="fl">3000</span>,
+                             type <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">subsamp.pvals</span><span class="op">)</span>
+  
+  <span class="va">results.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">results.df</span>, 
+                      <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>NBLOCKS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">all_ind</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>,
+                                 UNBIASED <span class="op">=</span> <span class="va">subsamp.pvals</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
+                                 VALID <span class="op">=</span> <span class="va">subsamp.pvals</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="co"># Save results dataframe</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">results.df</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span>, file <span class="op">=</span> <span class="st">"subsampling_analysis.csv"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Summarize results</span>
+<span class="va">results.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"subsampling_analysis.csv"</span><span class="op">)</span>
+<span class="co"># Print visual and quantitative summary</span>
+<span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="va">results.df</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">results.df</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">250</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">NBLOCKS</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">29.97</td>
+<td align="right">1.09</td>
+<td align="right">26</td>
+<td align="right">30</td>
+<td align="right">30</td>
+<td align="right">31</td>
+<td align="right">32</td>
+<td align="left">▁▁▃▇▆</td>
+</tr>
+<tr class="even">
+<td align="left">UNBIASED</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1.3e-6</td>
+<td align="right">2.1e-5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3.3e-4</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">VALID</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3.4e-4</td>
+<td align="right">2.1e-5</td>
+<td align="right">3.3e-4</td>
+<td align="right">3.3e-4</td>
+<td align="right">3.3e-4</td>
+<td align="right">3.3e-4</td>
+<td align="right">6.7e-4</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Perform FDR correction</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Any subsample and LD splits producing an insignificant p-value at 0.05?"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Any subsample and LD splits producing an insignificant p-value at 0.05?"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">results.df</span><span class="op">$</span><span class="va">VALID</span>, method<span class="op">=</span><span class="st">"BH"</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] FALSE</span></code></pre></div>
+<p>We find that the <span class="math inline">\(250\)</span> random subsamples led to LD splits that have, on average, about twice the size of the number of blocks identified on the Yoruban subsample. We also see that the <span class="math inline">\(p\)</span>-values are all significant at a <span class="math inline">\(0.05\)</span> false discovery rate threshold.</p>
+<p>Altogether, our analysis shows that for the Yoruban population, <strong>snp_ldsplit</strong> produced a set of split points that partition the variants into blocks that are statistically independent.</p>
+</div>
+<div class="section level3">
+<h3 id="statistical-approach-differs-from-optimization-approach">Statistical Approach Differs from Optimization Approach<a class="anchor" aria-label="anchor" href="#statistical-approach-differs-from-optimization-approach"></a>
+</h3>
+<p>As secondary analysis, we also explore other “non-optimal” choices of block splits identified by <strong>snp_ldsplit</strong>. (The optimal split is the one that minimizes the sum of squares of correlations between blocks.) We specifically consider whether non-optimal LD splits could produce statistically independent blocks of variants for the population.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Secondary analysis of independence</span>
 <span class="co"># Visualize loss function (cost) as function of number of blocks</span>
-<span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/qplot.html" class="external-link">qplot</a></span><span class="op">(</span><span class="va">n_block</span>, <span class="va">cost</span>, data <span class="op">=</span> <span class="va">res</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="figure">
-<img src="ld_splitting_files/figure-html/2_2-1.png" alt="">
-</div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The minimum cost index is "</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] "The minimum cost index is 1"</span>
+<span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/qplot.html" class="external-link">qplot</a></span><span class="op">(</span><span class="va">n_block</span>, <span class="va">cost</span>, data <span class="op">=</span> <span class="va">res</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Transformation introduced infinite values</span>
+<span class="co">#&gt; in continuous y-axis</span></code></pre></div>
+<p><img src="ld_splitting_files/figure-html/2_3-1.png"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The minimum cost indices are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "The minimum cost indices are 2" </span>
+<span class="co">#&gt;  [2] "The minimum cost indices are 3" </span>
+<span class="co">#&gt;  [3] "The minimum cost indices are 4" </span>
+<span class="co">#&gt;  [4] "The minimum cost indices are 5" </span>
+<span class="co">#&gt;  [5] "The minimum cost indices are 6" </span>
+<span class="co">#&gt;  [6] "The minimum cost indices are 7" </span>
+<span class="co">#&gt;  [7] "The minimum cost indices are 8" </span>
+<span class="co">#&gt;  [8] "The minimum cost indices are 9" </span>
+<span class="co">#&gt;  [9] "The minimum cost indices are 10"</span>
+<span class="co">#&gt; [10] "The minimum cost indices are 11"</span>
+<span class="co">#&gt; [11] "The minimum cost indices are 12"</span>
+<span class="co">#&gt; [12] "The minimum cost indices are 13"</span>
+<span class="co">#&gt; [13] "The minimum cost indices are 14"</span>
 
 <span class="co"># Use suboptimal choices</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">20</span>,<span class="fl">35</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">20</span>,<span class="fl">35</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">all_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">all_last</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>
   
   <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The (valid) p-value for cost index = "</span>, 
@@ -275,9 +449,9 @@
                          nruns <span class="op">=</span> <span class="fl">3000</span>,
                          type <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="co">#&gt; [1] "The (valid) p-value for cost index = 5 is 0.440519826724425"</span>
-<span class="co">#&gt; [1] "The (valid) p-value for cost index = 20 is 0.628790403198934"</span>
-<span class="co">#&gt; [1] "The (valid) p-value for cost index = 35 is 0.0373208930356548"</span></code></pre></div>
+<span class="co">#&gt; [1] "The (valid) p-value for cost index = 3 is 0.849050316561146"</span>
+<span class="co">#&gt; [1] "The (valid) p-value for cost index = 20 is 0.637454181939354"</span>
+<span class="co">#&gt; [1] "The (valid) p-value for cost index = 35 is 0.0336554481839387"</span></code></pre></div>
 <p>The insignificant <span class="math inline">\(p\)</span>-values for some choices of indices <span class="math inline">\(i\)</span> suggest that there may be other ways to split the Chromosome 22 LD matrix for the Yoruban population, which produces statistically valid approximately independent blocks. They also demonstrate how our approach not only differs fundamentally from, but also complements, deterministic approaches like <strong>snp_ldsplit</strong>: instead of minimizing a quantity associated with the LD matrix and the identified blocks, we verify statistical properties that should be satisfied by the blocks output by LD splitting.</p>
 </div>
 </div>
