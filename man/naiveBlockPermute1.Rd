@@ -4,7 +4,7 @@
 \alias{naiveBlockPermute1}
 \title{Resampling V Statistic (Version 1)}
 \usage{
-naiveBlockPermute1(X, block_labels, p = 2)
+naiveBlockPermute1(X, block_labels, p)
 }
 \arguments{
 \item{X}{The \eqn{N \times P} binary or real matrix}

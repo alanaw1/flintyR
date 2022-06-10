@@ -11,11 +11,12 @@ getPValue(
   largeP = FALSE,
   largeN = FALSE,
   nruns = 5000,
+  type = "unbiased",
   p = 2
 )
 }
 \arguments{
-\item{X}{The binary or real matrix on which to perform test of exchangeability}
+\item{X}{The binary or real matrix on which to perform test of exchangeability.}
 
 \item{block_boundaries}{Vector denoting the positions where a new
 block of non-independent features starts. Default is NULL.}
@@ -29,10 +30,12 @@ Default is NULL.}
 
 \item{nruns}{Resampling number for exact test. Default is 5000.}
 
+\item{type}{Either an unbiased estimate of (`'unbiased'`, default), or valid, but biased estimate of, (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.}
+
 \item{p}{The power \eqn{p} of \eqn{l_p^p}, i.e., \eqn{||x||_p^p = (x_1^p+...x_n^p)}. Default is 2.}
 }
 \value{
-The p-value to be used to test the null hypothesis of exchangeability
+The p-value to be used to test the null hypothesis of exchangeability.
 }
 \description{
 Computes the p-value of a multivariate dataset \eqn{\mathbf{X}}, which

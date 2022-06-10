@@ -80,7 +80,14 @@ decide whether to use distance caching or simple block permutations.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">blockPermute</span><span class="op">(</span><span class="va">X</span>, block_boundaries <span class="op">=</span> <span class="cn">NULL</span>, block_labels <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">nruns</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">blockPermute</span><span class="op">(</span>
+  <span class="va">X</span>,
+  block_boundaries <span class="op">=</span> <span class="cn">NULL</span>,
+  block_labels <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">nruns</span>,
+  <span class="va">type</span>,
+  p <span class="op">=</span> <span class="fl">2</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -96,6 +103,8 @@ block of non-independent features starts. Default is NULL.</p></dd>
 Default is NULL.</p></dd>
 <dt>nruns</dt>
 <dd><p>The resampling number (use at least 1000)</p></dd>
+<dt>type</dt>
+<dd><p>Either an unbiased estimate (`'unbiased'`, default), or exact (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.</p></dd>
 <dt>p</dt>
 <dd><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></dd>
 </dl></div>

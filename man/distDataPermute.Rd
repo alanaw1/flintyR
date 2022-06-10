@@ -4,7 +4,7 @@
 \alias{distDataPermute}
 \title{p-value Computation for Test of Exchangeability Using Distance Data}
 \usage{
-distDataPermute(dist_list, nruns)
+distDataPermute(dist_list, nruns, type)
 }
 \arguments{
 \item{dist_list}{The list (length \eqn{B}) of pairwise distance data. 
@@ -12,6 +12,8 @@ Each element in list should be either a distance matrix or a table recording
 pairwise distances.}
 
 \item{nruns}{The resampling number (use at least 1000)}
+
+\item{type}{Either an unbiased estimate (`'unbiased'`, default), or exact (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.}
 }
 \value{
 The p-value obtained from comparing the empirical tail cdf of the observed 

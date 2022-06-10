@@ -4,17 +4,19 @@
 \alias{distDataPValue}
 \title{A Non-parametric Test for Exchangeability and Homogeneity (Distance List Version)}
 \usage{
-distDataPValue(dist_list, largeP = FALSE, nruns = 1000)
+distDataPValue(dist_list, largeP = FALSE, nruns = 1000, type = "unbiased")
 }
 \arguments{
-\item{dist_list}{The list of distances}
+\item{dist_list}{The list of distances.}
 
 \item{largeP}{Boolean indicating whether to use large \eqn{P} asymptotics. Default is FALSE.}
 
 \item{nruns}{Resampling number for exact test. Default is 1000.}
+
+\item{type}{Either an unbiased estimate of (`'unbiased'`, default), or valid, but biased estimate of, (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.}
 }
 \value{
-The p-value to be used to test the null hypothesis of exchangeability
+The p-value to be used to test the null hypothesis of exchangeability.
 }
 \description{
 Computes the p-value of a multivariate dataset, which

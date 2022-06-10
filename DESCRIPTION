@@ -10,5 +10,5 @@ Suggests: rmarkdown, knitr, devtools, tidyverse
 LinkingTo: Rcpp, RcppArmadillo
 URL: https://alanaw1.github.io/flintyR/
 BugReports: https://github.com/alanaw1/flintyR/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.0
 Config/testthat/edition: 3
