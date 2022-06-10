@@ -78,21 +78,23 @@ dependencies. See Aw, Spence and Song (2021) for details.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">distDataPValue</span><span class="op">(</span><span class="va">dist_list</span>, largeP <span class="op">=</span> <span class="cn">FALSE</span>, nruns <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">distDataPValue</span><span class="op">(</span><span class="va">dist_list</span>, largeP <span class="op">=</span> <span class="cn">FALSE</span>, nruns <span class="op">=</span> <span class="fl">1000</span>, type <span class="op">=</span> <span class="st">"unbiased"</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dist_list</dt>
-<dd><p>The list of distances</p></dd>
+<dd><p>The list of distances.</p></dd>
 <dt>largeP</dt>
 <dd><p>Boolean indicating whether to use large \(P\) asymptotics. Default is FALSE.</p></dd>
 <dt>nruns</dt>
 <dd><p>Resampling number for exact test. Default is 1000.</p></dd>
+<dt>type</dt>
+<dd><p>Either an unbiased estimate of (`'unbiased'`, default), or valid, but biased estimate of, (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The p-value to be used to test the null hypothesis of exchangeability</p>
+    <p>The p-value to be used to test the null hypothesis of exchangeability.</p>
     </div>
     <div id="details">
     <h2>Details</h2>

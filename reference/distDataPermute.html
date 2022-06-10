@@ -72,7 +72,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">distDataPermute</span><span class="op">(</span><span class="va">dist_list</span>, <span class="va">nruns</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">distDataPermute</span><span class="op">(</span><span class="va">dist_list</span>, <span class="va">nruns</span>, <span class="va">type</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -83,6 +83,8 @@ Each element in list should be either a distance matrix or a table recording
 pairwise distances.</p></dd>
 <dt>nruns</dt>
 <dd><p>The resampling number (use at least 1000)</p></dd>
+<dt>type</dt>
+<dd><p>Either an unbiased estimate (`'unbiased'`, default), or exact (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
