@@ -59,6 +59,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/single-cell-atac-seq.html">Analysis of scATAC-seq Data</a>
     </li>
     <li>
@@ -126,7 +129,7 @@
 <h2 id="basic-example">Basic Example<a class="anchor" aria-label="anchor" href="#basic-example"></a>
 </h2>
 <p>We start simple. This example is motivated by recent work of Lucy Gao and Daniela Witten, which they presented in the International Seminar on Selective Inference and in the R/Medicine 2020 Virtual Conference respectively.</p>
-<p>We simulate <span class="math inline">\(\mathbf{X}\)</span>, a dataset consisting of <span class="math inline">\(N=100\)</span> samples, where each sample consists of <span class="math inline">\(P=50\)</span> independent features, each feature a realization of a standard Gaussian random variable. Mathematically, the entries <span class="math inline">\(x_{np}\overset{\text{iid}}{\sim} N(0,1)\)</span>.</p>
+<p>We simulate <span class="math inline">\(\mathbf{X}\)</span>, a sample consisting of <span class="math inline">\(N=100\)</span> observations, where each observation is comprised of <span class="math inline">\(P=50\)</span> independent features, each feature a realization of a standard Gaussian random variable. Mathematically, the entries <span class="math inline">\(x_{np}\overset{\text{iid}}{\sim} N(0,1)\)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Generate some data</span>
 <span class="co"># Set seed for reproducibility</span>
@@ -134,7 +137,7 @@
 <span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span>,
             nrow <span class="op">=</span> <span class="fl">100</span>,
             ncol <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
-<p>Under such settings <span class="math inline">\(\mathbf{X}\)</span> is homogeneous and the samples <span class="math inline">\(\mathbf{x}_1,\ldots,\mathbf{x}_N\)</span> are exchangeable, but if we were handed <span class="math inline">\(\mathbf{X}\)</span> without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis.</p>
+<p>Under such settings <span class="math inline">\(\mathbf{X}\)</span> is homogeneous and the sample <span class="math inline">\(\mathbf{x}_1,\ldots,\mathbf{x}_N\)</span> is exchangeable, but if we were handed <span class="math inline">\(\mathbf{X}\)</span> without knowing its generative mechanism completely, we might want to perform clustering as part of exploratory data analysis.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Cluster data</span>
 <span class="va">X_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
@@ -147,7 +150,7 @@
 <span class="va">X_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/princomp.html" class="external-link">princomp</a></span><span class="op">(</span><span class="va">X_df</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span><span class="op">)</span>
 <span class="va">PC1and2</span> <span class="op">&lt;-</span> <span class="va">X_pca</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">PC1and2</span><span class="op">$</span><span class="va">cluster</span> <span class="op">&lt;-</span> <span class="va">X_cluster</span><span class="op">$</span><span class="va">cluster</span> </code></pre></div>
-<p>By performing <span class="math inline">\(k\)</span>-means clustering with <span class="math inline">\(k=2\)</span> as shown above, we obtain a cluster assignment. We can visualize this clustering by performing PCA on the samples and plotting the projection of each sample onto its first two principal components.</p>
+<p>By performing <span class="math inline">\(k\)</span>-means clustering with <span class="math inline">\(k=2\)</span> as shown above, we obtain a cluster assignment. We can visualize this clustering by performing PCA on the samples and plotting the projection of each observation onto its first two principal components.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Visualize clustering</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PC1and2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Comp.1</span>, y <span class="op">=</span> <span class="va">Comp.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -159,17 +162,13 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Cluster"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="figure">
-<img src="figure/2_3-1.png" alt=""><p class="caption">plot of chunk 2_3</p>
-</div>
+<p><img src="intro_files/figure-html/2_3-1.png"></p>
 <p>Next, we perform <a href="https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test" class="external-link">Wilcoxon rank sum tests</a> between the two populations for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at <span class="math inline">\(\alpha=0.05\)</span>. Recall that the Wilcoxon rank sum (aka, Mann-Whitney) test is a non-parametric two-sample test for difference in sample distributions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Differential analysis</span>
 <span class="co"># Split into two clusters </span>
-<span class="va">X_df_1</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> 
-<span class="co">#&gt; Error in filter(., cluster == 1): object 'cluster' not found</span>
-<span class="va">X_df_2</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> 
-<span class="co">#&gt; Error in filter(., cluster == 2): object 'cluster' not found</span>
+<span class="va">X_df_1</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">X_df_2</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span>
 
 <span class="co"># Compute p-values</span>
 <span class="va">p_val_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
@@ -185,7 +184,18 @@
     <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"This is significant at FWER = 0.05 after Bonferroni correction.\n"</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">}</span>
-<span class="co">#&gt; Error in wilcox.test(x = X_df_1[, j], y = X_df_2[, j]): object 'X_df_1' not found</span></code></pre></div>
+<span class="co">#&gt; The p-value for feature 8 is 0.0005319207.</span>
+<span class="co">#&gt; This is significant at FWER = 0.05 after Bonferroni correction.</span>
+<span class="co">#&gt; The p-value for feature 14 is 0.0001147439.</span>
+<span class="co">#&gt; This is significant at FWER = 0.05 after Bonferroni correction.</span>
+<span class="co">#&gt; The p-value for feature 22 is 7.798508e-06.</span>
+<span class="co">#&gt; This is significant at FWER = 0.05 after Bonferroni correction.</span>
+<span class="co">#&gt; The p-value for feature 24 is 3.191586e-07.</span>
+<span class="co">#&gt; This is significant at FWER = 0.05 after Bonferroni correction.</span>
+<span class="co">#&gt; The p-value for feature 35 is 8.154343e-05.</span>
+<span class="co">#&gt; This is significant at FWER = 0.05 after Bonferroni correction.</span>
+<span class="co">#&gt; The p-value for feature 38 is 0.000559846.</span>
+<span class="co">#&gt; This is significant at FWER = 0.05 after Bonferroni correction.</span></code></pre></div>
 <p>We find six features that are statistically significant, which the user might erroneously report as discriminative features. We can visualize these six features by generating a Manhattan plot below.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Visualize differential analysis</span>
@@ -196,7 +206,6 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">feature</span>, <span class="va">p_value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>log_p_value <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">p_value</span><span class="op">)</span>,
          is_sig <span class="op">=</span> <span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">p_value</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> 
-<span class="co">#&gt; Error in names(x) &lt;- value: 'names' attribute [2] must be the same length as the vector [1]</span>
 
 <span class="co"># Generate plot</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">p_val_vector</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">feature</span>, y <span class="op">=</span> <span class="va">log_p_value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -207,11 +216,8 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#404040"</span>, <span class="st">"#d7191c"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"B"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,
-        legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
-<span class="co">#&gt; Error in FUN(X[[i]], ...): object 'feature' not found</span></code></pre></div>
-<div class="figure">
-<img src="figure/2_5-1.png" alt=""><p class="caption">plot of chunk 2_5</p>
-</div>
+        legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
+<p><img src="intro_files/figure-html/2_5-1.png"></p>
 <div class="section level3">
 <h3 id="fixing-the-problem">Fixing the Problem<a class="anchor" aria-label="anchor" href="#fixing-the-problem"></a>
 </h3>
@@ -237,18 +243,14 @@
 <p>The basic example, while illustrative of the problem and easily reproducible, is unlikely to occur in practice. Thus, we consider a more complicated example motivated by population genetics.</p>
 <details><summary><b>Tell me More about Population Genetic Data!</b></summary> In population-genetic datasets, the features are binarized single nucleotide polymorphisms (SNPs). These features are thought to be generated by an underlying model of evolution, which includes both molecular processes (e.g., base pair mutation and genetic recombination) and demographic events (bottlenecks, migrations, etc.). Broadly speaking, a population geneticist takes a dataset <span class="math inline">\(\mathbf{X}\)</span>, whose samples <span class="math inline">\(\mathbf{x}_1,\ldots,\mathbf{x}_N\)</span> are called haplotypes or genotypes depending on the ploidy of the organism, and fits a parametric model to it to estimate biologically or demographically meaningful parameters. Such parammeters include the per-site-per-generation mutation rate <span class="math inline">\(\mu\)</span>, the per-site-per-generation recombination rate <span class="math inline">\(\rho\)</span>, and the effective population size trajectory <span class="math inline">\(N_e(t)\)</span>, just to name a few.
 </details><p>Here, we simulate <span class="math inline">\(\mathbf{X}\)</span>, a dataset consisting of <span class="math inline">\(N=100\)</span> haploid individuals sampled from a panmictic population with per-site-per-generation parameters <span class="math inline">\(\mu=\rho=2\times 10^{-8}\)</span>. We generate polymorphisms by sampling <span class="math inline">\(10\)</span> chromosomes independently. For each chromosome, we assume its length is set to <span class="math inline">\(1\times 10^{5}\)</span>. The effective population size is assumed constant <span class="math inline">\(N_e=10000\)</span> throughout.</p>
-<p>To simulate <span class="math inline">\(\mathbf{X}\)</span>, we use <code>msprime</code>. The simulation script is saved as <code>msprime_model.py</code>, and we call it using the <code>reticulate</code> library that interfaces R with Python.</p>
+<p>To simulate <span class="math inline">\(\mathbf{X}\)</span>, we use <strong>msprime</strong> (<a href="https://github.com/tskit-dev/msprime" class="external-link">this software</a>). The simulation script is saved as <code>msprime_model.py</code>, and we call it using the <code>reticulate</code> library that interfaces R with Python.</p>
 <p>Note that because of the way in which mutations are generated (they are assigned on top of a generated tree topology), the number of binary features contributed by each chromosome differs. We will treat each chromosome as an independent block later, so this remark is to remind us that our blocks will not typically be of the same size.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Generate some data</span>
 <span class="co"># Source function to generate arrays with msprime</span>
+<span class="fu">reticulate</span><span class="fu">::</span><span class="fu">conda_install</span><span class="op">(</span>packages <span class="op">=</span> <span class="st">"msprime"</span><span class="op">)</span>
 <span class="fu">reticulate</span><span class="fu">::</span><span class="fu">source_python</span><span class="op">(</span><span class="st">'msprime_model.py'</span><span class="op">)</span>
-<span class="co">#&gt; Error in py_run_file_impl(file, local, convert): ModuleNotFoundError: No module named 'msprime'</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Detailed traceback:</span>
-<span class="co">#&gt;   File "&lt;string&gt;", line 13, in &lt;module&gt;</span>
-<span class="co">#&gt;   File "/Library/Frameworks/R.framework/Versions/4.0/Resources/library/reticulate/python/rpytools/loader.py", line 44, in _import_hook</span>
-<span class="co">#&gt;     level=level</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">)</span>
 
 <span class="co"># Helper function to generate a haplotype array with names</span>
 <span class="va">getExHaplotypes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">N</span>, <span class="va">num_blocks</span><span class="op">)</span> <span class="op">{</span>
@@ -284,12 +286,17 @@
 <span class="co"># Generate </span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
 <span class="va">X_data</span> <span class="op">&lt;-</span> <span class="fu">getExHaplotypes</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, num_blocks <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt; Error in getHaplotypes(N, 1e+05): could not find function "getHaplotypes"</span>
 
 <span class="co"># View</span>
 <span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'X_data' not found</span></code></pre></div>
-<p>As in the basic example, we cluster the samples into two clusters. Here, we use Prevosti’s distance (<a href="https://link.springer.com/content/pdf/10.1007/BF00831894.pdf" class="external-link">Prevosti et al., 1975</a>), a popular measure of genetic distance, and perform hierarchical clustering with Ward linkage.</p>
+<span class="co">#&gt;      rs1_1 rs1_2 rs1_3 rs1_4 rs1_5 rs1_6</span>
+<span class="co">#&gt; [1,]     0     0     0     0     0     0</span>
+<span class="co">#&gt; [2,]     0     0     0     0     0     0</span>
+<span class="co">#&gt; [3,]     0     0     0     0     0     0</span>
+<span class="co">#&gt; [4,]     0     0     0     0     0     0</span>
+<span class="co">#&gt; [5,]     1     0     0     0     0     0</span>
+<span class="co">#&gt; [6,]     0     0     0     0     0     0</span></code></pre></div>
+<p>As in the basic example, we group the sample into two clusters. Here, we use Prevosti’s distance (<a href="https://link.springer.com/content/pdf/10.1007/BF00831894.pdf" class="external-link">Prevosti et al., 1975</a>), a popular measure of genetic distance, and perform hierarchical clustering with Ward linkage.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform clustering</span>
 <span class="co"># Load library</span>
@@ -297,26 +304,21 @@
 
 <span class="co"># Compute Prevosti's distance matrix</span>
 <span class="va">sample_dist</span> <span class="op">&lt;-</span> <span class="fu">provesti.dist</span><span class="op">(</span><span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>
-<span class="co">#&gt; Error in is(x, "gen"): object 'X_data' not found</span>
 
 <span class="co"># Perform hierarchical clustering</span>
 <span class="va">samples_hclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="va">sample_dist</span>, method <span class="op">=</span> <span class="st">"ward.D"</span><span class="op">)</span>
-<span class="co">#&gt; Error in hclust(sample_dist, method = "ward.D"): object 'sample_dist' not found</span>
 
 <span class="co"># Obtain cluster labels</span>
 <span class="va">k</span> <span class="op">=</span> <span class="fl">2</span>
 <span class="va">samples_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html" class="external-link">cutree</a></span><span class="op">(</span><span class="va">samples_hclust</span>, <span class="va">k</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': object 'samples_hclust' not found</span>
 <span class="va">samples_clusters</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X_data</span><span class="op">$</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; Error in seq.default(from = 1, to = dim(X_data$data)[1], by = 1): object 'X_data' not found</span>
 
 <span class="co"># Attach cluster labels</span>
 <span class="va">X_df</span> <span class="op">&lt;-</span> <span class="va">X_data</span><span class="op">$</span><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cluster <span class="op">=</span> <span class="va">samples_clusters</span><span class="op">$</span><span class="va">.</span><span class="op">)</span>
-<span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': object 'X_data' not found</span></code></pre></div>
-<p>Similar to Section 2, we can visualize our clusters by plotting the projection of the samples of <span class="math inline">\(\mathbf{X}\)</span> onto their first two PCs. Here, because the number of features is larger than the number of samples, we use Q-PCA instead of R-PCA, and we subsequently obtain the projection scores by right-multiplying <span class="math inline">\(\mathbf{X}\)</span> with the rotation matrix.</p>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cluster <span class="op">=</span> <span class="va">samples_clusters</span><span class="op">$</span><span class="va">.</span><span class="op">)</span></code></pre></div>
+<p>Similar to Section 2, we can visualize our clusters by plotting the projection of each individual in <span class="math inline">\(\mathbf{X}\)</span> onto its first two PCs. Here, because the number of features is larger than the number of samples, we use Q-PCA instead of R-PCA, and we subsequently obtain the projection scores by right-multiplying <span class="math inline">\(\mathbf{X}\)</span> with the rotation matrix.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Visualize clustering</span>
 <span class="co"># Perform PCA</span>
@@ -325,6 +327,12 @@
 <span class="va">X_score_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">X_df</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X_df</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">X_pca</span><span class="op">$</span><span class="va">rotation</span>
 <span class="va">PC1and2</span> <span class="op">&lt;-</span> <span class="va">X_score_matrix</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">PC1and2</span><span class="op">$</span><span class="va">cluster</span> <span class="op">&lt;-</span> <span class="va">X_df</span><span class="op">$</span><span class="va">cluster</span> 
+
+<span class="co"># View size of each cluster</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">PC1and2</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  1  2 </span>
+<span class="co">#&gt; 74 26</span>
 
 <span class="co"># Generate plot</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PC1and2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PC1</span>, y <span class="op">=</span> <span class="va">PC2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -336,22 +344,17 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Cluster"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="figure">
-<img src="figure/3_3-1.png" alt=""><p class="caption">plot of chunk 3_3</p>
-</div>
+<p><img src="intro_files/figure-html/3_3-1.png"></p>
 <p>Next, we perform the Wald-Wolfowitz runs test for each feature, applying Bonferroni correction to control the family-wise error rate (FWER) at <span class="math inline">\(\alpha=0.05\)</span>.</p>
 <details><summary><b>What is the Wald-Wolfowitz runs test?</b></summary> The runs test is a non-parametric test that counts the number of changes in a binary sequence (defined as either <span class="math inline">\(0\rightarrow 1\)</span> or <span class="math inline">\(1\rightarrow 0\)</span>) to decide if the sequence “looks random.” It is non-parametric because the null distribution, based on which the <span class="math inline">\(p\)</span>-value is computed, fixes the number of ones in the sequence and performs permutations of the positions of ones. For example, suppose a length <span class="math inline">\(10\)</span> binary sequence with <span class="math inline">\(4\)</span> ones is observed. If that sequence were <span class="math inline">\(1001010010\)</span>, it’s probably random. If that sequence were <span class="math inline">\(1111000000\)</span>, probably not.
 </details><p>Controlling FWER with the Bonferroni method amounts to a null rejection at threshold <span class="math inline">\(0.05/P\)</span>, where <span class="math inline">\(P\)</span> is the number of polymorphic sites / features in <span class="math inline">\(\mathbf{X}\)</span>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform differential analysis</span>
 <span class="co"># Split into two clusters </span>
-<span class="va">X_df_1</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> 
-<span class="co">#&gt; Error in filter(., cluster == 1): object 'cluster' not found</span>
-<span class="va">X_df_2</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> 
-<span class="co">#&gt; Error in filter(., cluster == 2): object 'cluster' not found</span>
+<span class="va">X_df_1</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">X_df_2</span> <span class="op">&lt;-</span> <span class="va">X_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span>
 
 <span class="va">num_feat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X_df_1</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'X_df_1' not found</span>
 
 <span class="co"># Compute p-values</span>
 <span class="va">p_val_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
@@ -361,21 +364,21 @@
   <span class="co"># Print result if significant</span>
   <span class="va">p_val_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">p_val_vector</span>, <span class="va">da_result</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'num_feat' not found</span>
 <span class="va">n_sig_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">p_val_vector</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">/</span> <span class="va">num_feat</span><span class="op">)</span>
-<span class="co">#&gt; Error in eval(expr, envir, enclos): object 'num_feat' not found</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"The number of significant variants at FWER = 0.05 is "</span>, <span class="va">n_sig_vars</span>, <span class="st">"."</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="co">#&gt; Error in cat("The number of significant variants at FWER = 0.05 is ", : object 'n_sig_vars' not found</span></code></pre></div>
+<span class="co">#&gt; The number of significant variants at FWER = 0.05 is 22.</span></code></pre></div>
 <p>We find many features that are statistically significant. We can visualize them using a Manhattan plot, as usual.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Visualize differential analysis</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">num_feat</span><span class="op">)</span>
+<span class="co">#&gt; [1] 4271</span>
+
 <span class="co"># Mutate the p-value vector for easier plotting</span>
 <span class="va">p_val_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">p_val_vector</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X_df</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">num_feat</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">`colnames&lt;-`</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"p_value"</span>,<span class="st">"feature"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">feature</span>, <span class="va">p_value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>log_p_value <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">p_value</span><span class="op">)</span>,
          is_sig <span class="op">=</span> <span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">p_value</span><span class="op">)</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fl">1.2e-05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> 
-<span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'colnames&lt;-': error in evaluating the argument 'x' in selecting a method for function 'colnames': object 'num_feat' not found</span>
 
 <span class="co"># Generate plot</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">p_val_vector</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">feature</span>, y <span class="op">=</span> <span class="va">log_p_value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -387,17 +390,17 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,
         legend.position <span class="op">=</span> <span class="st">"none"</span>,
         axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
-        axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Error in new_data_frame(list(yintercept = yintercept)): object 'num_feat' not found</span></code></pre></div>
+        axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="intro_files/figure-html/3_5-1.png"></p>
 <p>In a population-genetic setting, these “significant features” would be candidate SNPs for ancestrally informative markers, which we know to be false given that the samples were really drawn from a single, panmictic population.</p>
 <div class="section level3">
 <h3 id="failing-to-consider-feature-dependencies">Failing to Consider Feature Dependencies<a class="anchor" aria-label="anchor" href="#failing-to-consider-feature-dependencies"></a>
 </h3>
-<p>Like in the basic example, we apply our exchangeability test before performing clustering to avoid double dipping. However, for population-genetic datasets, we expect correlation between SNPs lying in the same chromosome (owing to genetic recombination). This feature-feature correlation induces correlational patterns between samples, which could falsely suggest the presence of heterogeneous communities. We can see this by running the independent features version of the test.</p>
+<p>Like in the basic example, we apply our exchangeability test before performing clustering to avoid double dipping. However, for population-genetic datasets, we expect correlation between SNPs lying in the same chromosome (owing to genetic recombination). This feature-feature correlation induces correlational patterns between individuals, which could falsely suggest the presence of heterogeneous communities. We can see this by running the independent features version of the test.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Compute p-value under independent features null</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">X_df</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X_df</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, largeP <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4220238</span></code></pre></div>
+<span class="co">#&gt; [1] 0</span></code></pre></div>
 <p>If we were naïve, we’d reject the null hypothesis and conclude incorrectly the presence of distinct subpopulations.</p>
 </div>
 <div class="section level3">
@@ -409,7 +412,7 @@
 <span class="co"># Note: this takes about 2-3 minutes to run</span>
 <span class="fu"><a href="../reference/getPValue.html">getPValue</a></span><span class="op">(</span><span class="va">X_data</span><span class="op">$</span><span class="va">data</span>, 
           block_boundaries <span class="op">=</span> <span class="va">X_data</span><span class="op">$</span><span class="va">bounds</span><span class="op">)</span>
-<span class="co">#&gt; Error in eval(assertion, env): object 'X_data' not found</span></code></pre></div>
+<span class="co">#&gt; [1] 0.31</span></code></pre></div>
 <p>Now, we obtain a <span class="math inline">\(p\)</span>-value that is well above a typical cut-off threshold. Hence, we conclude correctly that at <span class="math inline">\(\alpha=0.05\)</span> there is insufficient evidence that <span class="math inline">\(\mathbf{X}\)</span> is heterogeneous.</p>
 </div>
 </div>
@@ -432,7 +435,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer>

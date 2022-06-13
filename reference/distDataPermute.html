@@ -41,6 +41,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/single-cell-atac-seq.html">Analysis of scATAC-seq Data</a>
     </li>
     <li>
@@ -81,14 +84,21 @@
 <dd><p>The list (length \(B\)) of pairwise distance data. 
 Each element in list should be either a distance matrix or a table recording
 pairwise distances.</p></dd>
+
+
 <dt>nruns</dt>
 <dd><p>The resampling number (use at least 1000)</p></dd>
+
+
 <dt>type</dt>
 <dd><p>Either an unbiased estimate (`'unbiased'`, default), or exact (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The p-value obtained from comparing the empirical tail cdf of the observed 
+    
+
+<p>The p-value obtained from comparing the empirical tail cdf of the observed 
 \(V\) statistic computed from distance data.</p>
     </div>
     <div id="details">
@@ -114,7 +124,7 @@ also computed from the distance data.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

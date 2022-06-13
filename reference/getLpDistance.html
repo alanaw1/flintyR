@@ -42,6 +42,9 @@ for a specified choice of Minkowski norm exponent \(p\)."><!-- mathjax --><scrip
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/single-cell-atac-seq.html">Analysis of scATAC-seq Data</a>
     </li>
     <li>
@@ -81,12 +84,17 @@ for a specified choice of Minkowski norm exponent \(p\).</p>
     <h2>Arguments</h2>
     <dl><dt>X</dt>
 <dd><p>The \(N \times P\) real matrix</p></dd>
+
+
 <dt>p</dt>
 <dd><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A length \({N \choose 2}\) vector of pairwise \(l_p^p\) distances</p>
+    
+
+<p>A length \({N \choose 2}\) vector of pairwise \(l_p^p\) distances</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -97,8 +105,8 @@ for a specified choice of Minkowski norm exponent \(p\).</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">5</span>, ncol <span class="op">=</span> <span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">getLpDistance</span><span class="op">(</span><span class="va">X</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 12.806095  5.032638 20.069073 13.830100  8.801140 22.412405 26.043136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 14.885743 16.155817 23.026989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 18.36136 12.45529 12.17656 10.10130 27.16940 23.25325 24.23874 16.90924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 10.31737 12.58790</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -114,7 +122,7 @@ for a specified choice of Minkowski norm exponent \(p\).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

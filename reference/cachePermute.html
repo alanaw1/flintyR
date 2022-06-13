@@ -43,6 +43,9 @@ permute the underlying sample labels!"><!-- mathjax --><script src="https://cdnj
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/single-cell-atac-seq.html">Analysis of scATAC-seq Data</a>
     </li>
     <li>
@@ -84,16 +87,23 @@ permute the underlying sample labels!</p>
     <dl><dt>dists</dt>
 <dd><p>\({N \choose 2}\) by \(B\) matrix, with each column
 containing the distances (ex: Hamming, \(l_p^p\)) for the block</p></dd>
+
+
 <dt>forward</dt>
 <dd><p>\(N \times N\) matrix mapping the pairs of sample labels
 to index of the \({N \choose 2}\)-length vector</p></dd>
+
+
 <dt>reverse</dt>
 <dd><p>\({N \choose 2}\times 2\) matrix mapping the index to
 pairs of sample labels</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A matrix with same dimensions as dists containing
+    
+
+<p>A matrix with same dimensions as dists containing
 the block-permuted pairwise distances</p>
     </div>
     <div id="details">
@@ -117,7 +127,7 @@ precomputed using buildForward and buildReverse.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

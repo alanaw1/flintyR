@@ -42,6 +42,9 @@ decide whether to use distance caching or simple block permutations."><!-- mathj
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/single-cell-atac-seq.html">Analysis of scATAC-seq Data</a>
     </li>
     <li>
@@ -89,22 +92,35 @@ decide whether to use distance caching or simple block permutations.</p>
     <dl><dt>X</dt>
 <dd><p>The binary or real matrix on which to perform
 permutation resampling</p></dd>
+
+
 <dt>block_boundaries</dt>
 <dd><p>Vector denoting the positions where a new
 block of non-independent features starts. Default is NULL.</p></dd>
+
+
 <dt>block_labels</dt>
 <dd><p>Length \(P\) vector recording the block label of each feature.
 Default is NULL.</p></dd>
+
+
 <dt>nruns</dt>
 <dd><p>The resampling number (use at least 1000)</p></dd>
+
+
 <dt>type</dt>
 <dd><p>Either an unbiased estimate (`'unbiased'`, default), or exact (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.</p></dd>
+
+
 <dt>p</dt>
 <dd><p>The power p of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The block permutation p-value</p>
+    
+
+<p>The block permutation p-value</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -125,7 +141,7 @@ getLpDistance, naiveBlockPermute1, naiveBlockPermute2</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

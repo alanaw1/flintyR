@@ -44,6 +44,9 @@ dependencies. See Aw, Spence and Song (2021) for details."><!-- mathjax --><scri
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/ld_splitting.html">Linkage Disequilibrium Splitting</a>
+    </li>
+    <li>
       <a href="../articles/single-cell-atac-seq.html">Analysis of scATAC-seq Data</a>
     </li>
     <li>
@@ -94,26 +97,43 @@ dependencies. See Aw, Spence and Song (2021) for details.</p>
     <h2>Arguments</h2>
     <dl><dt>X</dt>
 <dd><p>The binary or real matrix on which to perform test of exchangeability.</p></dd>
+
+
 <dt>block_boundaries</dt>
 <dd><p>Vector denoting the positions where a new
 block of non-independent features starts. Default is NULL.</p></dd>
+
+
 <dt>block_labels</dt>
 <dd><p>Length \(P\) vector recording the block label of each feature.
 Default is NULL.</p></dd>
+
+
 <dt>largeP</dt>
 <dd><p>Boolean indicating whether to use large \(P\) asymptotics. Default is FALSE.</p></dd>
+
+
 <dt>largeN</dt>
 <dd><p>Boolean indicating whether to use large \(N\) asymptotics. Default is FALSE.</p></dd>
+
+
 <dt>nruns</dt>
 <dd><p>Resampling number for exact test. Default is 5000.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>Either an unbiased estimate of (`'unbiased'`, default), or valid, but biased estimate of, (`'valid'`) p-value (see Hemerik and Goeman, 2018), or both (`'both'`). Default is `'unbiased'`.</p></dd>
+
+
 <dt>p</dt>
 <dd><p>The power \(p\) of \(l_p^p\), i.e., \(||x||_p^p = (x_1^p+...x_n^p)\). Default is 2.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The p-value to be used to test the null hypothesis of exchangeability.</p>
+    
+
+<p>The p-value to be used to test the null hypothesis of exchangeability.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -147,14 +167,14 @@ If \(P\) or \(B\) is small, however, stick with permutations.</p>
 <span class="r-in"><span class="fu">getPValue</span><span class="op">(</span><span class="va">X1</span><span class="op">)</span> <span class="co"># perform exact test with 5000 permutations</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There exist columns with all ones or all zeros for binary X.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>executing %dopar% sequentially: no parallel backend registered</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6066</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># should be larger than 0.05</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Example 2 (get p-value of high-dim matrix with independent features using asymptotic test)</span></span>
 <span class="r-in"><span class="va">X2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">10</span>, ncol <span class="op">=</span> <span class="fl">1000</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e4</span><span class="op">)</span><span class="op">)</span> <span class="co"># real matrix, large enough</span></span>
 <span class="r-in"><span class="fu">getPValue</span><span class="op">(</span><span class="va">X2</span>, p <span class="op">=</span> <span class="fl">2</span>, largeP <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># very fast</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4887905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6452824</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># should be larger than 0.05</span></span>
 <span class="r-in"><span class="co"># getPValue(X2, p = 2) # slower, do not run (Output: 0.5764)</span></span>
@@ -163,7 +183,8 @@ If \(P\) or \(B\) is small, however, stick with permutations.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">X3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">10</span>, ncol <span class="op">=</span> <span class="fl">1000</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">1e4</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">getPValue</span><span class="op">(</span><span class="va">X3</span>, block_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.995</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There exist columns with all ones or all zeros for binary X.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4958</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Warning message: # there are features that have zero variation (i.e., all 0s or 1s)</span></span>
 <span class="r-in"><span class="co"># In getPValue(X3, block_labels = rep(c(1, 2, 3, 4, 5), 200)) :</span></span>
@@ -220,7 +241,7 @@ If \(P\) or \(B\) is small, however, stick with permutations.</p>
 <span class="r-in"><span class="va">X4</span> <span class="op">&lt;-</span> <span class="fu">getExHaplotypes</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">getPValue</span><span class="op">(</span><span class="va">X4</span>, block_boundaries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">1000</span>, by <span class="op">=</span> <span class="fl">25</span><span class="op">)</span>, largeP <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There exist columns with all ones or all zeros for binary X.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9897701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9419778</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># stopImplicitCluster()</span></span>
 <span class="r-in"></span>
@@ -238,7 +259,7 @@ If \(P\) or \(B\) is small, however, stick with permutations.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
