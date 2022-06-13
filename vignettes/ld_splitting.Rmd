@@ -123,7 +123,7 @@ We persistently obtained very small $p$-values ($\ll 0.05$), despite possibly di
 
 This finding suggests that either (1) there exist no LD splits that result in statistically independent blocks of SNPs (there might, however, be other ways to cluster the SNPs that relax the block requirement); (2) the individuals making up the data were not exchangeable to begin with.
 
-## Subsetting to Yorubans Produces Independent LD Block Split
+## Subsetting to Yorubans Supports Independence of LD Block Split
 
 We suspect the failure to identify LD splits that produce independent blocks is owing to lack of exchangeability of the individuals. There are African Caribbean, Yoruban, and Esan individuals making up the 1KG African superpopulation, for instance. (See this [list](https://www.coriell.org/1/NHGRI/Collections/1000-Genomes-Project-Collection/1000-Genomes-Project) for details.) These populations have distinct recent population histories that may induce distinct patterns of linkage between variants. 
 
@@ -266,7 +266,7 @@ print(any(p.adjust(results.df$VALID, method="BH") >= 0.05))
 
 We find that the $500$ random subsamples led to LD splits that have, on average, about twice the size of the number of blocks identified on the Yoruban subsample. We also see that the $p$-values are all significant at a $0.05$ false discovery rate threshold.    
 
-Altogether, our analysis shows that for the Yoruban population, **snp_ldsplit** produced a set of split points that partition the variants into blocks that are statistically independent.  
+Altogether, our analysis shows that for the Yoruban population, **snp_ldsplit** produced a set of split points that partition the variants into blocks that *prevent* us from rejecting the null hypothesis of block independence. While we cannot rule out that with more SNPs or more Yoruban individuals we might eventually reject the null, our test and resampling analysis together provide evidence that the split points produce independent blocks.    
 
 ## Statistical Approach Differs from Optimization Approach
 
