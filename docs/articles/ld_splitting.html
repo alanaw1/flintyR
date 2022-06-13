@@ -212,7 +212,7 @@
 <h3 id="subsetting-to-yorubans-produces-independent-ld-block-split">Subsetting to Yorubans Produces Independent LD Block Split<a class="anchor" aria-label="anchor" href="#subsetting-to-yorubans-produces-independent-ld-block-split"></a>
 </h3>
 <p>We suspect the failure to identify LD splits that produce independent blocks is owing to lack of exchangeability of the individuals. There are African Caribbean, Yoruban, and Esan individuals making up the 1KG African superpopulation, for instance. (See this <a href="https://www.coriell.org/1/NHGRI/Collections/1000-Genomes-Project-Collection/1000-Genomes-Project" class="external-link">list</a> for details.) These populations have distinct recent population histories that may induce distinct patterns of linkage between variants.</p>
-<p>We show how our test might support this explanation. We repeat the same steps enumerated above, this time on the subset of Yoruban individuals. Because the sample size is now small (<span class="math inline">\(N=108\)</span> Yoruban individuals), we now use a higher <code>thr_r2</code> of <span class="math inline">\(0.2\)</span> to ensure that the LD splitting algorithm accounts for spurious positive correlations (i.e., <span class="math inline">\(r^2&gt;0\)</span> purely by chance). Note we have also performed this analysis for smaller <code>thr_r2</code> (e.g., <span class="math inline">\(0\)</span>), and our findings below are invariant to the smaller threshold.</p>
+<p>We show how our test might support this explanation. We repeat the same steps enumerated above, this time on the subset of Yoruban individuals. Because the sample size is now small (<span class="math inline">\(N=108\)</span> Yoruban individuals), we now use a higher <code>thr_r2</code> of <span class="math inline">\(0.2\)</span> to ensure that the LD splitting algorithm accounts for spurious positive correlations (i.e., <span class="math inline">\(r^2&gt;0\)</span> purely by chance). Note we have also performed this analysis for smaller <code>thr_r2</code> (e.g., <span class="math inline">\(0\)</span>), and our findings below do not change despite using the smaller threshold.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform test of independence on blocks of SNPs for 1KG Yorubans</span>
 <span class="co"># Load data and compute minor allele frequency</span>
@@ -244,12 +244,12 @@
           nruns <span class="op">=</span> <span class="fl">3000</span>,
           type <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span>
 <span class="co">#&gt;  unbiased     valid </span>
-<span class="co">#&gt; 0.6506667 0.6507831</span></code></pre></div>
+<span class="co">#&gt; 0.6590000 0.6591136</span></code></pre></div>
 <p>We find that the <span class="math inline">\(p\)</span>-value is now insignificant at the <span class="math inline">\(\alpha=0.05\)</span> level.</p>
-<p>To further ensure that the larger <span class="math inline">\(p\)</span>-value is <em>not</em> driven by using a smaller subsample of individuals, we perform a random subsampling analysis, in which we draw <span class="math inline">\(108\)</span> individuals at random from the <span class="math inline">\(652\)</span> African individuals, perform block splitting for that subset of individuals, and run <strong>flinty</strong>. We perform <span class="math inline">\(250\)</span> random subsampling routines.</p>
+<p>To further ensure that the larger <span class="math inline">\(p\)</span>-value is <em>not</em> driven by using a smaller subsample of individuals, we perform a random subsampling analysis, in which we draw <span class="math inline">\(108\)</span> individuals at random from the <span class="math inline">\(652\)</span> African individuals, perform block splitting for that subset of individuals, and run <strong>flinty</strong>. We perform <span class="math inline">\(500\)</span> random subsampling routines.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Perform test of independence on blocks of SNPs for 1KG random subsamples</span>
-<span class="co">## [!] Not run here (takes ~ 3min x 250 = 750min on Macbook Pro)</span>
+<span class="co">## [!] Not run here (takes ~ 3min x 500 = 1500min on Macbook Pro)</span>
 <span class="co"># Create dataframe to store results</span>
 <span class="va">results.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>NBLOCKS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, 
                          UNBIASED <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, 
@@ -314,7 +314,7 @@
 </tr>
 <tr class="even">
 <td align="left">Number of rows</td>
-<td align="left">250</td>
+<td align="left">500</td>
 </tr>
 <tr class="odd">
 <td align="left">Number of columns</td>
@@ -362,21 +362,21 @@
 <td align="left">NBLOCKS</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">29.97</td>
-<td align="right">1.09</td>
-<td align="right">26</td>
+<td align="right">29.94</td>
+<td align="right">1.1</td>
+<td align="right">25</td>
 <td align="right">30</td>
 <td align="right">30</td>
 <td align="right">31</td>
 <td align="right">32</td>
-<td align="left">▁▁▃▇▆</td>
+<td align="left">▁▁▃▇▅</td>
 </tr>
 <tr class="even">
 <td align="left">UNBIASED</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">1.3e-6</td>
-<td align="right">2.1e-5</td>
+<td align="right">6.7e-7</td>
+<td align="right">1.5e-5</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -389,7 +389,7 @@
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">3.4e-4</td>
-<td align="right">2.1e-5</td>
+<td align="right">1.5e-5</td>
 <td align="right">3.3e-4</td>
 <td align="right">3.3e-4</td>
 <td align="right">3.3e-4</td>
@@ -406,7 +406,7 @@
 <span class="co">#&gt; [1] "Any subsample and LD splits producing an insignificant p-value at 0.05?"</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">results.df</span><span class="op">$</span><span class="va">VALID</span>, method<span class="op">=</span><span class="st">"BH"</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] FALSE</span></code></pre></div>
-<p>We find that the <span class="math inline">\(250\)</span> random subsamples led to LD splits that have, on average, about twice the size of the number of blocks identified on the Yoruban subsample. We also see that the <span class="math inline">\(p\)</span>-values are all significant at a <span class="math inline">\(0.05\)</span> false discovery rate threshold.</p>
+<p>We find that the <span class="math inline">\(500\)</span> random subsamples led to LD splits that have, on average, about twice the size of the number of blocks identified on the Yoruban subsample. We also see that the <span class="math inline">\(p\)</span>-values are all significant at a <span class="math inline">\(0.05\)</span> false discovery rate threshold.</p>
 <p>Altogether, our analysis shows that for the Yoruban population, <strong>snp_ldsplit</strong> produced a set of split points that partition the variants into blocks that are statistically independent.</p>
 </div>
 <div class="section level3">
@@ -416,9 +416,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Secondary analysis of independence</span>
 <span class="co"># Visualize loss function (cost) as function of number of blocks</span>
-<span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/qplot.html" class="external-link">qplot</a></span><span class="op">(</span><span class="va">n_block</span>, <span class="va">cost</span>, data <span class="op">=</span> <span class="va">res</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Transformation introduced infinite values</span>
-<span class="co">#&gt; in continuous y-axis</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/qplot.html" class="external-link">qplot</a></span><span class="op">(</span><span class="va">n_block</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">cost</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">res</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span></code></pre></div>
 <p><img src="ld_splitting_files/figure-html/2_3-1.png"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The minimum cost indices are "</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">cost</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
@@ -449,9 +447,9 @@
                          nruns <span class="op">=</span> <span class="fl">3000</span>,
                          type <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="co">#&gt; [1] "The (valid) p-value for cost index = 3 is 0.849050316561146"</span>
-<span class="co">#&gt; [1] "The (valid) p-value for cost index = 20 is 0.637454181939354"</span>
-<span class="co">#&gt; [1] "The (valid) p-value for cost index = 35 is 0.0336554481839387"</span></code></pre></div>
+<span class="co">#&gt; [1] "The (valid) p-value for cost index = 3 is 0.837720759746751"</span>
+<span class="co">#&gt; [1] "The (valid) p-value for cost index = 20 is 0.642785738087304"</span>
+<span class="co">#&gt; [1] "The (valid) p-value for cost index = 35 is 0.0309896701099633"</span></code></pre></div>
 <p>The insignificant <span class="math inline">\(p\)</span>-values for some choices of indices <span class="math inline">\(i\)</span> suggest that there may be other ways to split the Chromosome 22 LD matrix for the Yoruban population, which produces statistically valid approximately independent blocks. They also demonstrate how our approach not only differs fundamentally from, but also complements, deterministic approaches like <strong>snp_ldsplit</strong>: instead of minimizing a quantity associated with the LD matrix and the identified blocks, we verify statistical properties that should be satisfied by the blocks output by LD splitting.</p>
 </div>
 </div>
